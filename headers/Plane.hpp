@@ -25,7 +25,13 @@ class Location {
         void setZ(const float& _z) { this->z = _z; }
         void setLocation(const float& _x, const float& _y, const float& _z);
 
-        float getThetaTo(const Location& l);
+        // Get the angle between this point and the given point
+        float getThetaTo(const Location& l) const;
+        float getDistanceTo(const Location& l) const;
+
+        // Operators
+        bool operator==(const Location& l) const;
+        friend ostream& operator<<(ostream& stream, const Location& l);
 };
 
 class Trajectory {
@@ -33,11 +39,13 @@ class Trajectory {
         vector<Location> points;
     public:
         Trajectory(const vector<Location>& _points) : points(_points) {}
+        Location getPoint(const size_t& i) const { return points.at(i); }
+        Location getLastPoint() const { return points.at(points.size() - 1); }
 
         // Get a location in the trajetory at specified time
-        Location getLocationAt(const size_t& t);
+        Location getLocationAt(const size_t& t) const;
         // Get a new step to move from the specified location to the first trajectory location
-        Location getLocationFrom(const Location& from);
+        Location getLocationFrom(const Location& from, const float& speed) const;
 };
 
 class Plane {
@@ -46,11 +54,10 @@ class Plane {
         Location location, destination;
         Trajectory trajectory;
         float speed, fuel, consumption;
-        bool reached_destination, reached_first_traj_point;
 
     public:
         Plane(const string& _name, const Location& _spawn, const Trajectory& _traj);
-        bool isDestinationReached() const { return reached_destination; }
+        bool isDestinationReached() const { return this->location == this->destination; }
 
         void start();
         void updateLocation();
