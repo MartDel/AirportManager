@@ -17,6 +17,7 @@ int main(void) {
         i++;
     }
 
+    // cout << spawn.getPhiTo(start) << endl;
     // cout << spawn.getThetaTo(start) << endl;
 
     return 0;

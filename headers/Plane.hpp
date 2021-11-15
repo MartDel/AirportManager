@@ -45,7 +45,7 @@ class Trajectory {
         Location* reached_point;
     public:
         Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL) {}
-        ~Trajectory() { delete reached_point; }
+        // ~Trajectory() { delete reached_point; }
         Location getPoint(const size_t& i) const { return points.at(i); }
         Location getLastPoint() const { return points.at(points.size() - 1); }
 

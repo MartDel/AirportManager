@@ -29,17 +29,20 @@ float Location::getPhiTo(const Location &l) const {
 
 float Location::getThetaTo(const Location &l) const {
     float
-        z_diff(abs(l.getX() - this->x)),
-        xy_diff(this->get2dDistanceTo(l)),
+        z_diff = abs(l.getZ() - this->z),
+        xy_diff = this->get2dDistanceTo(l),
         theta(0);
-    if (l.getZ() > 0) {
+    if (l.getZ() < this->z) {
         // 0 <= theta < pi/2
+        // cout << "0 <= theta < pi/2 " << z_diff << " " << xy_diff << endl;
         theta = atan(xy_diff / z_diff);
-    } else if(l.getZ() < 0) {
+    } else if(l.getZ() > this->z) {
         // pi/2 < theta <= pi
-        theta = atan(z_diff / xy_diff) + (M_PI / 2);
+        // cout << "pi/2 < theta <= pi" << endl;
+        theta = atan(xy_diff / z_diff) + (M_PI / 2);
     } else {
         // theta = pi/2
+        // cout << "theta = pi/2" << endl;
         theta = M_PI/2;
     }
     return theta;
@@ -69,7 +72,7 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed) {
         // Try to reached the first point
         Location to = points.at(0);
         float phi = from.getPhiTo(to);
-        float theta = from.getThetaTo(to);
+        float theta = M_PI - from.getThetaTo(to);
         float distance_between = from.get3dDistanceTo(to);
         float step = speed;
         if (distance_between <= speed) {
