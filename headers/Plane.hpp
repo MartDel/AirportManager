@@ -17,17 +17,22 @@ class Location {
 
     public:
         Location(const float& _x = 0, const float& _y = 0, const float& _z = 0) : x(_x), y(_y), z(_z) {}
-        float getX() const { return x; }
-        float getY() const { return y; }
-        float getZ() const { return z; }
+        float getX() const { return this->x; }
+        float getY() const { return this->y; }
+        float getZ() const { return this->z; }
         void setX(const float& _x) { this->x = _x; }
         void setY(const float& _y) { this->y = _y; }
         void setZ(const float& _z) { this->z = _z; }
         void setLocation(const float& _x, const float& _y, const float& _z);
 
-        // Get the angle between this point and the given point
+        // Get the angle between this point and the given point in the (x, y) plan
+        float getPhiTo(const Location& l) const;
+        // Get the angle between this point and the given point in the (z, sqrt(x²+y²)) plan
         float getThetaTo(const Location& l) const;
-        float getDistanceTo(const Location& l) const;
+        // Get euclidian distance with x and y
+        float get2dDistanceTo(const Location& l) const;
+        // Get euclidian distance with x, y and z
+        float get3dDistanceTo(const Location& l) const;
 
         // Operators
         bool operator==(const Location& l) const;
@@ -37,15 +42,19 @@ class Location {
 class Trajectory {
     private:
         vector<Location> points;
+        Location* reached_point;
     public:
-        Trajectory(const vector<Location>& _points) : points(_points) {}
+        Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL) {}
+        ~Trajectory() { delete reached_point; }
         Location getPoint(const size_t& i) const { return points.at(i); }
         Location getLastPoint() const { return points.at(points.size() - 1); }
 
+        // Get the next position in the trajectory
+        Location getNextLocation(const Location& from, const float& speed);
         // Get a location in the trajetory at specified time
-        Location getLocationAt(const size_t& t) const;
+        // Location getLocationAt(const size_t& t) const;
         // Get a new step to move from the specified location to the first trajectory location
-        Location getLocationFrom(const Location& from, const float& speed) const;
+        // Location getLocationFrom(const Location& from, const float& speed) const;
 };
 
 class Plane {

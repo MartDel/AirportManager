@@ -6,37 +6,56 @@ void Location::setLocation(const float &_x, const float &_y, const float &_z) {
     this->z = _z;
 }
 
+float Location::getPhiTo(const Location &l) const {
+    float
+        x_diff(abs(l.getX() - this->x)),
+        y_diff(abs(l.getY() - this->y)),
+        phi(0);
+    if (l.getX() < this->x && l.getY() <= this->y) {
+        // pi <= phi < 3pi/2
+        phi = atan(y_diff / x_diff) + M_PI;
+    } else if (l.getX() >= this->x && l.getY() < this->y) {
+        // 3pi/2 <= phi < 2pi
+        phi = atan(x_diff / y_diff) + ((3 * M_PI) / 2);
+    } else if (l.getX() > this->x && l.getY() >= this->y) {
+        // 0 <= phi < pi/2
+        phi = atan(y_diff / x_diff);
+    } else if (l.getX() <= this->x && l.getY() > this->y) {
+        // pi/2 <= phi < pi
+        phi = atan(x_diff / y_diff) + (M_PI / 2);
+    }
+    return phi;
+}
+
 float Location::getThetaTo(const Location &l) const {
     float
-        x_diff = abs(l.getX() - this->x),
-        y_diff = abs(l.getY() - this->y),
-        theta = 0;
-    if (l.getX() < this->x && l.getY() <= this->y) {
-        // pi <= theta < 3pi/2
-        // cout << "pi <= theta < 3pi/2" << endl;
-        theta = atan(y_diff / x_diff) + M_PI;
-    } else if (l.getX() >= this->x && l.getY() < this->y) {
-        // 3pi/2 <= theta < 2pi
-        // cout << "3pi/2 <= theta < 2pi" << endl;
-        theta = atan(x_diff / y_diff) + ((3 * M_PI) / 2);
-    } else if (l.getX() > this->x && l.getY() >= this->y) {
+        z_diff(abs(l.getX() - this->x)),
+        xy_diff(this->get2dDistanceTo(l)),
+        theta(0);
+    if (l.getZ() > 0) {
         // 0 <= theta < pi/2
-        // cout << "0 <= theta < pi/2" << endl;
-        theta = atan(y_diff / x_diff);
-    } else if (l.getX() <= this->x && l.getY() > this->y) {
-        // pi/2 <= theta < pi
-        // cout << "pi/2 <= theta < pi" << endl;
-        theta = atan(x_diff / y_diff) + (M_PI / 2);
+        theta = atan(xy_diff / z_diff);
+    } else if(l.getZ() < 0) {
+        // pi/2 < theta <= pi
+        theta = atan(z_diff / xy_diff) + (M_PI / 2);
+    } else {
+        // theta = pi/2
+        theta = M_PI/2;
     }
     return theta;
 }
 
-float Location::getDistanceTo(const Location &l) const {
+float Location::get2dDistanceTo(const Location &l) const {
+    return sqrt(pow(l.getX() - this->x, 2) + pow(l.getY() - this->y, 2));
+}
+
+float Location::get3dDistanceTo(const Location &l) const {
     return sqrt(pow(l.getX() - this->x, 2) + pow(l.getY() - this->y, 2) + pow(l.getZ() - this->z, 2));
 }
 
 bool Location::operator==(const Location &l) const {
-    return this->x == l.getX() && this->y == l.getY() && this->z == l.getZ();
+    // cout.precision(10);
+    return this->x == l.getX() && this->y == l.getY() && round(this->z) == l.getZ();
 }
 
 ostream& operator<<(ostream& stream, const Location& l) {
@@ -44,18 +63,24 @@ ostream& operator<<(ostream& stream, const Location& l) {
     return stream;
 }
 
-Location Trajectory::getLocationAt(const size_t &t) const {
+Location Trajectory::getNextLocation(const Location &from, const float &speed) {
     Location next;
-    return next;
-}
-
-Location Trajectory::getLocationFrom(const Location &from, const float& speed) const {
-    Location to = points.at(0);
-    float theta = from.getThetaTo(to);
-    float distance_between = from.getDistanceTo(to);
-    float step = distance_between > speed ? speed : distance_between;
-    Location next(from.getX() + (step * cos(theta)), from.getY() + (step * sin(theta)), from.getZ());
-    cout << next << " theta = " << theta << " step = " << step << endl;
+    if (reached_point == NULL) {
+        // Try to reached the first point
+        Location to = points.at(0);
+        float phi = from.getPhiTo(to);
+        float theta = from.getThetaTo(to);
+        float distance_between = from.get3dDistanceTo(to);
+        float step = speed;
+        if (distance_between <= speed) {
+            step = distance_between;
+            reached_point = &points.at(0);
+        }
+        next.setX(from.getX() + (step * sin(theta) * cos(phi)));
+        next.setY(from.getY() + (step * sin(theta) * sin(phi)));
+        next.setZ(from.getZ() + (step * (theta == float(M_PI)/2 ? 0.f : cos(theta))));
+        cout << next << " phi = " << phi << " theta = " << theta << " step = " << step << endl;
+    }
     return next;
 }
 
@@ -69,7 +94,7 @@ void Plane::start() {
 }
 
 void Plane::updateLocation() {
-    this->location = this->trajectory.getLocationFrom(this->location, this->speed);
+    this->location = this->trajectory.getNextLocation(this->location, this->speed);
     if (this->location == this->trajectory.getPoint(0))
         this->location = this->destination;
     cout << " -> " << this->location << endl;
