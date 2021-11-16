@@ -66,7 +66,8 @@ class Plane {
         const string name;
         Location location, destination;
         Trajectory trajectory;
-        float speed, fuel, consumption;
+        float speed, fuel;
+        const float consumption;
         size_t parking_spot, state;
         // State codes
         // 0 : parked
@@ -91,7 +92,6 @@ class Plane {
         void setDestination(const Location& d) { this->destination = d; }
         void setSpeed(const float& s) { this->speed = s; }
         void setFuel(const float& f) { this->fuel = f; }
-        void setConsumption(const float& c) { this->consumption = c; }
         void setState(const size_t& s) { this->state = s; }
         void setParkingSpot(const size_t& i) { this->parking_spot = i; }
 

@@ -149,6 +149,7 @@ void Plane::start(const Trajectory& traj) {
 
 void Plane::updateLocation() {
     this->setLocation(this->trajectory.getNextLocation(this->location, this->speed));
+    this->fuel -= this->consumption;
 }
 
 void Plane::setLocation(const Location& l) {
@@ -161,6 +162,6 @@ ostream& operator<<(ostream& stream, const Plane& plane) {
     stream << plane.getName() << " :" << endl;
     stream << "    " << plane.getLocation() << " -> " << plane.getDestination() << endl;
     stream << "    Speed: " << plane.getSpeed() << " m/s State: " << plane.getState() << endl;
-    stream << "    Fuel: " << plane.getFuel() << " % Fuel consumption: " << plane.getConsumption() << " %/s" << endl;
+    stream << "    Fuel: " << plane.getFuel() << " % Consumption: " << plane.getConsumption() << " %/s" << endl;
     return stream;
 }
