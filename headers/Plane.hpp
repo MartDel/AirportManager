@@ -36,6 +36,7 @@ class Location {
 
         // Operators
         bool operator==(const Location& l) const;
+        bool operator!=(const Location& l) const;
         friend ostream& operator<<(ostream& stream, const Location& l);
 };
 
@@ -45,16 +46,13 @@ class Trajectory {
         Location* reached_point;
     public:
         Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL) {}
-        // ~Trajectory() { delete reached_point; }
         Location getPoint(const size_t& i) const { return points.at(i); }
         Location getLastPoint() const { return points.at(points.size() - 1); }
+        size_t getPointPos(const Location& l) const;
+        bool isCyclic() const { return this->points.at(0) == this->getLastPoint(); }
 
         // Get the next position in the trajectory
-        Location getNextLocation(const Location& from, const float& speed);
-        // Get a location in the trajetory at specified time
-        // Location getLocationAt(const size_t& t) const;
-        // Get a new step to move from the specified location to the first trajectory location
-        // Location getLocationFrom(const Location& from, const float& speed) const;
+        Location getNextLocation(const Location& from, const float& speed, const bool& verbose = false);
 };
 
 class Plane {
@@ -66,7 +64,7 @@ class Plane {
 
     public:
         Plane(const string& _name, const Location& _spawn, const Trajectory& _traj);
-        bool isDestinationReached() const { return this->location == this->destination; }
+        bool isDestinationReached() const { return this->location == this->destination && !trajectory.isCyclic(); }
 
         void start();
         void updateLocation();

@@ -1,19 +1,22 @@
 #include "Plane.hpp"
 
 int main(void) {
-    Location spawn(0, 0, 0), start(3, 3, -2), destination(10, 10, 0);
+    Location spawn(0, 0, 0), p1(10, 0, 0), p2(0, 10, 0), p3(0, 0, 10);
 
     vector<Location> traj_vector;
-    traj_vector.push_back(start);
-    traj_vector.push_back(destination);
+    traj_vector.push_back(p1);
+    traj_vector.push_back(p2);
+    traj_vector.push_back(p3);
+    traj_vector.push_back(p1);
     Trajectory traj(traj_vector);
 
-    Plane p1("test", spawn, traj);
-    p1.start();
+    Plane plane1("test", spawn, traj);
+    plane1.start();
 
     size_t i(0);
-    while (!p1.isDestinationReached() && i < 10) {
-        p1.updateLocation();
+    while (!plane1.isDestinationReached() && i < 100) {
+        cout << " -- " << i << " -- " << endl;
+        plane1.updateLocation();
         i++;
     }
 

@@ -45,7 +45,7 @@ float Location::getThetaTo(const Location &l) const {
         // cout << "theta = pi/2" << endl;
         theta = M_PI/2;
     }
-    return theta;
+    return M_PI - theta;
 }
 
 float Location::get2dDistanceTo(const Location &l) const {
@@ -61,29 +61,68 @@ bool Location::operator==(const Location &l) const {
     return this->x == l.getX() && this->y == l.getY() && round(this->z) == l.getZ();
 }
 
+bool Location::operator!=(const Location &l) const {
+    return !(*this == l);
+}
+
 ostream& operator<<(ostream& stream, const Location& l) {
     stream << "(" << l.getX() << ", " << l.getY() << ", " << l.getZ() << ")";
     return stream;
 }
 
-Location Trajectory::getNextLocation(const Location &from, const float &speed) {
-    Location next;
-    if (reached_point == NULL) {
-        // Try to reached the first point
-        Location to = points.at(0);
-        float phi = from.getPhiTo(to);
-        float theta = M_PI - from.getThetaTo(to);
-        float distance_between = from.get3dDistanceTo(to);
-        float step = speed;
-        if (distance_between <= speed) {
-            step = distance_between;
-            reached_point = &points.at(0);
+size_t Trajectory::getPointPos(const Location &l) const {
+    size_t i(0);
+    Location current;
+    do {
+        current = points.at(i);
+        i++;
+    } while(current != l && i < points.size());
+    return --i;
+}
+
+Location Trajectory::getNextLocation(const Location &from, const float &speed, const bool& verbose) {
+    Location next, *to;
+    size_t next_point_pos(0);
+
+    if (this->reached_point != NULL)
+        next_point_pos = (this->getPointPos(*this->reached_point) + 1) % this->points.size();
+
+    to = &this->points.at(next_point_pos);
+    float d_between_next = from.get3dDistanceTo(*to);
+
+    if (d_between_next <= speed) {
+        // Reach the next point
+        if (next_point_pos == this->points.size() - 1) {
+            // Last trajectory point reached
+            if (this->isCyclic()) {
+                // Restart from the first point
+                this->reached_point = &this->points.at(0);
+                if (verbose) cout << endl << "Restart (reached_point : " << *this->reached_point << ")" << endl;
+                next = this->getNextLocation(*this->reached_point, speed - d_between_next);
+            } else {
+                // Stop here
+                if (verbose) cout << endl << "Stop" << endl;
+                this->reached_point = to;
+                next = *to;
+            }
+        } else {
+            if (verbose) cout << endl << "New point : " << *to << endl;
+            this->reached_point = to;
+            next = this->getNextLocation(*this->reached_point, speed - d_between_next);
         }
-        next.setX(from.getX() + (step * sin(theta) * cos(phi)));
-        next.setY(from.getY() + (step * sin(theta) * sin(phi)));
-        next.setZ(from.getZ() + (step * (theta == float(M_PI)/2 ? 0.f : cos(theta))));
-        cout << next << " phi = " << phi << " theta = " << theta << " step = " << step << endl;
+    } else {
+        // Calcul the next location
+        float
+            phi = from.getPhiTo(*to),
+            theta = from.getThetaTo(*to);
+        next.setX(from.getX() + (speed * sin(theta) * cos(phi)));
+        next.setY(from.getY() + (speed * sin(theta) * sin(phi)));
+        next.setZ(from.getZ() + (speed * (theta == float(M_PI)/2 ? 0.f : cos(theta))));
+        if (verbose)
+            cout << "phi = " << phi << " theta = " << theta << endl;
     }
+
+    if (verbose) cout << next << endl;
     return next;
 }
 
@@ -97,8 +136,5 @@ void Plane::start() {
 }
 
 void Plane::updateLocation() {
-    this->location = this->trajectory.getNextLocation(this->location, this->speed);
-    if (this->location == this->trajectory.getPoint(0))
-        this->location = this->destination;
-    cout << " -> " << this->location << endl;
+    this->location = this->trajectory.getNextLocation(this->location, this->speed, true);
 }
