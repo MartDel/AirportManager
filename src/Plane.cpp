@@ -67,6 +67,8 @@ bool Location::operator!=(const Location &l) const {
 
 ostream& operator<<(ostream& stream, const Location& l) {
     stream << "(" << l.getX() << ", " << l.getY() << ", " << l.getZ() << ")";
+    if (l.getSpeed() != -1)
+        stream << " [" << l.getSpeed() << "m/s]";
     return stream;
 }
 
@@ -104,6 +106,7 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
                 this->reached_point = &this->points.at(0);
                 if (verbose) cout << endl << "Restart (reached_point : " << *this->reached_point << ")" << endl;
                 next = this->getNextLocation(*this->reached_point, speed - d_between_next);
+                next.setSpeed(this->reached_point->getSpeed() == -1 ? speed : this->reached_point->getSpeed());
             } else {
                 // Stop here
                 if (verbose) cout << endl << "Stop" << endl;
@@ -114,6 +117,7 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
             if (verbose) cout << endl << "New point : " << *to << endl;
             this->reached_point = to;
             next = this->getNextLocation(*this->reached_point, speed - d_between_next);
+            next.setSpeed(to->getSpeed() == -1 ? speed : to->getSpeed());
         }
     } else {
         // Calcul the next location
@@ -123,6 +127,7 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
         next.setX(from.getX() + (speed * sin(theta) * cos(phi)));
         next.setY(from.getY() + (speed * sin(theta) * sin(phi)));
         next.setZ(from.getZ() + (speed * (theta == float(M_PI)/2 ? 0.f : cos(theta))));
+        next.setSpeed(speed);
         if (verbose)
             cout << "phi = " << phi << " theta = " << theta << endl;
     }
@@ -137,18 +142,25 @@ Plane::Plane(const string& _name, const Location& _spawn, const size_t& _parking
 void Plane::start(const Trajectory& traj) {
     this->trajectory = traj;
     this->destination = trajectory.getLastPoint();
-    this->speed = 20;
+    float new_speed = trajectory.getPoint(0).getSpeed();
+    if (new_speed != -1) this->speed = new_speed;
     cout << "Start from : " << this->location << endl;
 }
 
 void Plane::updateLocation() {
-    this->location = this->trajectory.getNextLocation(this->location, this->speed);
+    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed));
+}
+
+void Plane::setLocation(const Location& l) {
+    this->location = l;
+    if (l.getSpeed() != -1)
+        this->speed = l.getSpeed();
 }
 
 ostream& operator<<(ostream& stream, const Plane& plane) {
     stream << plane.getName() << " :" << endl;
     stream << "    " << plane.getLocation() << " -> " << plane.getDestination() << endl;
-    stream << "    Speed: " << plane.getSpeed() << "m/s State: " << plane.getState() << endl;
-    stream << "    Fuel: " << plane.getFuel() << "% Fuel consumption: " << plane.getConsumption() << "%/s" << endl;
+    stream << "    Speed: " << plane.getSpeed() << " m/s State: " << plane.getState() << endl;
+    stream << "    Fuel: " << plane.getFuel() << " % Fuel consumption: " << plane.getConsumption() << " %/s" << endl;
     return stream;
 }

@@ -52,13 +52,13 @@ int main(void) {
     // Create first TWR
     vector<Location> twr1_parking;
     for (size_t i = 0; i < NB_PARKING_SPOTS; i++)
-        twr1_parking.push_back(Location(i * 10, 0, 0));
+        twr1_parking.push_back(Location(i * 10, 0, 0, 0));
     TWR twr1(
         twr1_parking,
-        Location(-20, 10, 0),
-        Location(60, 70, 0),
-        Location(0, 10, 0),
-        Location(300, 300, 200)
+        Location(-20, 10, 0, 5),
+        Location(60, 70, 0, 100),
+        Location(0, 10, 0, 5),
+        Location(300, 300, 200, 250)
     );
 
     // Create planes

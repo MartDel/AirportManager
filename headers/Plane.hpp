@@ -15,16 +15,19 @@ using namespace std;
 
 class Location {
     private:
-        float x, y, z;
+        float x, y, z, speed;
 
     public:
-        Location(const float& _x = 0, const float& _y = 0, const float& _z = 0) : x(_x), y(_y), z(_z) {}
+        Location(const float& _x = 0, const float& _y = 0, const float& _z = 0, const float& _speed = -1)
+         : x(_x), y(_y), z(_z), speed(_speed) {}
         float getX() const { return this->x; }
         float getY() const { return this->y; }
         float getZ() const { return this->z; }
+        float getSpeed() const { return this->speed; }
         void setX(const float& _x) { this->x = _x; }
         void setY(const float& _y) { this->y = _y; }
         void setZ(const float& _z) { this->z = _z; }
+        void setSpeed(const float& _speed) { this->speed = _speed; }
         void setLocation(const float& _x, const float& _y, const float& _z);
 
         // Get the angle between this point and the given point in the (x, y) plan
@@ -84,7 +87,7 @@ class Plane {
         size_t getState() const { return this->state; }
 
         // Setters
-        void setLocation(const Location& l) { this->location = l; }
+        void setLocation(const Location& l);
         void setDestination(const Location& d) { this->destination = d; }
         void setSpeed(const float& s) { this->speed = s; }
         void setFuel(const float& f) { this->fuel = f; }
