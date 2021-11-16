@@ -5,11 +5,13 @@
 #include <map>
 #include <queue>
 #include <cmath>
+#include <thread>
+#include <mutex>
+#include <chrono>
 
 using namespace std;
 
-#define MAX_FUEL 1000
-#define DEFAULT_CONSUMPTION 0.5
+#define DEFAULT_CONSUMPTION 0.25
 
 class Location {
     private:
@@ -45,11 +47,12 @@ class Trajectory {
         vector<Location> points;
         Location* reached_point;
     public:
+        Trajectory() : reached_point(NULL) {}
         Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL) {}
         Location getPoint(const size_t& i) const { return points.at(i); }
         Location getLastPoint() const { return points.at(points.size() - 1); }
         size_t getPointPos(const Location& l) const;
-        bool isCyclic() const { return this->points.at(0) == this->getLastPoint(); }
+        bool isCyclic() const;
 
         // Get the next position in the trajectory
         Location getNextLocation(const Location& from, const float& speed, const bool& verbose = false);
@@ -61,11 +64,39 @@ class Plane {
         Location location, destination;
         Trajectory trajectory;
         float speed, fuel, consumption;
+        size_t parking_spot, state;
+        // State codes
+        // 0 : parked
+        // 1 : taking off
+        // 2 : taked off
 
     public:
-        Plane(const string& _name, const Location& _spawn, const Trajectory& _traj);
-        bool isDestinationReached() const { return this->location == this->destination && !trajectory.isCyclic(); }
+        Plane(const string& _name, const Location& _spawn, const size_t& parking_spot);
 
-        void start();
+        // Getters
+        string getName() const { return this->name; }
+        Location getLocation() const { return this->location; }
+        Location getDestination() const { return this->destination; }
+        float getSpeed() const { return this->speed; }
+        float getFuel() const { return this->fuel; }
+        float getConsumption() const { return this->consumption; }
+        size_t getParkingSpot() const { return this->parking_spot; }
+        size_t getState() const { return this->state; }
+
+        // Setters
+        void setLocation(const Location& l) { this->location = l; }
+        void setDestination(const Location& d) { this->destination = d; }
+        void setSpeed(const float& s) { this->speed = s; }
+        void setFuel(const float& f) { this->fuel = f; }
+        void setConsumption(const float& c) { this->consumption = c; }
+        void setState(const size_t& s) { this->state = s; }
+        void setParkingSpot(const size_t& i) { this->parking_spot = i; }
+
+        bool isDestinationReached() const { return this->location == this->destination && !this->trajectory.isCyclic(); }
+
+        void start(const Trajectory& traj);
         void updateLocation();
+
+        friend ostream& operator<<(ostream& stream, const Plane& plane);
+
 };

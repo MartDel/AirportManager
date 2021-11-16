@@ -80,6 +80,11 @@ size_t Trajectory::getPointPos(const Location &l) const {
     return --i;
 }
 
+bool Trajectory::isCyclic() const {
+    if (this->points.size() == 0) return false;
+    else return this->points.at(0) == this->getLastPoint();
+}
+
 Location Trajectory::getNextLocation(const Location &from, const float &speed, const bool& verbose) {
     Location next, *to;
     size_t next_point_pos(0);
@@ -126,15 +131,24 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
     return next;
 }
 
-Plane::Plane(const string& _name, const Location& _spawn, const Trajectory& _traj)
-: name(_name), location(_spawn), trajectory(_traj), speed(0), fuel(MAX_FUEL), consumption(DEFAULT_CONSUMPTION) {}
+Plane::Plane(const string& _name, const Location& _spawn, const size_t& _parking_spot)
+: name(_name), location(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION), parking_spot(_parking_spot), state(0) {}
 
-void Plane::start() {
+void Plane::start(const Trajectory& traj) {
+    this->trajectory = traj;
     this->destination = trajectory.getLastPoint();
-    this->speed = 1;
+    this->speed = 20;
     cout << "Start from : " << this->location << endl;
 }
 
 void Plane::updateLocation() {
-    this->location = this->trajectory.getNextLocation(this->location, this->speed, true);
+    this->location = this->trajectory.getNextLocation(this->location, this->speed);
+}
+
+ostream& operator<<(ostream& stream, const Plane& plane) {
+    stream << plane.getName() << " :" << endl;
+    stream << "    " << plane.getLocation() << " -> " << plane.getDestination() << endl;
+    stream << "    Speed: " << plane.getSpeed() << "m/s State: " << plane.getState() << endl;
+    stream << "    Fuel: " << plane.getFuel() << "% Fuel consumption: " << plane.getConsumption() << "%/s" << endl;
+    return stream;
 }
