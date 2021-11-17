@@ -38,11 +38,11 @@ float Location::getThetaTo(const Location &l) const {
         theta = atan(xy_diff / z_diff);
     } else if(l.getZ() > this->z) {
         // pi/2 < theta <= pi
-        // cout << "pi/2 < theta <= pi" << endl;
-        theta = atan(xy_diff / z_diff) + (M_PI / 2);
+        // cout << "pi/2 < theta <= pi " << z_diff << " " << xy_diff << endl;
+        theta = atan(z_diff / xy_diff) + (M_PI / 2);
     } else {
         // theta = pi/2
-        // cout << "theta = pi/2" << endl;
+        // cout << "theta = pi/2 " << z_diff << " " << xy_diff << endl;
         theta = M_PI/2;
     }
     return M_PI - theta;
@@ -124,12 +124,12 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
         float
             phi = from.getPhiTo(*to),
             theta = from.getThetaTo(*to);
+        if (verbose)
+            cout << "phi = " << phi << " theta = " << theta << endl;
         next.setX(from.getX() + (speed * sin(theta) * cos(phi)));
         next.setY(from.getY() + (speed * sin(theta) * sin(phi)));
         next.setZ(from.getZ() + (speed * (theta == float(M_PI)/2 ? 0.f : cos(theta))));
         next.setSpeed(speed);
-        if (verbose)
-            cout << "phi = " << phi << " theta = " << theta << endl;
     }
 
     if (verbose) cout << next << endl;
