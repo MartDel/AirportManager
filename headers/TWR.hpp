@@ -1,12 +1,17 @@
 #include "Plane.hpp"
 
+// Number of parking spots in airports
 #define NB_PARKING_SPOTS 3
 
+/**
+ * @brief A TWR manage airport parking and runway.
+ * It manage all of landing and taking off planes.
+ */
 class TWR {
     private:
-        queue<Plane*> parking;
-        vector<Location> parking_spots;
-        Trajectory takeoff, landing;
+        queue<Plane*> parking; // All of parked planes
+        vector<Location> parking_spots; // All of parking spot locations
+        Trajectory takeoff, landing; // The taking off and landing trajectory
         bool is_runway_used;
 
     public:
@@ -21,12 +26,21 @@ class TWR {
         bool isParkingEmpty() const { return this->parking.empty(); }
         bool isRunwayUsed() const { return this->is_runway_used; }
 
-        // Manage a plane to land and park it
+        /**
+         * @brief Manage a plane to land it and park it
+         * @param plane The plane to land
+         */
         void landPlane(Plane* plane);
 
-        // Manage a plane to take it off
+        /**
+         * @brief Manage the first arrived plane to take it off
+         */
         void takeOffPlane();
 
-        // Spawn a plane in the parking
+        /**
+         * @brief Spawn a new plane in the parking
+         * @param name The plane name
+         * @return Plane* The spawned plane
+         */
         Plane* spawnPlane(const string& name);
 };

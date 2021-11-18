@@ -1,5 +1,9 @@
 #include "Plane.hpp"
 
+/* -------------------------------------------------------------------------- */
+/*                             Location functions                             */
+/* -------------------------------------------------------------------------- */
+
 void Location::setLocation(const float &_x, const float &_y, const float &_z) {
     this->x = _x;
     this->y = _y;
@@ -34,15 +38,12 @@ float Location::getThetaTo(const Location &l) const {
         theta(0);
     if (l.getZ() < this->z) {
         // 0 <= theta < pi/2
-        // cout << "0 <= theta < pi/2 " << z_diff << " " << xy_diff << endl;
         theta = atan(xy_diff / z_diff);
     } else if(l.getZ() > this->z) {
         // pi/2 < theta <= pi
-        // cout << "pi/2 < theta <= pi " << z_diff << " " << xy_diff << endl;
         theta = atan(z_diff / xy_diff) + (M_PI / 2);
     } else {
         // theta = pi/2
-        // cout << "theta = pi/2 " << z_diff << " " << xy_diff << endl;
         theta = M_PI/2;
     }
     return M_PI - theta;
@@ -72,6 +73,10 @@ ostream& operator<<(ostream& stream, const Location& l) {
     return stream;
 }
 
+/* -------------------------------------------------------------------------- */
+/*                            Trajectory functions                            */
+/* -------------------------------------------------------------------------- */
+
 size_t Trajectory::getPointPos(const Location &l) const {
     size_t i(0);
     Location current;
@@ -83,7 +88,7 @@ size_t Trajectory::getPointPos(const Location &l) const {
 }
 
 bool Trajectory::isCyclic() const {
-    if (this->points.size() == 0) return false;
+    if (this->points.size() < 2) return false;
     else return this->points.at(0) == this->getLastPoint();
 }
 
@@ -91,14 +96,14 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
     Location next, *to;
     size_t next_point_pos(0);
 
+    // Get the next point to reach
     if (this->reached_point != NULL)
         next_point_pos = (this->getPointPos(*this->reached_point) + 1) % this->points.size();
-
     to = &this->points.at(next_point_pos);
-    float d_between_next = from.get3dDistanceTo(*to);
 
+    // Checking the different cases
+    float d_between_next = from.get3dDistanceTo(*to);
     if (d_between_next <= speed) {
-        // Reach the next point
         if (next_point_pos == this->points.size() - 1) {
             // Last trajectory point reached
             if (this->isCyclic()) {
@@ -114,6 +119,7 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
                 next = *to;
             }
         } else {
+            // Reach the next point
             if (verbose) cout << endl << "New point : " << *to << endl;
             this->reached_point = to;
             next = this->getNextLocation(*this->reached_point, speed - d_between_next);
@@ -136,24 +142,30 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
     return next;
 }
 
+/* -------------------------------------------------------------------------- */
+/*                               Plane functions                              */
+/* -------------------------------------------------------------------------- */
+
 Plane::Plane(const string& _name, const Location& _spawn, const size_t& _parking_spot)
 : name(_name), location(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION), parking_spot(_parking_spot), state(0) {}
 
 void Plane::start(const Trajectory& traj) {
     this->trajectory = traj;
     this->destination = trajectory.getLastPoint();
-    float new_speed = trajectory.getPoint(0).getSpeed();
+    float new_speed = trajectory.getPointAt(0).getSpeed();
     if (new_speed != -1) this->speed = new_speed;
     cout << "Start from : " << this->location << endl;
 }
 
 void Plane::updateLocation() {
-    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed));
+    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed, true));
     this->fuel -= this->consumption;
 }
 
 void Plane::setLocation(const Location& l) {
     this->location = l;
+
+    // Update the plane speed
     if (l.getSpeed() != -1)
         this->speed = l.getSpeed();
 }

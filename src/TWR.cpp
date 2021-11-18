@@ -1,5 +1,9 @@
 #include "TWR.hpp"
 
+/* -------------------------------------------------------------------------- */
+/*                                TWR functions                               */
+/* -------------------------------------------------------------------------- */
+
 TWR::TWR(
     const vector<Location>& _parking_spots,
     const Location& runway_start,
