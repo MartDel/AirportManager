@@ -6,6 +6,10 @@
 
 mutex cout_lock; // A thread lock
 
+/* -------------------------------------------------------------------------- */
+/*                              Thread functions                              */
+/* -------------------------------------------------------------------------- */
+
 /**
  * @brief The world thread function.
  * Manage plane locations each second.
@@ -48,7 +52,7 @@ void world(vector<Plane*>& planes, bool& stop_prgm) {
 
 /**
  * @brief Airport thread function.
- * Check if a plane can take off or land
+ * Check if a plane can take off or land.
  * @param twr The TWR to manage
  * @param stop_prgm If the simulation must stoped
  */
@@ -72,6 +76,10 @@ void twr_control(TWR& twr, bool& stop_prgm) {
     cout_lock.unlock();
 }
 
+/* -------------------------------------------------------------------------- */
+/*                                Main function                               */
+/* -------------------------------------------------------------------------- */
+
 int main(void) {
     bool stop_prgm(false);
 
@@ -91,26 +99,60 @@ int main(void) {
     vector<Plane*> planes;
     Plane* p = twr1.spawnPlane("test1");
     if (p == NULL) {
-        cout << "No more parking spot in Airport1..." << endl;
+        cerr << "No more parking spot in Airport1..." << endl;
         return -1;
     }
     planes.push_back(p);
 
     // Create and start threads
-    thread world_thread(world, ref(planes), ref(stop_prgm));
-    thread twr_thread(twr_control, ref(twr1), ref(stop_prgm));
+    // thread world_thread(world, ref(planes), ref(stop_prgm));
+    // thread twr_thread(twr_control, ref(twr1), ref(stop_prgm));
 
     // Check if the simulation should stop
-    char input;
-    while (!stop_prgm) {
-        cin >> input;
-        if (input == 'q')
-            stop_prgm = true;
+    // char input;
+    // while (!stop_prgm) {
+    //     cin >> input;
+    //     if (input == 'q')
+    //         stop_prgm = true;
+    // }
+
+    // Set up the window
+    RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "TWR1");
+    app.setFramerateLimit(60);
+
+    // Set up the background image
+    Texture background_img;
+    Sprite background_sprite;
+    if (!background_img.loadFromFile(IMG_FOLDER + BACKGROUND_IMG)) {
+        cerr << "Cannot load image file : " << IMG_FOLDER << BACKGROUND_IMG << endl;
+        return EXIT_FAILURE;
+    }
+    background_sprite.setTexture(background_img);
+
+    // Set up the circle
+    CircleShape circle(10.f);
+    circle.setFillColor(Color(0, 0, 250));
+    circle.setPosition(Vector2f(700, 100));
+
+    while (app.isOpen()) {
+        // Events
+        Event event;
+        while (app.pollEvent(event)) {
+            if ((event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) || event.type == Event::Closed)
+                app.close();
+        }
+
+        // Display
+        app.clear();
+        app.draw(background_sprite);
+        app.draw(circle);
+        app.display();
     }
 
     // Shut down threads
-    if(world_thread.joinable()) world_thread.join();
-    if(twr_thread.joinable()) twr_thread.join();
+    stop_prgm = true;
+    // if(world_thread.joinable()) world_thread.join();
+    // if(twr_thread.joinable()) twr_thread.join();
 
     return 0;
 }

@@ -1,16 +1,4 @@
-#define _USE_MATH_DEFINES
-
-#include <iostream>
-#include <vector>
-#include <map>
-#include <queue>
-#include <cmath>
-#include <thread>
-#include <mutex>
-#include <chrono>
-
-using namespace std;
-
+#include "Airport.hpp"
 #define DEFAULT_CONSUMPTION 0.25
 
 /**
@@ -158,5 +146,6 @@ class Plane {
          */
         void updateLocation();
 
+        // Operators
         friend ostream& operator<<(ostream& stream, const Plane& plane);
 };
