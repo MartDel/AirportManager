@@ -117,22 +117,38 @@ int main(void) {
     // }
 
     // Set up the window
-    RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "TWR1");
-    app.setFramerateLimit(60);
+    ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "TWR1", Style::Default, settings);
+    app.setFramerateLimit(1);
 
     // Set up the background image
     Texture background_img;
     Sprite background_sprite;
     if (!background_img.loadFromFile(IMG_FOLDER + BACKGROUND_IMG)) {
         cerr << "Cannot load image file : " << IMG_FOLDER << BACKGROUND_IMG << endl;
-        return EXIT_FAILURE;
+        return -1;
     }
     background_sprite.setTexture(background_img);
 
     // Set up the circle
+    Vector2f plane_pos(700, 100);
     CircleShape circle(10.f);
-    circle.setFillColor(Color(0, 0, 250));
-    circle.setPosition(Vector2f(700, 100));
+    circle.setFillColor(Color::Blue);
+    circle.setPosition(plane_pos);
+
+    // Set up a text
+    Font font;
+    if (!font.loadFromFile(FONTS_FOLDER + OPENSANS_FONT)) {
+        cerr << "Cannot load font file : " << FONTS_FOLDER << OPENSANS_FONT << endl;
+        return -1;
+    }
+    Text altitude;
+    altitude.setFont(font);
+    altitude.setString("500m");
+    altitude.setCharacterSize(10);
+    altitude.setFillColor(Color::Black);
+    altitude.setPosition(Vector2f(plane_pos.x + 25, plane_pos.y - 10));
 
     while (app.isOpen()) {
         // Events
@@ -146,6 +162,7 @@ int main(void) {
         app.clear();
         app.draw(background_sprite);
         app.draw(circle);
+        app.draw(altitude);
         app.display();
     }
 
