@@ -1,4 +1,5 @@
 #include "Plane.hpp"
+#include <SFML/System/Vector2.hpp>
 
 /* -------------------------------------------------------------------------- */
 /*                             Location functions                             */
@@ -8,6 +9,13 @@ void Location::setLocation(const float &_x, const float &_y, const float &_z) {
     this->x = _x;
     this->y = _y;
     this->z = _z;
+}
+
+Vector2f Location::toVector() const {
+    Vector2f v;
+    v.x = WINDOW_WIDTH * (this->x / WINDOW_REAL_WIDTH);
+    v.y = WINDOW_HEIGHT * (this->y / WINDOW_REAL_HEIGHT);
+    return v;
 }
 
 float Location::getPhiTo(const Location &l) const {
@@ -135,6 +143,8 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
         next.setX(from.getX() + (speed * sin(theta) * cos(phi)));
         next.setY(from.getY() + (speed * sin(theta) * sin(phi)));
         next.setZ(from.getZ() + (speed * (theta == float(M_PI)/2 ? 0.f : cos(theta))));
+        next.setPhi(phi);
+        next.setTheta(theta);
         next.setSpeed(speed);
     }
 
@@ -146,15 +156,51 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
 /*                               Plane functions                              */
 /* -------------------------------------------------------------------------- */
 
+Font Plane::default_font = Font();
+
 Plane::Plane(const string& _name, const Location& _spawn, const size_t& _parking_spot)
-: name(_name), location(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION), parking_spot(_parking_spot), state(0) {}
+: name(_name), location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION), parking_spot(_parking_spot), state(0) {
+    // Set graphical plane
+    this->graphical_plane = CircleShape(PLANE_CIRCLE_RADIUS);
+    this->graphical_plane.setFillColor(PLANE_COLOR_DEFAULT);
+
+    // Set altitude and name label
+    Text altitude_label, name_label;
+    altitude_label.setFont(Plane::default_font);
+    altitude_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
+    altitude_label.setFillColor(Color::Black);
+    this->altitude_label = altitude_label;
+    name_label.setFont(Plane::default_font);
+    name_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
+    name_label.setFillColor(Color::Black);
+    this->name_label = name_label;
+}
+
+Text Plane::getAltitudeLabel() {
+    Vector2f location_v = this->location.toVector();
+    this->altitude_label.setString(to_string(int(round(this->location.getZ()))) + "m");
+    this->altitude_label.setPosition(Vector2f(location_v.x + ALTITUDE_LABEL_X, location_v.y - ALTITUDE_LABEL_Y));
+    return this->altitude_label;
+}
+
+Text Plane::getNameLabel() {
+    Vector2f location_v = this->location.toVector();
+    this->name_label.setString(this->name);
+    this->name_label.setPosition(Vector2f(location_v.x + NAME_LABEL_X, location_v.y - NAME_LABEL_Y));
+    return this->name_label;
+}
 
 void Plane::start(const Trajectory& traj) {
     this->trajectory = traj;
     this->destination = trajectory.getLastPoint();
     float new_speed = trajectory.getPointAt(0).getSpeed();
-    if (new_speed != -1) this->speed = new_speed;
+    // cout << trajectory.getPointAt(0) << endl;
+    if (new_speed != -1) {
+        this->speed = new_speed;
+        // cout << this->speed << endl;
+    }
     cout << "Start from : " << this->location << endl;
+    // cout << *this << endl;
 }
 
 void Plane::updateLocation() {
@@ -168,6 +214,11 @@ void Plane::setLocation(const Location& l) {
     // Update the plane speed
     if (l.getSpeed() != -1)
         this->speed = l.getSpeed();
+}
+
+CircleShape Plane::toSFML() {
+    this->graphical_plane.setPosition(this->location.toVector());
+    return this->graphical_plane;
 }
 
 ostream& operator<<(ostream& stream, const Plane& plane) {

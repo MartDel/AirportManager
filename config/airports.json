@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Lille-Lesquin",
+        "parking": [
+            {"x": 1440, "y": 910},
+            {"x": 1380, "y": 890},
+            {"x": 1330, "y": 860}
+        ],
+        "parking_entrance": {"x": 1405, "y": 830, "speed": 20},
+        "runway_start": {"x": 1000, "y": 600, "speed": 50},
+        "runway_end": {"x": 1800, "y": 920, "speed": 100},
+        "perimeter_exit": {"x": 2900, "y": 1300, "speed": 250}
+    }
+]

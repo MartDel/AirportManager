@@ -16,8 +16,10 @@ using namespace sf;
 /* ------------------------------ SFML defines ------------------------------ */
 
 // Window size
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 494
+#define WINDOW_WIDTH 800.0
+#define WINDOW_REAL_WIDTH 3000.0
+#define WINDOW_HEIGHT 494.0
+#define WINDOW_REAL_HEIGHT (WINDOW_REAL_WIDTH * (WINDOW_HEIGHT / WINDOW_WIDTH))
 
 // Images
 const string IMG_FOLDER = "../img/";

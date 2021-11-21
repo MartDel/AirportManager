@@ -21,10 +21,10 @@ void world(vector<Plane*>& planes, bool& stop_prgm) {
 
     while (!stop_prgm) {
         for (auto& current_plane : planes) {
-            if (!current_plane->isDestinationReached())
+            if (!current_plane->isDestinationReached()) {
                 // Update plane location
                 current_plane->updateLocation();
-            else {
+            } else {
                 // Update plane state
                 switch (current_plane->getState()) {
                     case 1:
@@ -83,38 +83,7 @@ void twr_control(TWR& twr, bool& stop_prgm) {
 int main(void) {
     bool stop_prgm(false);
 
-    // Create first TWR
-    vector<Location> twr1_parking;
-    for (size_t i = 0; i < NB_PARKING_SPOTS; i++)
-        twr1_parking.push_back(Location(i * 10, 0, 0, 0));
-    TWR twr1(
-        twr1_parking,
-        Location(-20, 10, 0, 5),
-        Location(60, 70, 0, 100),
-        Location(0, 10, 0, 5),
-        Location(300, 300, 200, 250)
-    );
-
-    // Create planes
-    vector<Plane*> planes;
-    Plane* p = twr1.spawnPlane("test1");
-    if (p == NULL) {
-        cerr << "No more parking spot in Airport1..." << endl;
-        return -1;
-    }
-    planes.push_back(p);
-
-    // Create and start threads
-    // thread world_thread(world, ref(planes), ref(stop_prgm));
-    // thread twr_thread(twr_control, ref(twr1), ref(stop_prgm));
-
-    // Check if the simulation should stop
-    // char input;
-    // while (!stop_prgm) {
-    //     cin >> input;
-    //     if (input == 'q')
-    //         stop_prgm = true;
-    // }
+    /* ------------------------------- Init window ------------------------------ */
 
     // Set up the window
     ContextSettings settings;
@@ -125,30 +94,51 @@ int main(void) {
     // Set up the background image
     Texture background_img;
     Sprite background_sprite;
-    if (!background_img.loadFromFile(IMG_FOLDER + BACKGROUND_IMG)) {
+    if (!background_img.loadFromFile(IMG_FOLDER + BACKGROUND_IMG))
+    {
         cerr << "Cannot load image file : " << IMG_FOLDER << BACKGROUND_IMG << endl;
         return -1;
     }
     background_sprite.setTexture(background_img);
 
-    // Set up the circle
-    Vector2f plane_pos(700, 100);
-    CircleShape circle(10.f);
-    circle.setFillColor(Color::Blue);
-    circle.setPosition(plane_pos);
-
-    // Set up a text
+    // Set up the font
     Font font;
     if (!font.loadFromFile(FONTS_FOLDER + OPENSANS_FONT)) {
         cerr << "Cannot load font file : " << FONTS_FOLDER << OPENSANS_FONT << endl;
         return -1;
     }
-    Text altitude;
-    altitude.setFont(font);
-    altitude.setString("500m");
-    altitude.setCharacterSize(10);
-    altitude.setFillColor(Color::Black);
-    altitude.setPosition(Vector2f(plane_pos.x + 25, plane_pos.y - 10));
+    Plane::default_font = font;
+
+    /* ------------------------ Init planes and airports ------------------------ */
+
+    // Create first TWR
+    vector<Location> twr1_parking;
+    twr1_parking.push_back(Location(1440, 910, 0, 0));
+    twr1_parking.push_back(Location(1380, 890, 0, 0));
+    twr1_parking.push_back(Location(1330, 860, 0, 0));
+    TWR twr1(
+        twr1_parking,
+        Location(1000, 600, 0, 50),
+        Location(1800, 920, 0, 100),
+        Location(1405, 830, 0, 20),
+        Location(2900, 1300, 200, 250)
+    );
+    twr1.setBackground(background_sprite);
+
+    // Create planes
+    vector<Plane*> planes;
+    Plane* p = twr1.spawnPlane("blabla");
+    if (p == NULL) {
+        cerr << "No more parking spot in Airport1..." << endl;
+        return -1;
+    }
+    planes.push_back(p);
+
+    /* ------------------------- Threads and window loop ------------------------ */
+
+    // Create and start threads
+    thread world_thread(world, ref(planes), ref(stop_prgm));
+    thread twr_thread(twr_control, ref(twr1), ref(stop_prgm));
 
     while (app.isOpen()) {
         // Events
@@ -158,18 +148,26 @@ int main(void) {
                 app.close();
         }
 
-        // Display
+        // Stop the programme
+        if(stop_prgm) app.close();
+        
         app.clear();
-        app.draw(background_sprite);
-        app.draw(circle);
-        app.draw(altitude);
+        app.draw(twr1.getBackground());
+
+        for (auto& plane : planes) {
+            app.draw(plane->toSFML());
+            app.draw(plane->getAltitudeLabel());
+            app.draw(plane->getNameLabel());
+        }
+
         app.display();
     }
 
     // Shut down threads
     stop_prgm = true;
-    // if(world_thread.joinable()) world_thread.join();
-    // if(twr_thread.joinable()) twr_thread.join();
+    if(world_thread.joinable()) world_thread.join();
+    if(twr_thread.joinable()) twr_thread.join();
+    for (auto& plane : planes) delete plane;
 
     return 0;
 }

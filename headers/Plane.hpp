@@ -1,5 +1,16 @@
 #include "Airport.hpp"
+
+/* ------------------------------ Plane defines ----------------------------- */
 #define DEFAULT_CONSUMPTION 0.25
+#define PLANE_COLOR_DEFAULT Color::Blue
+#define PLANE_COLOR_URGENCY Color::Red
+#define PLANE_CIRCLE_RADIUS 5.f
+#define ALTITUDE_LABEL_X 15
+#define ALTITUDE_LABEL_Y 10
+#define ALTITUDE_LABEL_SIZE 10
+#define NAME_LABEL_X 15
+#define NAME_LABEL_Y 25
+#define NAME_LABEL_SIZE 15
 
 /**
  * @brief A Location is a 3D point.
@@ -7,20 +18,29 @@
  */
 class Location {
     private:
-        float x, y, z, speed;
+        float x, y, z, phi, theta, speed;
 
     public:
-        Location(const float& _x = 0, const float& _y = 0, const float& _z = 0, const float& _speed = -1)
-         : x(_x), y(_y), z(_z), speed(_speed) {}
+        Location(
+            const float &_x = 0,
+            const float &_y = 0,
+            const float &_z = 0,
+            const float &_speed = -1
+        ) : x(_x), y(_y), z(_z), speed(_speed) {}
         float getX() const { return this->x; }
         float getY() const { return this->y; }
         float getZ() const { return this->z; }
+        float getPhi() const { return this->phi; }
+        float getTheta() const { return this->theta; }
         float getSpeed() const { return this->speed; }
         void setX(const float& _x) { this->x = _x; }
         void setY(const float& _y) { this->y = _y; }
-        void setZ(const float& _z) { this->z = _z; }
+        void setZ(const float &_z) { this->z = _z; }
+        void setPhi(const float &_phi) { this->z = _phi; }
+        void setTheta(const float &_theta) { this->z = _theta; }
         void setSpeed(const float& _speed) { this->speed = _speed; }
         void setLocation(const float& _x, const float& _y, const float& _z);
+        Vector2f toVector() const;
 
         /**
          * @brief Get the angle between this point and the given point in the (0, Ux, Uy) plan
@@ -104,13 +124,16 @@ class Plane {
         float speed, fuel;
         const float consumption;
         size_t parking_spot, state;
+        CircleShape graphical_plane;
+        Text altitude_label, name_label;
         // State codes
         // 0 : parked
         // 1 : taking off
         // 2 : taked off
 
     public:
-        Plane(const string& _name, const Location& _spawn, const size_t& parking_spot);
+        static Font default_font;
+        Plane(const string &_name, const Location &_spawn, const size_t &parking_spot);
 
         // Getters
         string getName() const { return this->name; }
@@ -121,6 +144,8 @@ class Plane {
         float getConsumption() const { return this->consumption; }
         size_t getParkingSpot() const { return this->parking_spot; }
         size_t getState() const { return this->state; }
+        Text getAltitudeLabel();
+        Text getNameLabel();
 
         // Setters
         void setLocation(const Location& l);
@@ -146,6 +171,12 @@ class Plane {
          */
         void updateLocation();
 
+        /**
+         * @brief Get the plane SFML version
+         * @return CircleShape The plane to display
+         */
+        CircleShape toSFML();
+
         // Operators
-        friend ostream& operator<<(ostream& stream, const Plane& plane);
+        friend ostream & operator<<(ostream &stream, const Plane &plane);
 };
