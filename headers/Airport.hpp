@@ -8,10 +8,12 @@
 #include <thread>
 #include <mutex>
 #include <chrono>
+#include <nlohmann/json.hpp>
 #include <SFML/Graphics.hpp>
 
 using namespace std;
 using namespace sf;
+using json = nlohmann::json;
 
 /* ------------------------------ SFML defines ------------------------------ */
 
@@ -28,3 +30,7 @@ const string BACKGROUND_IMG = "airport.jpg";
 // Fonts
 const string FONTS_FOLDER = "../fonts/";
 const string OPENSANS_FONT = "OpenSans.ttf";
+
+/* ---------------------------------- Utils --------------------------------- */
+
+float roundWithPrecision(const float& f);

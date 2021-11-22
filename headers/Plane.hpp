@@ -26,7 +26,7 @@ class Location {
             const float &_y = 0,
             const float &_z = 0,
             const float &_speed = -1
-        ) : x(_x), y(_y), z(_z), speed(_speed) {}
+        ) : x(_x), y(_y), z(_z), speed(_speed), phi(0), theta(0) {}
         float getX() const { return this->x; }
         float getY() const { return this->y; }
         float getZ() const { return this->z; }
@@ -36,8 +36,8 @@ class Location {
         void setX(const float& _x) { this->x = _x; }
         void setY(const float& _y) { this->y = _y; }
         void setZ(const float &_z) { this->z = _z; }
-        void setPhi(const float &_phi) { this->z = _phi; }
-        void setTheta(const float &_theta) { this->z = _theta; }
+        void setPhi(const float &_phi) { this->phi = _phi; }
+        void setTheta(const float &_theta) { this->theta = _theta; }
         void setSpeed(const float& _speed) { this->speed = _speed; }
         void setLocation(const float& _x, const float& _y, const float& _z);
         Vector2f toVector() const;

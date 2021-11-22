@@ -1,5 +1,6 @@
 #include "Plane.hpp"
 #include <SFML/System/Vector2.hpp>
+#include <cmath>
 
 /* -------------------------------------------------------------------------- */
 /*                             Location functions                             */
@@ -137,12 +138,13 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
         // Calcul the next location
         float
             phi = from.getPhiTo(*to),
-            theta = from.getThetaTo(*to);
+            theta = from.getThetaTo(*to),
+            theta_z = theta * (float(M_PI) / 180);
         if (verbose)
             cout << "phi = " << phi << " theta = " << theta << endl;
         next.setX(from.getX() + (speed * sin(theta) * cos(phi)));
         next.setY(from.getY() + (speed * sin(theta) * sin(phi)));
-        next.setZ(from.getZ() + (speed * (theta == float(M_PI)/2 ? 0.f : cos(theta))));
+        next.setZ(from.getZ() + (speed * (roundWithPrecision(theta) == roundWithPrecision(float(M_PI)/2) ? 0.f : cos(theta))));
         next.setPhi(phi);
         next.setTheta(theta);
         next.setSpeed(speed);
