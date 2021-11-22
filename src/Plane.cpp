@@ -196,13 +196,8 @@ void Plane::start(const Trajectory& traj) {
     this->trajectory = traj;
     this->destination = trajectory.getLastPoint();
     float new_speed = trajectory.getPointAt(0).getSpeed();
-    // cout << trajectory.getPointAt(0) << endl;
-    if (new_speed != -1) {
-        this->speed = new_speed;
-        // cout << this->speed << endl;
-    }
+    if (new_speed != -1) this->speed = new_speed;
     cout << "Start from : " << this->location << endl;
-    // cout << *this << endl;
 }
 
 void Plane::updateLocation() {
