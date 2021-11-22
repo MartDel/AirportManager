@@ -31,7 +31,6 @@ TWR::TWR(
 void TWR::takeOffPlane() {
     Plane* plane = this->parking.front();
     cout << " -- Starting take off for " << plane->getName() << " --" << endl;
-    plane->setState(1);
     plane->start(this->takeoff);
     this->parking.pop();
 }

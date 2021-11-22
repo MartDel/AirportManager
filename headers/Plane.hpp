@@ -84,18 +84,26 @@ class Trajectory {
     private:
         vector<Location> points; // The Trajectory points
         Location* reached_point; // The last point reached (default : NULL)
-    public:
-        Trajectory() : reached_point(NULL) {}
-        Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL) {}
-        Location getPointAt(const size_t& i) const { return points.at(i); }
-        Location getLastPoint() const { return points.at(points.size() - 1); }
 
         /**
          * @brief Get the given point position in the array (vector) points
          * @param l The location to search
          * @return size_t The position of the given location in the array
          */
-        size_t getPointPos(const Location& l) const;
+        size_t getPointPos(const Location &l) const;
+
+        /**
+         * @brief Get the near cyclic trajectory point from a given location
+         * @param from The plane location
+         * @return Location* The near point
+         */
+        Location *getNearPoint(const Location &from);
+
+    public:
+        Trajectory() : reached_point(NULL) {}
+        Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL) {}
+        Location getPointAt(const size_t& i) const { return points.at(i); }
+        Location getLastPoint() const { return points.at(points.size() - 1); }
 
         /**
          * @brief Check if the trajectory is cylic.
@@ -123,17 +131,13 @@ class Plane {
         Trajectory trajectory;
         float speed, fuel;
         const float consumption;
-        size_t parking_spot, state;
+        size_t parking_spot;
         CircleShape graphical_plane;
         Text altitude_label, name_label;
-        // State codes
-        // 0 : parked
-        // 1 : taking off
-        // 2 : taked off
 
     public:
         static Font default_font;
-        Plane(const string &_name, const Location &_spawn, const size_t &parking_spot);
+        Plane(const string &_name, const Location &_spawn, const size_t &parking_spot = 0);
 
         // Getters
         string getName() const { return this->name; }
@@ -143,7 +147,6 @@ class Plane {
         float getFuel() const { return this->fuel; }
         float getConsumption() const { return this->consumption; }
         size_t getParkingSpot() const { return this->parking_spot; }
-        size_t getState() const { return this->state; }
         Text getAltitudeLabel();
         Text getNameLabel();
 
@@ -152,7 +155,6 @@ class Plane {
         void setDestination(const Location& d) { this->destination = d; }
         void setSpeed(const float& s) { this->speed = s; }
         void setFuel(const float& f) { this->fuel = f; }
-        void setState(const size_t& s) { this->state = s; }
         void setParkingSpot(const size_t& i) { this->parking_spot = i; }
 
         /**

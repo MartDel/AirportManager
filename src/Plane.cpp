@@ -96,6 +96,14 @@ size_t Trajectory::getPointPos(const Location &l) const {
     return --i;
 }
 
+Location* Trajectory::getNearPoint(const Location& from) {
+    map<float, Location*> points_away;
+    for (auto& current_point : this->points) {
+        points_away.insert(pair<float, Location*>(from.get3dDistanceTo(current_point), &current_point));
+    }
+    return points_away.begin()->second;
+}
+
 bool Trajectory::isCyclic() const {
     if (this->points.size() < 2) return false;
     else return this->points.at(0) == this->getLastPoint();
@@ -108,7 +116,10 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
     // Get the next point to reach
     if (this->reached_point != NULL)
         next_point_pos = (this->getPointPos(*this->reached_point) + 1) % this->points.size();
-    to = &this->points.at(next_point_pos);
+    
+    // Choose a direction
+    if (this->isCyclic()) to = this->getNearPoint(from);
+    else to = &this->points.at(next_point_pos);
 
     // Checking the different cases
     float d_between_next = from.get3dDistanceTo(*to);
@@ -161,7 +172,7 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
 Font Plane::default_font = Font();
 
 Plane::Plane(const string& _name, const Location& _spawn, const size_t& _parking_spot)
-: name(_name), location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION), parking_spot(_parking_spot), state(0) {
+: name(_name), location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION), parking_spot(_parking_spot) {
     // Set graphical plane
     this->graphical_plane = CircleShape(PLANE_CIRCLE_RADIUS);
     this->graphical_plane.setFillColor(PLANE_COLOR_DEFAULT);
@@ -221,7 +232,7 @@ CircleShape Plane::toSFML() {
 ostream& operator<<(ostream& stream, const Plane& plane) {
     stream << plane.getName() << " :" << endl;
     stream << "    " << plane.getLocation() << " -> " << plane.getDestination() << endl;
-    stream << "    Speed: " << plane.getSpeed() << " m/s State: " << plane.getState() << endl;
+    stream << "    Speed: " << plane.getSpeed() << " m/s" << endl;
     stream << "    Fuel: " << plane.getFuel() << " % Consumption: " << plane.getConsumption() << " %/s" << endl;
     return stream;
 }

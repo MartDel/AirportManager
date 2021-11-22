@@ -24,15 +24,6 @@ void world(vector<Plane*>& planes, bool& stop_prgm) {
             if (!current_plane->isDestinationReached()) {
                 // Update plane location
                 current_plane->updateLocation();
-            } else {
-                // Update plane state
-                switch (current_plane->getState()) {
-                    case 1:
-                        // The plane has token off
-                        stop_prgm = true;
-                        current_plane->setState(2);
-                        break;
-                }
             }
 
             // Debug plane data
@@ -61,6 +52,12 @@ void airport_control(APP& app, bool& stop_prgm) {
     TWR* twr = app.getTWR();
 
     while (!stop_prgm) {
+        // Check arrived planes
+        vector<Plane*> arrived_planes = app.getArrivedPlanes();
+        for (auto& arrived_plane : arrived_planes) {
+            arrived_plane->start(app.getCircularTrajectory());
+        }
+
         if (!twr->isRunwayUsed() && !twr->isParkingEmpty()) {
             // Take off a plane
             cout_lock.lock();
@@ -122,13 +119,13 @@ int main(void) {
         twr1_parking,
         Location(1000, 600, 0, 50),
         Location(1800, 920, 0, 100),
-        Location(1405, 830, 0, 20),
+        Location(1405, 830, 0, 30),
         Location(2900, 1300, 200, 250)
     );
     twr1.setBackground(background_sprite);
 
     // Create first APP
-    APP app1(&twr1);
+    APP app1(&twr1, Location(100, 100, 1000, CIRCULAR_TRAJ_SPEED), Location(WINDOW_REAL_WIDTH/2, WINDOW_REAL_HEIGHT/2));
 
     // Create planes
     vector<Plane*> planes;
@@ -138,12 +135,13 @@ int main(void) {
         return -1;
     }
     planes.push_back(p);
+    planes.push_back(app1.spawnPlane("bleble"));
 
     /* ------------------------- Threads and window loop ------------------------ */
 
     // Create and start threads
-    thread world_thread(world, ref(planes), ref(stop_prgm));
     thread airport_thread(airport_control, ref(app1), ref(stop_prgm));
+    thread world_thread(world, ref(planes), ref(stop_prgm));
 
     while (app.isOpen()) {
         // Events

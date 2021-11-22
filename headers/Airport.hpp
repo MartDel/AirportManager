@@ -34,3 +34,4 @@ const string OPENSANS_FONT = "OpenSans.ttf";
 /* ---------------------------------- Utils --------------------------------- */
 
 float roundWithPrecision(const float& f);
+float mapValue(const float &x, const float &in_min, const float &in_max, const float &out_min, const float &out_max);
