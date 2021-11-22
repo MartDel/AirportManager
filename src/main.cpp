@@ -1,4 +1,4 @@
-#include "TWR.hpp"
+#include "APP.hpp"
 
 // Thread timeouts (in ms)
 #define WORLD_INTERVAL 1000
@@ -56,14 +56,15 @@ void world(vector<Plane*>& planes, bool& stop_prgm) {
  * @param twr The TWR to manage
  * @param stop_prgm If the simulation must stoped
  */
-void twr_control(TWR& twr, bool& stop_prgm) {
+void airport_control(APP& app, bool& stop_prgm) {
     chrono::milliseconds interval(AIRPORTS_INTERVAL);
+    TWR* twr = app.getTWR();
 
     while (!stop_prgm) {
-        if (!twr.isRunwayUsed() && !twr.isParkingEmpty()) {
+        if (!twr->isRunwayUsed() && !twr->isParkingEmpty()) {
             // Take off a plane
             cout_lock.lock();
-            twr.takeOffPlane();
+            twr->takeOffPlane();
             cout_lock.unlock();
         }
 
@@ -126,6 +127,9 @@ int main(void) {
     );
     twr1.setBackground(background_sprite);
 
+    // Create first APP
+    APP app1(&twr1);
+
     // Create planes
     vector<Plane*> planes;
     Plane* p = twr1.spawnPlane("blabla");
@@ -139,7 +143,7 @@ int main(void) {
 
     // Create and start threads
     thread world_thread(world, ref(planes), ref(stop_prgm));
-    thread twr_thread(twr_control, ref(twr1), ref(stop_prgm));
+    thread airport_thread(airport_control, ref(app1), ref(stop_prgm));
 
     while (app.isOpen()) {
         // Events
@@ -167,7 +171,7 @@ int main(void) {
     // Shut down threads
     stop_prgm = true;
     if(world_thread.joinable()) world_thread.join();
-    if(twr_thread.joinable()) twr_thread.join();
+    if(airport_thread.joinable()) airport_thread.join();
     for (auto& plane : planes) delete plane;
 
     return 0;
