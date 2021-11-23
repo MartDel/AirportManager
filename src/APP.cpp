@@ -6,7 +6,7 @@
 /* -------------------------------------------------------------------------- */
 
 APP::APP(TWR *_twr, const Location &_perimeter_entrance, const Location& center)
-: linked_twr(_twr), perimeter_entrance(_perimeter_entrance), airport_center(center) {
+: linked_twr(_twr), perimeter_entrance(_perimeter_entrance), airport_center(center), landing_plane(NULL) {
     // Init waiting and comming planes
     vector<Plane*> tmp1, tmp2;
     this->waiting_planes = tmp1;
@@ -47,4 +47,29 @@ vector<Plane*> APP::getArrivedPlanes() const {
             arrived.push_back(comming_plane);
     }
     return arrived;
+}
+
+void APP::askPlaneToWait(Plane* p) {
+    // Remove the plane from the coming planes list
+    vector<Plane *>::iterator it = this->coming_planes.begin();
+    while (it != this->coming_planes.end()) {
+        if (*it == p) break;
+        else it++;
+    }
+    this->coming_planes.erase(it);
+
+    // Add the plane to waiting planes
+    Trajectory circular_t(this->circular_traj);
+    circular_t.setAltitude(CIRCULAR_TRAJ_ALTITUDE_MIN + (CIRCULAR_TRAJ_ALTITUDE_STEP * this->waiting_planes.size()));
+    this->waiting_planes.push_back(p);
+    p->start(circular_t);
+}
+
+void APP::landPriorityPlane() {
+    // Choose the plane to land
+    Plane* to_land = this->waiting_planes.at(0);
+    Location runway_start = this->linked_twr->getLandingTrajectory().getPointAt(0);
+    Location dest = this->circular_traj.getPointAt(this->circular_traj.getNearPointPos(runway_start));
+    to_land->setDestination(dest);
+    this->landing_plane = to_land;
 }

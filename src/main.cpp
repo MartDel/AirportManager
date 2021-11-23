@@ -58,8 +58,15 @@ void airport_control(APP& app, bool& stop_prgm) {
         vector<Plane*> arrived_planes = app.getArrivedPlanes();
         for (auto& arrived_plane : arrived_planes) {
             cout_lock.lock();
-            arrived_plane->start(app.getCircularTrajectory());
+            app.askPlaneToWait(arrived_plane);
             cout_lock.unlock();
+        }
+
+        if (!twr->isRunwayUsed()) {
+            // The runway is free
+            if (!twr->isParkingFull() && app.isPlaneWaiting()) {
+                app.landPriorityPlane();
+            }
         }
 
         if (!twr->isRunwayUsed() && !twr->isParkingEmpty()) {

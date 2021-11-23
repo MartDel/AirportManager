@@ -25,6 +25,8 @@ class TWR {
         );
         queue<Plane*> getParking() const { return this->parking; }
         bool isParkingEmpty() const { return this->parking.empty(); }
+        bool isParkingFull() const { return this->parking.size() == NB_PARKING_SPOTS; }
+        Trajectory getLandingTrajectory() const { return this->landing; }
         bool isRunwayUsed() const { return this->is_runway_used; }
         Sprite getBackground() const { return this->background; }
         void setBackground(const Sprite& bg) { this->background = bg; }

@@ -92,13 +92,6 @@ class Trajectory {
          */
         size_t getPointPos(const Location &l) const;
 
-        /**
-         * @brief Get the near cyclic trajectory point from a given location
-         * @param from The plane location
-         * @return Location* The near point
-         */
-        size_t getNearPointPos(const Location &from);
-
     public:
         Trajectory() : reached_point(NULL) {}
         Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL) {}
@@ -119,6 +112,19 @@ class Trajectory {
          * @return Location The new step location
          */
         Location getNextLocation(const Location& from, const float& speed, const bool& verbose = false);
+
+        /**
+         * @brief Set all trajectory points altitude
+         * @param altitude The altitude of all points
+         */
+        void setAltitude(const float& altitude);
+
+        /**
+         * @brief Get the near cyclic trajectory point from a given location
+         * @param from The plane location
+         * @return Location* The near point
+         */
+        size_t getNearPointPos(const Location &from);
 };
 
 /**

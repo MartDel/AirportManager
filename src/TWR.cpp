@@ -21,9 +21,8 @@ TWR::TWR(
 
     // Create landing trajectory
     vector<Location> landing_vector;
-    landing_vector.push_back(perimeter_limit);
-    landing_vector.push_back(runway_end);
     landing_vector.push_back(runway_start);
+    landing_vector.push_back(runway_end);
     landing_vector.push_back(parking_entrance);
     this->landing = Trajectory(landing_vector);
 }

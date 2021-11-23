@@ -175,6 +175,12 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
     return next;
 }
 
+void Trajectory::setAltitude(const float& altitude) {
+    for (size_t i = 0; i < this->points.size(); i++) {
+        this->points.at(i).setZ(altitude);
+    }
+}
+
 /* -------------------------------------------------------------------------- */
 /*                               Plane functions                              */
 /* -------------------------------------------------------------------------- */
