@@ -1,6 +1,46 @@
 [
     {
         "name": "Air France",
-        "trigramme": "AFR"
+        "IATA": "AF"
+    },
+    {
+        "name": "Air Canada",
+        "IATA": "AC"
+    },
+    {
+        "name": "Ryanair",
+        "IATA": "FR"
+    },
+    {
+        "name": "easyJet Europe",
+        "IATA": "EC"
+    },
+    {
+        "name": "Emirates",
+        "IATA": "EK"
+    },
+    {
+        "name": "Lufthansa",
+        "IATA": "LH"
+    },
+    {
+        "name": "Turkish Airlines",
+        "IATA": "TK"
+    },
+    {
+        "name": "Air Europa",
+        "IATA": "EO"
+    },
+    {
+        "name": "Air India",
+        "IATA": "AI"
+    },
+    {
+        "name": "Air China",
+        "IATA": "CA"
+    },
+    {
+        "name": "Air New Zealand",
+        "IATA": "NZ"
     }
 ]
