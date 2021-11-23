@@ -23,7 +23,9 @@ void world(vector<Plane*>& planes, bool& stop_prgm) {
         for (auto& current_plane : planes) {
             if (!current_plane->isDestinationReached()) {
                 // Update plane location
+                cout_lock.lock();
                 current_plane->updateLocation();
+                cout_lock.unlock();
             }
 
             // Debug plane data
@@ -55,7 +57,9 @@ void airport_control(APP& app, bool& stop_prgm) {
         // Check arrived planes
         vector<Plane*> arrived_planes = app.getArrivedPlanes();
         for (auto& arrived_plane : arrived_planes) {
+            cout_lock.lock();
             arrived_plane->start(app.getCircularTrajectory());
+            cout_lock.unlock();
         }
 
         if (!twr->isRunwayUsed() && !twr->isParkingEmpty()) {
@@ -129,12 +133,12 @@ int main(void) {
 
     // Create planes
     vector<Plane*> planes;
-    Plane* p = twr1.spawnPlane("blabla");
-    if (p == NULL) {
-        cerr << "No more parking spot in Airport1..." << endl;
-        return -1;
-    }
-    planes.push_back(p);
+    // Plane* p = twr1.spawnPlane("blabla");
+    // if (p == NULL) {
+    //     cerr << "No more parking spot in Airport1..." << endl;
+    //     return -1;
+    // }
+    // planes.push_back(p);
     planes.push_back(app1.spawnPlane("bleble"));
 
     /* ------------------------- Threads and window loop ------------------------ */
@@ -143,6 +147,12 @@ int main(void) {
     thread airport_thread(airport_control, ref(app1), ref(stop_prgm));
     thread world_thread(world, ref(planes), ref(stop_prgm));
 
+    // char input;
+    // do {
+    //     cin >> input;
+    // } while (input != 'q');
+
+    Trajectory t = app1.getCircularTrajectory();
     while (app.isOpen()) {
         // Events
         Event event;
@@ -161,6 +171,14 @@ int main(void) {
             app.draw(plane->toSFML());
             app.draw(plane->getAltitudeLabel());
             app.draw(plane->getNameLabel());
+        }
+
+        for (size_t i = 0; i < CIRCULAR_TRAJ_NB_POINTS; i++) {
+            Location l = t.getPointAt(i);
+            CircleShape point(3.f);
+            point.setFillColor(Color::Green);
+            point.setPosition(l.toVector());
+            app.draw(point);
         }
 
         app.display();

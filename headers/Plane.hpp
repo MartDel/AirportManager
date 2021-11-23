@@ -97,7 +97,7 @@ class Trajectory {
          * @param from The plane location
          * @return Location* The near point
          */
-        Location *getNearPoint(const Location &from);
+        size_t getNearPointPos(const Location &from);
 
     public:
         Trajectory() : reached_point(NULL) {}

@@ -96,12 +96,12 @@ size_t Trajectory::getPointPos(const Location &l) const {
     return --i;
 }
 
-Location* Trajectory::getNearPoint(const Location& from) {
-    map<float, Location*> points_away;
+size_t Trajectory::getNearPointPos(const Location& from) {
+    map<float, Location> points_away;
     for (auto& current_point : this->points) {
-        points_away.insert(pair<float, Location*>(from.get3dDistanceTo(current_point), &current_point));
+        points_away.insert(pair<float, Location>(from.get3dDistanceTo(current_point), current_point));
     }
-    return points_away.begin()->second;
+    return this->getPointPos(points_away.begin()->second);
 }
 
 bool Trajectory::isCyclic() const {
@@ -110,16 +110,23 @@ bool Trajectory::isCyclic() const {
 }
 
 Location Trajectory::getNextLocation(const Location &from, const float &speed, const bool& verbose) {
+    if (verbose) cout << "-- Next location --" << endl;
+
     Location next, *to;
     size_t next_point_pos(0);
 
     // Get the next point to reach
     if (this->reached_point != NULL)
         next_point_pos = (this->getPointPos(*this->reached_point) + 1) % this->points.size();
-    
+    else if (this->isCyclic())
+        next_point_pos = this->getNearPointPos(from);
+
     // Choose a direction
-    if (this->isCyclic()) to = this->getNearPoint(from);
-    else to = &this->points.at(next_point_pos);
+    to = &this->points.at(next_point_pos);
+    if (verbose) {
+        cout << "next point pos : " << next_point_pos << endl;
+        cout << "next point : " << *to << endl;
+    }
 
     // Checking the different cases
     float d_between_next = from.get3dDistanceTo(*to);
@@ -161,7 +168,10 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
         next.setSpeed(speed);
     }
 
-    if (verbose) cout << next << endl;
+    if (verbose) {
+        cout << next << endl;
+        cout << "------" << endl;
+    }
     return next;
 }
 
@@ -212,7 +222,7 @@ void Plane::start(const Trajectory& traj) {
 }
 
 void Plane::updateLocation() {
-    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed, true));
+    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed, false));
     this->fuel -= this->consumption;
 }
 

@@ -20,12 +20,17 @@ APP::APP(TWR *_twr, const Location &_perimeter_entrance, const Location& center)
     Location new_point;
     new_point.setZ(CIRCULAR_TRAJ_ALTITUDE_MIN);
     new_point.setSpeed(CIRCULAR_TRAJ_SPEED);
+    cout << "Circular trajectory :" << endl;
     for (size_t i = 0; i < CIRCULAR_TRAJ_NB_POINTS; i++) {
-        theta = mapValue(i, 0, 20, 0, (5 * M_PI) / 2);
+        theta = mapValue(i, 0, CIRCULAR_TRAJ_NB_POINTS, 0, 2 * M_PI);
+        cout << theta << endl;
         new_point.setX(center_x + (CIRCULAR_TRAJ_RADIUS * cos(theta)));
         new_point.setY(center_y + (CIRCULAR_TRAJ_RADIUS * sin(theta)));
         traj.push_back(new_point);
+        cout << "   " << new_point << endl;
     }
+    traj.push_back(traj.at(0));
+    cout << endl;
     this->circular_traj = Trajectory(traj);
 }
 
