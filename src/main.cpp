@@ -65,16 +65,27 @@ void airport_control(APP& app, bool& stop_prgm) {
         if (!twr->isRunwayUsed()) {
             // The runway is free
             if (!twr->isParkingFull() && app.isPlaneWaiting()) {
+                cout_lock.lock();
                 app.landPriorityPlane();
+                cout_lock.unlock();
+            }
+        } else {
+            // A plane is landing or taking off
+            Plane *landing_plane = app.getLandingPlane();
+            if (landing_plane != NULL && landing_plane->isDestinationReached()) {
+                cout_lock.lock();
+                cout << " -- Start landing of " << landing_plane->getName() << " --" << endl;
+                app.startLanding();
+                cout_lock.unlock();
             }
         }
 
-        if (!twr->isRunwayUsed() && !twr->isParkingEmpty()) {
-            // Take off a plane
-            cout_lock.lock();
-            twr->takeOffPlane();
-            cout_lock.unlock();
-        }
+        // if (!twr->isRunwayUsed() && !twr->isParkingEmpty()) {
+        //     // Take off a plane
+        //     cout_lock.lock();
+        //     twr->takeOffPlane();
+        //     cout_lock.unlock();
+        // }
 
         // Add 0.25s timeout
         this_thread::sleep_for(interval);
@@ -126,13 +137,8 @@ int main(void) {
     twr1_parking.push_back(Location(1440, 910, 0, 0));
     twr1_parking.push_back(Location(1380, 890, 0, 0));
     twr1_parking.push_back(Location(1330, 860, 0, 0));
-    TWR twr1(
-        twr1_parking,
-        Location(1000, 600, 0, 50),
-        Location(1800, 920, 0, 100),
-        Location(1405, 830, 0, 30),
-        Location(2900, 1300, 200, 250)
-    );
+    Location l1(1000, 600, 0), l2(1800, 920, 0), l3(1405, 830, 0), l4(2900, 1300, 200, 250);
+    TWR twr1(twr1_parking,l1,l2,l3,l4);
     twr1.setBackground(background_sprite);
 
     // Create first APP

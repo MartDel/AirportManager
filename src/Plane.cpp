@@ -75,6 +75,11 @@ bool Location::operator!=(const Location &l) const {
     return !(*this == l);
 }
 
+bool Location::operator<(const Location& l) const {
+    Location o;
+    return this->get3dDistanceTo(o) < l.get3dDistanceTo(o);
+}
+
 ostream& operator<<(ostream& stream, const Location& l) {
     stream << "(" << l.getX() << ", " << l.getY() << ", " << l.getZ() << ")";
     if (l.getSpeed() != -1)
@@ -168,6 +173,10 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
         next.setSpeed(speed);
     }
 
+    if (this->cutting_pos >= 0) {
+        this->cutTrajectory(this->cutting_pos);
+    }
+
     if (verbose) {
         cout << next << endl;
         cout << "------" << endl;
@@ -178,6 +187,24 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
 void Trajectory::setAltitude(const float& altitude) {
     for (size_t i = 0; i < this->points.size(); i++) {
         this->points.at(i).setZ(altitude);
+    }
+}
+
+void Trajectory::cutTrajectory(const size_t& pos) {
+    // Checking pos
+    this->setCuttingPos(pos);
+    if (this->cutting_pos < 0) return;
+
+    // Init the iterator
+    vector<Location>::iterator it = this->points.begin() + pos;
+    if (*it == *this->reached_point) return;
+
+    // Erase reached points
+    it++;
+    while (it != this->points.end() && *it != *this->reached_point) {
+        this->points.erase(it);
+        if (it != this->points.end()) this->reached_point--;
+        else this->reached_point = &this->points.at(0);
     }
 }
 
@@ -228,8 +255,9 @@ void Plane::start(const Trajectory& traj) {
 }
 
 void Plane::updateLocation() {
-    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed, false));
+    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed));
     this->fuel -= this->consumption;
+    this->destination = this->trajectory.getLastPoint();
 }
 
 void Plane::setLocation(const Location& l) {
@@ -243,6 +271,10 @@ void Plane::setLocation(const Location& l) {
 CircleShape Plane::toSFML() {
     this->graphical_plane.setPosition(this->location.toVector());
     return this->graphical_plane;
+}
+
+void Plane::stopAt(const size_t& stop_pos) {
+    this->trajectory.cutTrajectory(stop_pos);
 }
 
 ostream& operator<<(ostream& stream, const Plane& plane) {

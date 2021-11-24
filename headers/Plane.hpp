@@ -73,6 +73,7 @@ class Location {
         // Operators
         bool operator==(const Location& l) const;
         bool operator!=(const Location& l) const;
+        bool operator<(const Location& l) const;
         friend ostream& operator<<(ostream& stream, const Location& l);
 };
 
@@ -84,6 +85,7 @@ class Trajectory {
     private:
         vector<Location> points; // The Trajectory points
         Location* reached_point; // The last point reached (default : NULL)
+        int cutting_pos; // If the trajectory must be cutted, cutting_pos contains the stop point pos, else cutting_pos = -1
 
         /**
          * @brief Get the given point position in the array (vector) points
@@ -93,10 +95,13 @@ class Trajectory {
         size_t getPointPos(const Location &l) const;
 
     public:
-        Trajectory() : reached_point(NULL) {}
-        Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL) {}
+        Trajectory() : reached_point(NULL), cutting_pos(-1) {}
+        Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL), cutting_pos(-1) {}
         Location getPointAt(const size_t& i) const { return points.at(i); }
         Location getLastPoint() const { return points.at(points.size() - 1); }
+        bool isStarted() const { return this->reached_point != NULL; }
+        void setCuttingPos(const int& _pos) { this->cutting_pos = _pos < this->points.size() ? _pos : -1; }
+        void addPoint(const Location& new_point) { this->points.push_back(new_point); }
 
         /**
          * @brief Check if the trajectory is cylic.
@@ -125,6 +130,12 @@ class Trajectory {
          * @return Location* The near point
          */
         size_t getNearPointPos(const Location &from);
+
+        /**
+         * @brief Cut the trajectory to remove all of points after the pos argument
+         * @param pos The id of the last point
+         */
+        void cutTrajectory(const size_t& pos);
 };
 
 /**
@@ -164,6 +175,12 @@ class Plane {
         void setParkingSpot(const size_t& i) { this->parking_spot = i; }
 
         /**
+         * @brief Check if the plane reached the first point
+         * @return bool The plane started its trajectory
+         */
+        bool isTrajectoryStarted() const { return this->trajectory.isStarted(); }
+
+        /**
          * @brief Check if the plane has reached its destination
          */
         bool isDestinationReached() const { return this->location == this->destination && !this->trajectory.isCyclic(); }
@@ -184,6 +201,12 @@ class Plane {
          * @return CircleShape The plane to display
          */
         CircleShape toSFML();
+
+        /**
+         * @brief Cut the plane trajectory with the given point pos
+         * @param stop_pos The stopping point pos
+         */
+        void stopAt(const size_t& stop_pos);
 
         // Operators
         friend ostream & operator<<(ostream &stream, const Plane &plane);

@@ -20,18 +20,23 @@ APP::APP(TWR *_twr, const Location &_perimeter_entrance, const Location& center)
     Location new_point;
     new_point.setZ(CIRCULAR_TRAJ_ALTITUDE_MIN);
     new_point.setSpeed(CIRCULAR_TRAJ_SPEED);
-    cout << "Circular trajectory :" << endl;
     for (size_t i = 0; i < CIRCULAR_TRAJ_NB_POINTS; i++) {
         theta = mapValue(i, 0, CIRCULAR_TRAJ_NB_POINTS, 0, 2 * M_PI);
-        cout << theta << endl;
         new_point.setX(center_x + (CIRCULAR_TRAJ_RADIUS * cos(theta)));
         new_point.setY(center_y + (CIRCULAR_TRAJ_RADIUS * sin(theta)));
         traj.push_back(new_point);
-        cout << "   " << new_point << endl;
     }
     traj.push_back(traj.at(0));
-    cout << endl;
     this->circular_traj = Trajectory(traj);
+}
+
+void APP::removePlaneFrom(Plane* plane, vector<Plane*>& list) {
+    vector<Plane *>::iterator it = list.begin();
+    while (it != list.end()) {
+        if (*it == plane) break;
+        else it++;
+    }
+    list.erase(it);
 }
 
 Plane* APP::spawnPlane(const string& name) {
@@ -51,12 +56,7 @@ vector<Plane*> APP::getArrivedPlanes() const {
 
 void APP::askPlaneToWait(Plane* p) {
     // Remove the plane from the coming planes list
-    vector<Plane *>::iterator it = this->coming_planes.begin();
-    while (it != this->coming_planes.end()) {
-        if (*it == p) break;
-        else it++;
-    }
-    this->coming_planes.erase(it);
+    this->removePlaneFrom(p, this->coming_planes);
 
     // Add the plane to waiting planes
     Trajectory circular_t(this->circular_traj);
@@ -65,11 +65,31 @@ void APP::askPlaneToWait(Plane* p) {
     p->start(circular_t);
 }
 
-void APP::landPriorityPlane() {
+void APP::landPriorityPlane(const bool& verbose) {
     // Choose the plane to land
     Plane* to_land = this->waiting_planes.at(0);
+    if (verbose)
+        cout << "-- Land plane " << to_land->getName() << " --" << endl;
+
+    // Check if the plane started the circular trajectory
+    if (!to_land->isTrajectoryStarted()) {
+        if (verbose) cout << " ! Aborting landing ! " << endl;
+        return;
+    }
+
+    // Choose the stoping point before landing
     Location runway_start = this->linked_twr->getLandingTrajectory().getPointAt(0);
-    Location dest = this->circular_traj.getPointAt(this->circular_traj.getNearPointPos(runway_start));
-    to_land->setDestination(dest);
+    size_t dest_pos = this->circular_traj.getNearPointPos(runway_start);
+    
+    // Update the landing plane
+    to_land->stopAt(dest_pos);
     this->landing_plane = to_land;
+    this->linked_twr->toggleIsRunwayUsed();
+}
+
+void APP::startLanding() {
+    // Remove the landing plane from the waiting planes list
+    this->removePlaneFrom(this->landing_plane, waiting_planes);
+    this->linked_twr->landPlane(this->landing_plane);
+    this->landing_plane = NULL;
 }

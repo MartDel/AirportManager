@@ -20,11 +20,19 @@ class APP {
         Trajectory circular_traj; // Circular trajectory to lead waiting planes
         Plane* landing_plane;
 
+        /**
+         * @brief Remove a plane from a vector
+         * @param plane The plane to remove
+         * @param list The list to remove the plane from
+         */
+        void removePlaneFrom(Plane* plane, vector<Plane*>& list);
+
     public:
         APP(TWR* _twr, const Location& _perimeter_entrance, const Location& center);
         TWR* getTWR() const { return this->linked_twr; }
         Trajectory getCircularTrajectory() const { return this->circular_traj; }
         bool isPlaneWaiting() const { return !this->waiting_planes.empty() && this->landing_plane == NULL; }
+        Plane* getLandingPlane() const { return this->landing_plane; }
 
         /**
          * @brief Spawn a plane to the perimeter entrance.
@@ -49,6 +57,13 @@ class APP {
         /**
          * @brief Land the plane with the high priority.
          * A plane is pririty if it has trouble or if it's the lower plane in the air.
+         * @param verbose Print some debug data or not
          */
-        void landPriorityPlane();
+        void landPriorityPlane(const bool& verbose = false);
+
+        /**
+         * @brief Start landing a plane to the runway.
+         * Transfert the landing plane to the TWR.
+         */
+        void startLanding();
 };
