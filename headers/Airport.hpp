@@ -31,7 +31,29 @@ const string BACKGROUND_IMG = "airport.jpg";
 const string FONTS_FOLDER = "../fonts/";
 const string OPENSANS_FONT = "OpenSans.ttf";
 
+/* ------------------------------ Config Files ------------------------------ */
+
+#define AIRPORTS_FILE "../config/airports.json"
+#define COMPAGNIES_FILE "../config/compagnies.json"
+#define PLANES_FILE "../config/planes.json"
+
 /* ---------------------------------- Utils --------------------------------- */
 
+/**
+ * @brief Round a float with a given precision 
+ * 
+ * @param f 
+ * @return float 
+ */
 float roundWithPrecision(const float& f);
+/**
+ * @brief 
+ * 
+ * @param x 
+ * @param in_min 
+ * @param in_max 
+ * @param out_min 
+ * @param out_max 
+ * @return float 
+ */
 float mapValue(const float &x, const float &in_min, const float &in_max, const float &out_min, const float &out_max);

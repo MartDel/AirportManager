@@ -126,7 +126,8 @@ class Trajectory {
  */
 class Plane {
     private:
-        const string name;
+        string name;
+        string company;
         Location location, destination;
         Trajectory trajectory;
         float speed, fuel;
@@ -138,9 +139,11 @@ class Plane {
     public:
         static Font default_font;
         Plane(const string &_name, const Location &_spawn, const size_t &parking_spot = 0);
+        Plane(const Location &_spawn, const size_t &parking_spot = 0);
 
         // Getters
         string getName() const { return this->name; }
+        string getCompany() const { return this->company; }
         Location getLocation() const { return this->location; }
         Location getDestination() const { return this->destination; }
         float getSpeed() const { return this->speed; }

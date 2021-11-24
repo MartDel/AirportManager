@@ -1,6 +1,10 @@
 #include "Plane.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
+#include <cstdlib>
+#include <fstream>
+#include <string>
+#include <time.h>
 
 /* -------------------------------------------------------------------------- */
 /*                             Location functions                             */
@@ -173,6 +177,37 @@ Font Plane::default_font = Font();
 
 Plane::Plane(const string& _name, const Location& _spawn, const size_t& _parking_spot)
 : name(_name), location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION), parking_spot(_parking_spot) {
+    this->company = "Martin Airlines";
+    
+    // Set graphical plane
+    this->graphical_plane = CircleShape(PLANE_CIRCLE_RADIUS);
+    this->graphical_plane.setFillColor(PLANE_COLOR_DEFAULT);
+
+    // Set altitude and name label
+    Text altitude_label, name_label;
+    altitude_label.setFont(Plane::default_font);
+    altitude_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
+    altitude_label.setFillColor(Color::Black);
+    this->altitude_label = altitude_label;
+    name_label.setFont(Plane::default_font);
+    name_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
+    name_label.setFillColor(Color::Black);
+    this->name_label = name_label;
+}
+
+Plane::Plane(const Location& _spawn, const size_t& _parking_spot)
+: location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION), parking_spot(_parking_spot) {
+    ifstream i(COMPAGNIES_FILE);
+    if (i.is_open()) {
+        json j;
+        i >> j;
+        int random_id = rand()%j.size();
+        this->name = j[random_id]["IATA"] + to_string(rand()%1000);
+        this->company = j[random_id]["name"];
+        i.close();
+    } else {
+        this->name = "ER" + to_string(rand()%100);
+    }
     // Set graphical plane
     this->graphical_plane = CircleShape(PLANE_CIRCLE_RADIUS);
     this->graphical_plane.setFillColor(PLANE_COLOR_DEFAULT);
@@ -230,7 +265,7 @@ CircleShape Plane::toSFML() {
 }
 
 ostream& operator<<(ostream& stream, const Plane& plane) {
-    stream << plane.getName() << " :" << endl;
+    stream << plane.getCompany()<< " "<< plane.getName() << " :" << endl;
     stream << "    " << plane.getLocation() << " -> " << plane.getDestination() << endl;
     stream << "    Speed: " << plane.getSpeed() << " m/s" << endl;
     stream << "    Fuel: " << plane.getFuel() << " % Consumption: " << plane.getConsumption() << " %/s" << endl;
