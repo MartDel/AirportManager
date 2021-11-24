@@ -148,13 +148,12 @@ class Plane {
         Trajectory trajectory;
         float speed, fuel;
         const float consumption;
-        size_t parking_spot;
         CircleShape graphical_plane;
         Text altitude_label, name_label;
 
     public:
         static Font default_font;
-        Plane(const string &_name, const Location &_spawn, const size_t &parking_spot = 0);
+        Plane(const string &_name, const Location &_spawn);
 
         // Getters
         string getName() const { return this->name; }
@@ -163,7 +162,6 @@ class Plane {
         float getSpeed() const { return this->speed; }
         float getFuel() const { return this->fuel; }
         float getConsumption() const { return this->consumption; }
-        size_t getParkingSpot() const { return this->parking_spot; }
         Text getAltitudeLabel();
         Text getNameLabel();
 
@@ -172,7 +170,6 @@ class Plane {
         void setDestination(const Location& d) { this->destination = d; }
         void setSpeed(const float& s) { this->speed = s; }
         void setFuel(const float& f) { this->fuel = f; }
-        void setParkingSpot(const size_t& i) { this->parking_spot = i; }
 
         /**
          * @brief Check if the plane reached the first point

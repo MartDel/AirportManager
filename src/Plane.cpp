@@ -214,8 +214,8 @@ void Trajectory::cutTrajectory(const size_t& pos) {
 
 Font Plane::default_font = Font();
 
-Plane::Plane(const string& _name, const Location& _spawn, const size_t& _parking_spot)
-: name(_name), location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION), parking_spot(_parking_spot) {
+Plane::Plane(const string& _name, const Location& _spawn)
+: name(_name), location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION) {
     // Set graphical plane
     this->graphical_plane = CircleShape(PLANE_CIRCLE_RADIUS);
     this->graphical_plane.setFillColor(PLANE_COLOR_DEFAULT);

@@ -59,7 +59,7 @@ class APP {
          * A plane is pririty if it has trouble or if it's the lower plane in the air.
          * @param verbose Print some debug data or not
          */
-        void landPriorityPlane(const bool& verbose = false);
+        void landPriorityPlane();
 
         /**
          * @brief Start landing a plane to the runway.

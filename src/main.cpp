@@ -29,9 +29,9 @@ void world(vector<Plane*>& planes, bool& stop_prgm) {
             }
 
             // Debug plane data
-            cout_lock.lock();
-            cout << *current_plane << endl;
-            cout_lock.unlock();
+            // cout_lock.lock();
+            // cout << *current_plane << endl;
+            // cout_lock.unlock();
         }
 
         // Add 1s timeout
@@ -58,6 +58,7 @@ void airport_control(APP& app, bool& stop_prgm) {
         vector<Plane*> arrived_planes = app.getArrivedPlanes();
         for (auto& arrived_plane : arrived_planes) {
             cout_lock.lock();
+            cout << " -- Move " << arrived_plane->getName() << " to circular trajectory --" << endl << endl;
             app.askPlaneToWait(arrived_plane);
             cout_lock.unlock();
         }
@@ -65,8 +66,14 @@ void airport_control(APP& app, bool& stop_prgm) {
         if (!twr->isRunwayUsed()) {
             // The runway is free
             if (!twr->isParkingFull() && app.isPlaneWaiting()) {
+                // Land the most important plane
                 cout_lock.lock();
                 app.landPriorityPlane();
+                cout_lock.unlock();
+            } else if (!twr->isParkingEmpty()) {
+                // Take off a plane
+                cout_lock.lock();
+                twr->takeOffPlane();
                 cout_lock.unlock();
             }
         } else {
@@ -74,18 +81,11 @@ void airport_control(APP& app, bool& stop_prgm) {
             Plane *landing_plane = app.getLandingPlane();
             if (landing_plane != NULL && landing_plane->isDestinationReached()) {
                 cout_lock.lock();
-                cout << " -- Start landing of " << landing_plane->getName() << " --" << endl;
+                cout << " -- " << landing_plane->getName() << " is reaching the runway --" << endl;
                 app.startLanding();
                 cout_lock.unlock();
             }
         }
-
-        // if (!twr->isRunwayUsed() && !twr->isParkingEmpty()) {
-        //     // Take off a plane
-        //     cout_lock.lock();
-        //     twr->takeOffPlane();
-        //     cout_lock.unlock();
-        // }
 
         // Add 0.25s timeout
         this_thread::sleep_for(interval);
@@ -146,12 +146,12 @@ int main(void) {
 
     // Create planes
     vector<Plane*> planes;
-    // Plane* p = twr1.spawnPlane("blabla");
-    // if (p == NULL) {
-    //     cerr << "No more parking spot in Airport1..." << endl;
-    //     return -1;
-    // }
-    // planes.push_back(p);
+    Plane* p = twr1.spawnPlane("blabla");
+    if (p == NULL) {
+        cerr << "No more parking spot in Airport1..." << endl;
+        return -1;
+    }
+    planes.push_back(p);
     planes.push_back(app1.spawnPlane("bleble"));
 
     /* ------------------------- Threads and window loop ------------------------ */
@@ -184,14 +184,6 @@ int main(void) {
             app.draw(plane->toSFML());
             app.draw(plane->getAltitudeLabel());
             app.draw(plane->getNameLabel());
-        }
-
-        for (size_t i = 0; i < CIRCULAR_TRAJ_NB_POINTS; i++) {
-            Location l = t.getPointAt(i);
-            CircleShape point(3.f);
-            point.setFillColor(Color::Green);
-            point.setPosition(l.toVector());
-            app.draw(point);
         }
 
         app.display();

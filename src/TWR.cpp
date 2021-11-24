@@ -72,15 +72,19 @@ void TWR::landPlane(Plane* plane) {
 
 void TWR::takeOffPlane() {
     Plane* plane = this->parking.front();
-    cout << " -- Starting take off for " << plane->getName() << " --" << endl;
+    this->parking_spots.at(plane->getLocation()) = false;
+    cout << " -- Starting take off for " << plane->getName() << " --" << endl << endl;
     plane->start(this->takeoff);
     this->parking.pop();
 }
 
 Plane* TWR::spawnPlane(const string& name){
     if (this->parking.size() < NB_PARKING_SPOTS) {
-        size_t parking_spot_id = this->parking.size();
-        Plane* p = new Plane(name, parking_spots.at(parking_spot_id), parking_spot_id);
+        auto parking_spot_it = this->getFreeParkingSpot();
+        if (parking_spot_it == this->parking_spots.end()) return NULL;
+        Location parking_spot = (*parking_spot_it).first;
+        this->parking_spots.at(parking_spot) = true;
+        Plane* p = new Plane(name, parking_spot);
         this->parking.push(p);
         return p;
     } else return NULL;

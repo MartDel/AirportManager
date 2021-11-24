@@ -65,17 +65,13 @@ void APP::askPlaneToWait(Plane* p) {
     p->start(circular_t);
 }
 
-void APP::landPriorityPlane(const bool& verbose) {
+void APP::landPriorityPlane() {
     // Choose the plane to land
     Plane* to_land = this->waiting_planes.at(0);
-    if (verbose)
-        cout << "-- Land plane " << to_land->getName() << " --" << endl;
 
     // Check if the plane started the circular trajectory
-    if (!to_land->isTrajectoryStarted()) {
-        if (verbose) cout << " ! Aborting landing ! " << endl;
-        return;
-    }
+    if (!to_land->isTrajectoryStarted()) return;
+    cout << "-- Land plane " << to_land->getName() << " --" << endl << endl;
 
     // Choose the stoping point before landing
     Location runway_start = this->linked_twr->getLandingTrajectory().getPointAt(0);
