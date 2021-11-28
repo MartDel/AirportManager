@@ -71,7 +71,7 @@ void APP::landPriorityPlane() {
 
     // Check if the plane started the circular trajectory
     if (!to_land->isTrajectoryStarted()) return;
-    cout << "-- Land plane " << to_land->getName() << " --" << endl << endl;
+    cout << " -- Land plane " << to_land->getName() << " --" << endl << endl;
 
     // Choose the stoping point before landing
     Location runway_start = this->linked_twr->getLandingTrajectory().getPointAt(0);
@@ -81,6 +81,7 @@ void APP::landPriorityPlane() {
     to_land->stopAt(dest_pos);
     this->landing_plane = to_land;
     this->linked_twr->toggleIsRunwayUsed();
+    this->linked_twr->setPlaneInRunway(this->landing_plane);
 }
 
 void APP::startLanding() {

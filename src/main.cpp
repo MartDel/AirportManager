@@ -1,7 +1,7 @@
 #include "APP.hpp"
 
 // Thread timeouts (in ms)
-#define WORLD_INTERVAL 1000
+#define WORLD_INTERVAL 250
 #define AIRPORTS_INTERVAL 250
 
 mutex cout_lock; // A thread lock
@@ -65,6 +65,7 @@ void airport_control(APP& app, bool& stop_prgm) {
 
         if (!twr->isRunwayUsed()) {
             // The runway is free
+
             if (!twr->isParkingFull() && app.isPlaneWaiting()) {
                 // Land the most important plane
                 cout_lock.lock();
@@ -76,13 +77,23 @@ void airport_control(APP& app, bool& stop_prgm) {
                 twr->takeOffPlane();
                 cout_lock.unlock();
             }
+
         } else {
-            // A plane is landing or taking off
-            Plane *landing_plane = app.getLandingPlane();
+            // The runway is used
+            Plane* landing_plane = app.getLandingPlane();
+            Plane* plane_using_runway = twr->getPlaneInRunway();
+
             if (landing_plane != NULL && landing_plane->isDestinationReached()) {
+                // The landing plane reached the runway start
                 cout_lock.lock();
                 cout << " -- " << landing_plane->getName() << " is reaching the runway --" << endl;
                 app.startLanding();
+                cout_lock.unlock();
+            } else if (plane_using_runway != NULL && plane_using_runway->isDestinationReached()) {
+                // The plane which is landing or taking off has finished
+                cout_lock.lock();
+                cout << " -- " << plane_using_runway->getName() << " has finished its landing or taking off --" << endl;
+                twr->toggleIsRunwayUsed();
                 cout_lock.unlock();
             }
         }
@@ -110,13 +121,12 @@ int main(void) {
     ContextSettings settings;
     settings.antialiasingLevel = 8;
     RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "TWR1", Style::Default, settings);
-    app.setFramerateLimit(1);
+    app.setFramerateLimit(30);
 
     // Set up the background image
     Texture background_img;
     Sprite background_sprite;
-    if (!background_img.loadFromFile(IMG_FOLDER + BACKGROUND_IMG))
-    {
+    if (!background_img.loadFromFile(IMG_FOLDER + BACKGROUND_IMG)) {
         cerr << "Cannot load image file : " << IMG_FOLDER << BACKGROUND_IMG << endl;
         return -1;
     }
@@ -146,24 +156,31 @@ int main(void) {
 
     // Create planes
     vector<Plane*> planes;
-    Plane* p = twr1.spawnPlane("blabla");
-    if (p == NULL) {
+    Plane* p1 = twr1.spawnPlane("blabla");
+    if (p1 == NULL) {
         cerr << "No more parking spot in Airport1..." << endl;
         return -1;
     }
-    planes.push_back(p);
-    planes.push_back(app1.spawnPlane("bleble"));
+    planes.push_back(p1);
+    Plane *p2 = twr1.spawnPlane("bleble");
+    if (p2 == NULL) {
+        cerr << "No more parking spot in Airport1..." << endl;
+        return -1;
+    }
+    planes.push_back(p2);
+    Plane *p3 = twr1.spawnPlane("blibli");
+    if (p3 == NULL) {
+        cerr << "No more parking spot in Airport1..." << endl;
+        return -1;
+    }
+    planes.push_back(p3);
+    planes.push_back(app1.spawnPlane("bloblo"));
 
     /* ------------------------- Threads and window loop ------------------------ */
 
     // Create and start threads
     thread airport_thread(airport_control, ref(app1), ref(stop_prgm));
     thread world_thread(world, ref(planes), ref(stop_prgm));
-
-    // char input;
-    // do {
-    //     cin >> input;
-    // } while (input != 'q');
 
     Trajectory t = app1.getCircularTrajectory();
     while (app.isOpen()) {

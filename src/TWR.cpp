@@ -76,6 +76,8 @@ void TWR::takeOffPlane() {
     cout << " -- Starting take off for " << plane->getName() << " --" << endl << endl;
     plane->start(this->takeoff);
     this->parking.pop();
+    this->toggleIsRunwayUsed();
+    this->plane_using_runway = plane;
 }
 
 Plane* TWR::spawnPlane(const string& name){

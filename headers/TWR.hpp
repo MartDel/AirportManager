@@ -22,6 +22,7 @@ class TWR {
         Trajectory takeoff, landing; // The taking off and landing trajectory
         bool is_runway_used;
         Sprite background; // The airport background image
+        Plane* plane_using_runway; // The plane which is using the runway
 
         std::_Rb_tree_const_iterator<std::pair<const Location, bool>> getFreeParkingSpot() const;
 
@@ -41,6 +42,8 @@ class TWR {
         void toggleIsRunwayUsed() { this->is_runway_used = !this->is_runway_used; }
         Sprite getBackground() const { return this->background; }
         void setBackground(const Sprite& bg) { this->background = bg; }
+        Plane* getPlaneInRunway() const { return this->plane_using_runway; }
+        void setPlaneInRunway(Plane* p) { this->plane_using_runway = p; }
 
         /**
          * @brief Manage a plane to land it and park it

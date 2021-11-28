@@ -193,18 +193,22 @@ void Trajectory::setAltitude(const float& altitude) {
 void Trajectory::cutTrajectory(const size_t& pos) {
     // Checking pos
     this->setCuttingPos(pos);
-    if (this->cutting_pos < 0) return;
+    if (this->cutting_pos < 0 && this->cutting_pos >= this->points.size()) return;
 
     // Init the iterator
-    vector<Location>::iterator it = this->points.begin() + pos;
+    vector<Location>::iterator it = this->points.begin() + this->cutting_pos;
     if (*it == *this->reached_point) return;
 
     // Erase reached points
     it++;
     while (it != this->points.end() && *it != *this->reached_point) {
         this->points.erase(it);
-        if (it != this->points.end()) this->reached_point--;
-        else this->reached_point = &this->points.at(0);
+        if (this->getPointPos(*this->reached_point) >= this->cutting_pos) {
+            if (it != this->points.end())
+                this->reached_point--;
+            else
+                this->reached_point = &this->points.at(0);
+        }
     }
 }
 
@@ -251,7 +255,6 @@ void Plane::start(const Trajectory& traj) {
     this->destination = trajectory.getLastPoint();
     float new_speed = trajectory.getPointAt(0).getSpeed();
     if (new_speed != -1) this->speed = new_speed;
-    cout << "Start from : " << this->location << endl;
 }
 
 void Plane::updateLocation() {
