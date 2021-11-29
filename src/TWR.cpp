@@ -55,7 +55,7 @@ void TWR::landPlane(Plane* plane) {
     // Choose the parking spot
     auto free_spot = this->getFreeParkingSpot();
     if (free_spot == this->parking_spots.end()) {
-        cerr << "Trying to land plane but no free parking spot is available..." << endl;
+        cerr << " 🛬 Trying to land plane but no free parking spot is available..." << endl;
         return;
     }
     Location spot = (*free_spot).first;
@@ -73,20 +73,20 @@ void TWR::landPlane(Plane* plane) {
 void TWR::takeOffPlane() {
     Plane* plane = this->parking.front();
     this->parking_spots.at(plane->getLocation()) = false;
-    cout << " -- Starting take off for " << plane->getName() << " --" << endl << endl;
+    cout << "🛬 -- Starting take off for " << plane->getName() << " --" << endl << endl;
     plane->start(this->takeoff);
     this->parking.pop();
     this->toggleIsRunwayUsed();
     this->plane_using_runway = plane;
 }
 
-Plane* TWR::spawnPlane(const string& name){
-    if (this->parking.size() < NB_PARKING_SPOTS) {
+Plane* TWR::spawnPlane(){
+    if (this->parking.size() < this->parking_spots.size()) {
         auto parking_spot_it = this->getFreeParkingSpot();
         if (parking_spot_it == this->parking_spots.end()) return NULL;
         Location parking_spot = (*parking_spot_it).first;
         this->parking_spots.at(parking_spot) = true;
-        Plane* p = new Plane(name, parking_spot);
+        Plane* p = new Plane(parking_spot);
         this->parking.push(p);
         return p;
     } else return NULL;

@@ -1,8 +1,5 @@
 #include "Plane.hpp"
 
-// Number of parking spots in airports
-#define NB_PARKING_SPOTS 3
-
 // Landing and take off speeds
 #define TAKEOFF_RUNWAY_START_SPEED 50
 #define TAKEOFF_RUNWAY_END_SPEED 100
@@ -34,9 +31,10 @@ class TWR {
             Location &parking_entrance,
             Location &perimeter_limit
         );
+
         queue<Plane*> getParking() const { return this->parking; }
         bool isParkingEmpty() const { return this->parking.empty(); }
-        bool isParkingFull() const { return this->parking.size() == NB_PARKING_SPOTS; }
+        bool isParkingFull() const { return this->parking.size() == this->parking_spots.size(); }
         Trajectory getLandingTrajectory() const { return this->landing; }
         bool isRunwayUsed() const { return this->is_runway_used; }
         void toggleIsRunwayUsed() { this->is_runway_used = !this->is_runway_used; }
@@ -61,5 +59,5 @@ class TWR {
          * @param name The plane name
          * @return Plane* The spawned plane
          */
-        Plane* spawnPlane(const string& name);
+        Plane* spawnPlane();
 };

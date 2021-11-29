@@ -143,7 +143,8 @@ class Trajectory {
  */
 class Plane {
     private:
-        const string name;
+        string name;
+        string company;
         Location location, destination;
         Trajectory trajectory;
         float speed, fuel;
@@ -154,6 +155,7 @@ class Plane {
     public:
         static Font default_font;
         Plane(const string &_name, const Location &_spawn);
+        Plane(const Location &_spawn);
 
         // Getters
         string getName() const { return this->name; }
@@ -170,6 +172,7 @@ class Plane {
         void setDestination(const Location& d) { this->destination = d; }
         void setSpeed(const float& s) { this->speed = s; }
         void setFuel(const float& f) { this->fuel = f; }
+        void setTrajectoryAltitude(const float& alt) { this->trajectory.setAltitude(alt); }
 
         /**
          * @brief Check if the plane reached the first point

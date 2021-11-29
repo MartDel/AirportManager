@@ -2,17 +2,13 @@
 
 // Thread timeouts (in ms)
 #define WORLD_INTERVAL 250
-#define AIRPORTS_INTERVAL 250
-
-mutex cout_lock; // A thread lock
 
 /* -------------------------------------------------------------------------- */
 /*                              Thread functions                              */
 /* -------------------------------------------------------------------------- */
 
 /**
- * @brief The world thread function.
- * Manage plane locations each second.
+ * @brief Manage plane locations each second.
  * @param planes Planes to manage
  * @param stop_prgm If the simulation must stoped
  */
@@ -23,9 +19,9 @@ void world(vector<Plane*>& planes, bool& stop_prgm) {
         for (auto& current_plane : planes) {
             if (!current_plane->isDestinationReached()) {
                 // Update plane location
-                cout_lock.lock();
+                APP::cout_lock.lock();
                 current_plane->updateLocation();
-                cout_lock.unlock();
+                APP::cout_lock.unlock();
             }
 
             // Debug plane data
@@ -38,73 +34,9 @@ void world(vector<Plane*>& planes, bool& stop_prgm) {
         this_thread::sleep_for(interval);
     }
 
-    cout_lock.lock();
+    APP::cout_lock.lock();
     cout << "World stop" << endl;
-    cout_lock.unlock();
-}
-
-/**
- * @brief Airport thread function.
- * Check if a plane can take off or land.
- * @param twr The TWR to manage
- * @param stop_prgm If the simulation must stoped
- */
-void airport_control(APP& app, bool& stop_prgm) {
-    chrono::milliseconds interval(AIRPORTS_INTERVAL);
-    TWR* twr = app.getTWR();
-
-    while (!stop_prgm) {
-        // Check arrived planes
-        vector<Plane*> arrived_planes = app.getArrivedPlanes();
-        for (auto& arrived_plane : arrived_planes) {
-            cout_lock.lock();
-            cout << " -- Move " << arrived_plane->getName() << " to circular trajectory --" << endl << endl;
-            app.askPlaneToWait(arrived_plane);
-            cout_lock.unlock();
-        }
-
-        if (!twr->isRunwayUsed()) {
-            // The runway is free
-
-            if (!twr->isParkingFull() && app.isPlaneWaiting()) {
-                // Land the most important plane
-                cout_lock.lock();
-                app.landPriorityPlane();
-                cout_lock.unlock();
-            } else if (!twr->isParkingEmpty()) {
-                // Take off a plane
-                cout_lock.lock();
-                twr->takeOffPlane();
-                cout_lock.unlock();
-            }
-
-        } else {
-            // The runway is used
-            Plane* landing_plane = app.getLandingPlane();
-            Plane* plane_using_runway = twr->getPlaneInRunway();
-
-            if (landing_plane != NULL && landing_plane->isDestinationReached()) {
-                // The landing plane reached the runway start
-                cout_lock.lock();
-                cout << " -- " << landing_plane->getName() << " is reaching the runway --" << endl;
-                app.startLanding();
-                cout_lock.unlock();
-            } else if (plane_using_runway != NULL && plane_using_runway->isDestinationReached()) {
-                // The plane which is landing or taking off has finished
-                cout_lock.lock();
-                cout << " -- " << plane_using_runway->getName() << " has finished its landing or taking off --" << endl;
-                twr->toggleIsRunwayUsed();
-                cout_lock.unlock();
-            }
-        }
-
-        // Add 0.25s timeout
-        this_thread::sleep_for(interval);
-    }
-    
-    cout_lock.lock();
-    cout << "Airport stop" << endl;
-    cout_lock.unlock();
+    APP::cout_lock.unlock();
 }
 
 /* -------------------------------------------------------------------------- */
@@ -112,6 +44,13 @@ void airport_control(APP& app, bool& stop_prgm) {
 /* -------------------------------------------------------------------------- */
 
 int main(void) {
+
+    time_t now = time(0);
+    char* dt = ctime(&now);
+    ofstream file;
+    file.open(LOGS_FILE,std::ofstream::out | std::ofstream::trunc);
+    file << dt << "Roll the dice, the program has begun" << endl;
+    file.close();
 
     bool stop_prgm(false);
 
@@ -126,8 +65,8 @@ int main(void) {
     // Set up the background image
     Texture background_img;
     Sprite background_sprite;
-    if (!background_img.loadFromFile(IMG_FOLDER + BACKGROUND_IMG)) {
-        cerr << "Cannot load image file : " << IMG_FOLDER << BACKGROUND_IMG << endl;
+    if (!background_img.loadFromFile(IMG_FOLDER + "airport1.jpg")) {
+        cerr << "Cannot load image file : " << IMG_FOLDER << "airport1.jpg" << endl;
         return -1;
     }
     background_sprite.setTexture(background_img);
@@ -142,47 +81,51 @@ int main(void) {
 
     /* ------------------------ Init planes and airports ------------------------ */
 
+    vector<APP*> airports;
+
     // Create first TWR
-    vector<Location> twr1_parking;
-    twr1_parking.push_back(Location(1440, 910, 0, 0));
-    twr1_parking.push_back(Location(1380, 890, 0, 0));
-    twr1_parking.push_back(Location(1330, 860, 0, 0));
-    Location l1(1000, 600, 0), l2(1800, 920, 0), l3(1405, 830, 0), l4(2900, 1300, 200, 250);
-    TWR twr1(twr1_parking,l1,l2,l3,l4);
-    twr1.setBackground(background_sprite);
+    // vector<Location> twr1_parking;
+    // twr1_parking.push_back(Location(1440, 910, 0, 0));
+    // twr1_parking.push_back(Location(1380, 890, 0, 0));
+    // twr1_parking.push_back(Location(1330, 860, 0, 0));
+    // Location l1(1000, 600, 0), l2(1800, 920, 0), l3(1405, 830, 0), l4(2900, 1300, 200, 250);
+    // TWR twr1(twr1_parking,l1,l2,l3,l4);
+    // twr1.setBackground(background_sprite);
 
-    // Create first APP
-    APP app1(&twr1, Location(100, 100, 1000, CIRCULAR_TRAJ_SPEED), Location(WINDOW_REAL_WIDTH/2, WINDOW_REAL_HEIGHT/2));
+    // // Create first APP
+    // APP app1(&twr1, Location(100, 100, 1000, CIRCULAR_TRAJ_SPEED), Location(WINDOW_REAL_WIDTH/2, WINDOW_REAL_HEIGHT/2), 800);
 
-    // Create planes
+    // // Create planes
     vector<Plane*> planes;
-    Plane* p1 = twr1.spawnPlane("blabla");
-    if (p1 == NULL) {
-        cerr << "No more parking spot in Airport1..." << endl;
-        return -1;
-    }
-    planes.push_back(p1);
-    Plane *p2 = twr1.spawnPlane("bleble");
-    if (p2 == NULL) {
-        cerr << "No more parking spot in Airport1..." << endl;
-        return -1;
-    }
-    planes.push_back(p2);
-    Plane *p3 = twr1.spawnPlane("blibli");
-    if (p3 == NULL) {
-        cerr << "No more parking spot in Airport1..." << endl;
-        return -1;
-    }
-    planes.push_back(p3);
-    planes.push_back(app1.spawnPlane("bloblo"));
+    // Plane* p1 = twr1.spawnPlane();
+    // if (p1 == NULL) {
+    //     cerr << "No more parking spot in Airport1..." << endl;
+    //     return -1;
+    // }
+    // planes.push_back(p1);
+    // Plane *p2 = twr1.spawnPlane();
+    // if (p2 == NULL) {
+    //     cerr << "No more parking spot in Airport1..." << endl;
+    //     return -1;
+    // }
+    // planes.push_back(p2);
+    // Plane *p3 = twr1.spawnPlane();
+    // if (p3 == NULL) {
+    //     cerr << "No more parking spot in Airport1..." << endl;
+    //     return -1;
+    // }
+    // planes.push_back(p3);
+    // planes.push_back(app1.spawnPlane());
+    // planes.push_back(app1.spawnPlane());
+    // planes.push_back(app1.spawnPlane());
 
     /* ------------------------- Threads and window loop ------------------------ */
 
     // Create and start threads
-    thread airport_thread(airport_control, ref(app1), ref(stop_prgm));
+    for (auto& airport : airports)
+        airport->setThread(ref(stop_prgm));
     thread world_thread(world, ref(planes), ref(stop_prgm));
 
-    Trajectory t = app1.getCircularTrajectory();
     while (app.isOpen()) {
         // Events
         Event event;
@@ -195,7 +138,7 @@ int main(void) {
         if(stop_prgm) app.close();
         
         app.clear();
-        app.draw(twr1.getBackground());
+        app.draw(background_sprite);
 
         for (auto& plane : planes) {
             app.draw(plane->toSFML());
@@ -209,7 +152,6 @@ int main(void) {
     // Shut down threads
     stop_prgm = true;
     if(world_thread.joinable()) world_thread.join();
-    if(airport_thread.joinable()) airport_thread.join();
     for (auto& plane : planes) delete plane;
 
     return 0;

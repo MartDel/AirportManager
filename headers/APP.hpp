@@ -1,11 +1,13 @@
 #include "TWR.hpp"
 
 // The circular trajectory config
-#define CIRCULAR_TRAJ_RADIUS 800
 #define CIRCULAR_TRAJ_NB_POINTS 20
 #define CIRCULAR_TRAJ_SPEED 100
 #define CIRCULAR_TRAJ_ALTITUDE_MIN 500
 #define CIRCULAR_TRAJ_ALTITUDE_STEP 350
+
+// Airport refresh interval
+#define AIRPORTS_INTERVAL 250
 
 /**
  * @brief A APP manage airport perimeter and landing.
@@ -19,6 +21,7 @@ class APP {
         Location perimeter_entrance, airport_center;
         Trajectory circular_traj; // Circular trajectory to lead waiting planes
         Plane* landing_plane;
+        thread* airport_thread;
 
         /**
          * @brief Remove a plane from a vector
@@ -28,18 +31,21 @@ class APP {
         void removePlaneFrom(Plane* plane, vector<Plane*>& list);
 
     public:
-        APP(TWR* _twr, const Location& _perimeter_entrance, const Location& center);
+        static mutex cout_lock;
+        APP(TWR* _twr, const Location& _perimeter_entrance, const Location& center, const float& radius);
+        APP(const json& data);
+        ~APP();
         TWR* getTWR() const { return this->linked_twr; }
         Trajectory getCircularTrajectory() const { return this->circular_traj; }
         bool isPlaneWaiting() const { return !this->waiting_planes.empty() && this->landing_plane == NULL; }
         Plane* getLandingPlane() const { return this->landing_plane; }
+        void setThread(bool &stop_prgm);
 
         /**
          * @brief Spawn a plane to the perimeter entrance.
-         * @param name The plane name
          * @return Plane* The spawned plane
          */
-        Plane* spawnPlane(const string& name);
+        Plane* spawnPlane();
 
         /**
          * @brief Get all arrived planes in the coming planes array
@@ -66,4 +72,12 @@ class APP {
          * Transfert the landing plane to the TWR.
          */
         void startLanding();
+
+        /**
+         * @brief Airport thread function.
+         * Check if a plane can take off or land.
+         * @param twr The TWR to manage
+         * @param stop_prgm If the simulation must stoped
+         */
+        static void airportControl(APP &app, bool &stop_prgm);
 };

@@ -185,6 +185,7 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
 }
 
 void Trajectory::setAltitude(const float& altitude) {
+    if (!this->isCyclic()) return;
     for (size_t i = 0; i < this->points.size(); i++) {
         this->points.at(i).setZ(altitude);
     }
@@ -234,6 +235,39 @@ Plane::Plane(const string& _name, const Location& _spawn)
     name_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
     name_label.setFillColor(Color::Black);
     this->name_label = name_label;
+    updateLogs("Plane "+this->name + " created");
+}
+
+Plane::Plane(const Location& _spawn)
+: location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION) {
+    ifstream i(COMPAGNIES_FILE);
+    if (i.is_open()) {
+        json j;
+        i >> j;
+        int random_id = rand()%j.size();
+        this->name = j[random_id]["IATA"] + to_string(rand()%1000);
+        this->company = j[random_id]["name"];
+        i.close();
+    } else {
+        this->name = "ER" + to_string(rand()%100);
+        this->company = "Martin Airlines";
+    }
+    updateLogs("🚁 Plane "+this->name + " created");
+    // Set graphical plane
+    this->graphical_plane = CircleShape(PLANE_CIRCLE_RADIUS);
+    this->graphical_plane.setFillColor(PLANE_COLOR_DEFAULT);
+
+    // Set altitude and name label
+    Text altitude_label, name_label;
+    altitude_label.setFont(Plane::default_font);
+    altitude_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
+    altitude_label.setFillColor(Color::Black);
+    this->altitude_label = altitude_label;
+    name_label.setFont(Plane::default_font);
+    name_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
+    name_label.setFillColor(Color::Black);
+    this->name_label = name_label;
+    
 }
 
 Text Plane::getAltitudeLabel() {
