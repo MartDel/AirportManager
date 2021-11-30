@@ -11,6 +11,7 @@
 #include <chrono>
 #include <nlohmann/json.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 
 using namespace std;
 using namespace sf;
@@ -26,6 +27,7 @@ using json = nlohmann::json;
 
 // Images
 const string IMG_FOLDER = "../img/";
+const string IMG_EXTENSION = ".jpg";
 
 // Fonts
 const string FONTS_FOLDER = "../fonts/";
@@ -65,3 +67,5 @@ float mapValue(const float &x, const float &in_min, const float &in_max, const f
  * @param logs  
  */
 void updateLogs(const string& logs);
+
+string imgAirport(const string &trigramme);

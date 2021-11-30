@@ -18,3 +18,7 @@ void updateLogs(const string &logs){
     file.close();
     return;
 }
+
+string imgAirport(const string &trigramme) {
+    return IMG_FOLDER + trigramme + IMG_EXTENSION;
+}

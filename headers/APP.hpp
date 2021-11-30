@@ -15,6 +15,8 @@
  */
 class APP {
     private:
+        string name;
+        string trigramme;
         vector<Plane *> waiting_planes;
         vector<Plane *> coming_planes;
         TWR* linked_twr;
@@ -31,12 +33,13 @@ class APP {
         void removePlaneFrom(Plane* plane, vector<Plane*>& list);
 
     public:
-        APP(TWR* _twr, const Location& _perimeter_entrance, const Location& center, const float& radius);
         APP(const json& data);
         ~APP();
 
         /* --------------------------- Getters and setters -------------------------- */
 
+        string getName() const { return this->name; }
+        string getTrigramme() const { return this->trigramme; }
         TWR* getTWR() const { return this->linked_twr; }
         Trajectory getCircularTrajectory() const { return this->circular_traj; }
         bool isPlaneWaiting() const { return !this->waiting_planes.empty() && this->landing_plane == NULL; }

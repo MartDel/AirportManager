@@ -9,6 +9,7 @@ int main(void) {
 
     /* ------------------------------ Init log file ----------------------------- */
 
+    srand(time(NULL));
     time_t now = time(0);
     char* dt = ctime(&now);
     ofstream file;
@@ -21,13 +22,13 @@ int main(void) {
     // Set up the window
     ContextSettings settings;
     settings.antialiasingLevel = 8;
-    RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "TWR1", Style::Default, settings);
+    RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "Airport simulation", Style::Default, settings);
     app.setFramerateLimit(30);
 
     // Set up the background image
     Texture background_img;
     Sprite background_sprite;
-    if (!background_img.loadFromFile(IMG_FOLDER + "airport1.jpg")) {
+    if (!background_img.loadFromFile(imgAirport("LIL"))) {
         cerr << "Cannot load image file : " << IMG_FOLDER << "airport1.jpg" << endl;
         return -1;
     }
@@ -43,43 +44,32 @@ int main(void) {
 
     /* ------------------------ Init planes and airports ------------------------ */
 
+    // Create airports
     vector<APP*> airports;
+    ifstream file_in(AIRPORTS_FILE);
+    if (!file_in.is_open()) {
+        cerr << "Cannot open file : " << AIRPORTS_FILE << endl;
+        return -1;
+    } else {
+        json j;
+        file_in >> j;
+        for (auto& airport : j) {
+            cout << "Generating the airport : " << airport["name"] << endl;
+            airports.push_back(new APP(airport));
+        }
+    }
 
-    // Create first TWR
-    // vector<Location> twr1_parking;
-    // twr1_parking.push_back(Location(1440, 910, 0, 0));
-    // twr1_parking.push_back(Location(1380, 890, 0, 0));
-    // twr1_parking.push_back(Location(1330, 860, 0, 0));
-    // Location l1(1000, 600, 0), l2(1800, 920, 0), l3(1405, 830, 0), l4(2900, 1300, 200, 250);
-    // TWR twr1(twr1_parking,l1,l2,l3,l4);
-    // twr1.setBackground(background_sprite);
-
-    // // Create first APP
-    // APP app1(&twr1, Location(100, 100, 1000, CIRCULAR_TRAJ_SPEED), Location(WINDOW_REAL_WIDTH/2, WINDOW_REAL_HEIGHT/2), 800);
-
-    // // Create planes
+    // Create planes
     vector<Plane*> planes;
-    // Plane* p1 = twr1.spawnPlane();
-    // if (p1 == NULL) {
-    //     cerr << "No more parking spot in Airport1..." << endl;
-    //     return -1;
-    // }
-    // planes.push_back(p1);
-    // Plane *p2 = twr1.spawnPlane();
-    // if (p2 == NULL) {
-    //     cerr << "No more parking spot in Airport1..." << endl;
-    //     return -1;
-    // }
-    // planes.push_back(p2);
-    // Plane *p3 = twr1.spawnPlane();
-    // if (p3 == NULL) {
-    //     cerr << "No more parking spot in Airport1..." << endl;
-    //     return -1;
-    // }
-    // planes.push_back(p3);
-    // planes.push_back(app1.spawnPlane());
-    // planes.push_back(app1.spawnPlane());
-    // planes.push_back(app1.spawnPlane());
+    for (auto& app : airports) {
+        cout << app->getName() << endl;
+        TWR* current_twr = app->getTWR();
+        Plane* p;
+        do {
+            p = current_twr->spawnPlane();
+            if (p != NULL) planes.push_back(p);
+        } while (p != NULL);
+    }
 
     /* ------------------------------ Init threads ------------------------------ */
 

@@ -1,6 +1,4 @@
 #include "Plane.hpp"
-#include <SFML/System/Vector2.hpp>
-#include <cmath>
 
 /* -------------------------------------------------------------------------- */
 /*                             Location functions                             */
@@ -279,7 +277,6 @@ Plane::Plane(const Location& _spawn)
     name_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
     name_label.setFillColor(Color::Black);
     this->name_label = name_label;
-    
 }
 
 /* --------------------------- Getters and setters -------------------------- */
@@ -356,17 +353,16 @@ void Plane::world(vector<Plane *> &planes, bool &stop_prgm) {
             }
 
             // Debug plane data
-            // cout_lock.lock();
+            // Plane::cout_lock.lock();
             // cout << *current_plane << endl;
-            // cout_lock.unlock();
+            // Plane::cout_lock.unlock();
         }
 
         // Add 1s timeout
         this_thread::sleep_for(interval);
     }
-
     Plane::cout_lock.lock();
-    cout << "World stop" << endl;
+    cout << "World stopped" << endl;
     Plane::cout_lock.unlock();
 }
 

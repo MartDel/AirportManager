@@ -4,8 +4,11 @@
 /*                                APP functions                               */
 /* -------------------------------------------------------------------------- */
 
-APP::APP(TWR *_twr, const Location &_perimeter_entrance, const Location& center, const float& radius)
-: linked_twr(_twr), perimeter_entrance(_perimeter_entrance), airport_center(center), landing_plane(NULL) {
+APP::APP(const json& data) : landing_plane(NULL) {
+    this->name = data["name"];
+    this->trigramme = data["trigramme"];
+    
+
     // Init waiting and comming planes
     vector<Plane*> tmp1, tmp2;
     this->waiting_planes = tmp1;
@@ -14,59 +17,40 @@ APP::APP(TWR *_twr, const Location &_perimeter_entrance, const Location& center,
     // Build circular trajectory
     vector<Location> traj;
     float theta,
-        center_x = this->airport_center.getX(),
-        center_y = this->airport_center.getY();
+        center_x = data["airport_center"]["x"],
+        center_y = data["airport_center"]["y"];
     Location new_point;
     new_point.setZ(CIRCULAR_TRAJ_ALTITUDE_MIN);
     new_point.setSpeed(CIRCULAR_TRAJ_SPEED);
     for (size_t i = 0; i < CIRCULAR_TRAJ_NB_POINTS; i++) {
         theta = mapValue(i, 0, CIRCULAR_TRAJ_NB_POINTS, 0, 2 * M_PI);
-        new_point.setX(center_x + (radius * cos(theta)));
-        new_point.setY(center_y + (radius * sin(theta)));
+        new_point.setX(center_x + (float(data["circular_traj_radius"]) * cos(theta)));
+        new_point.setY(center_y + (float(data["circular_traj_radius"]) * sin(theta)));
         traj.push_back(new_point);
     }
     traj.push_back(traj.at(0));
     this->circular_traj = Trajectory(traj);
-}
-
-APP::APP(const json& data) : landing_plane(NULL) {
-    // Init waiting and comming planes
-    vector<Plane*> tmp1, tmp2;
-    this->waiting_planes = tmp1;
-    this->coming_planes = tmp2;
-
-    // Build circular trajectory
-    // vector<Location> traj;
-    // float theta,
-    //     center_x = data["airport_center"]["x"],
-    //     center_y = data["airport_center"]["y"];
-    // Location new_point;
-    // new_point.setZ(CIRCULAR_TRAJ_ALTITUDE_MIN);
-    // new_point.setSpeed(CIRCULAR_TRAJ_SPEED);
-    // for (size_t i = 0; i < CIRCULAR_TRAJ_NB_POINTS; i++) {
-    //     theta = mapValue(i, 0, CIRCULAR_TRAJ_NB_POINTS, 0, 2 * M_PI);
-    //     new_point.setX(center_x + (float(data["circular_traj_radius"]) * cos(theta)));
-    //     new_point.setY(center_y + (float(data["circular_traj_radius"]) * sin(theta)));
-    //     traj.push_back(new_point);
-    // }
-    // traj.push_back(traj.at(0));
-    // this->circular_traj = Trajectory(traj);
     
-    // vector<Location> tmp_park;
-    // for (size_t i = 0; i < data["parking"].size(); i++) {
-    //     tmp_park.push_back(Location(data["parking"][i]["x"], data["parking"][i]["y"], data["parking"][i]["z"]));
-    // }
+    vector<Location> tmp_park;
+    for (size_t i = 0; i < data["parking"].size(); i++) {
+        tmp_park.push_back(Location(data["parking"][i]["x"], data["parking"][i]["y"]));
+    }
 
-    // Location tmp_entrance(data["perimeter_entrance"]["x"], data["perimeter_entrance"]["y"], data["perimeter_entrance"]["z"]);
+    Location tmp_entrance(data["perimeter_entrance"]["x"], data["perimeter_entrance"]["y"], data["perimeter_entrance"]["z"]);
 
-    // Location runway_entrance(data["runway_entrance"]["x"], data["runway_entrance"]["y"], data["runway_entrance"]["z"]);
+    Location runway_entrance(data["runway_start"]["x"], data["runway_start"]["y"], data["runway_start"]["z"]);
+    Location runway_exit(data["runway_end"]["x"], data["runway_end"]["y"], data["runway_end"]["z"]);
+    Location parking_entrance(data["parking_entrance"]["x"], data["parking_entrance"]["y"], data["parking_entrance"]["z"]);
+    Location perimeter_end(data["perimeter_exit"]["x"], data["perimeter_exit"]["y"], data["perimeter_exit"]["z"]);
 
-    // linked_twr = new TWR(tmp_park,);
+    linked_twr = new TWR(tmp_park, runway_entrance, runway_exit, parking_entrance, perimeter_end);
+    updateLogs("Generating TWR " + this->name);
 }
 
 APP::~APP() {
     if (this->airport_thread->joinable()) this->airport_thread->join();
     delete this->airport_thread;
+    delete this->linked_twr;
 }
 
 /* ----------------------------- Private methods ---------------------------- */
@@ -205,6 +189,6 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
     }
 
     Plane::cout_lock.lock();
-    cout << "Airport stop" << endl;
+    cout << "The airport " << app.getName() << " stopped" << endl;
     Plane::cout_lock.unlock();
 }
