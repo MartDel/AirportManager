@@ -22,17 +22,8 @@ int main(void) {
     // Set up the window
     ContextSettings settings;
     settings.antialiasingLevel = 8;
-    RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), "Airport simulation", Style::Default, settings);
+    RenderWindow app(VideoMode(WINDOW_WIDTH*2, WINDOW_HEIGHT*2, 32), "Airport simulation", Style::Default, settings);
     app.setFramerateLimit(30);
-
-    // Set up the background image
-    Texture background_img;
-    Sprite background_sprite;
-    if (!background_img.loadFromFile(imgAirport("LIL"))) {
-        cerr << "Cannot load image file : " << IMG_FOLDER << "airport1.jpg" << endl;
-        return -1;
-    }
-    background_sprite.setTexture(background_img);
 
     // Set up the font
     Font font;
@@ -62,7 +53,6 @@ int main(void) {
     // Create planes
     vector<Plane*> planes;
     for (auto& app : airports) {
-        cout << app->getName() << endl;
         TWR* current_twr = app->getTWR();
         Plane* p;
         do {
@@ -78,6 +68,24 @@ int main(void) {
         airport->setThread(ref(stop_prgm));
     thread world_thread(Plane::world, ref(planes), ref(stop_prgm));
 
+    /* ---------------------------- Load backgrounds ---------------------------- */
+
+    // Set up the background image
+    map<string, Sprite*> backgrounds;
+    vector<Texture*> background_textures;
+    for (auto& airport : airports) {
+        Texture* background_img = new Texture();
+        Sprite* background_sprite = new Sprite();
+        string img_name = imgAirport(airport->getTrigramme());
+        if (!background_img->loadFromFile(img_name)) {
+            cerr << "Cannot load image file : " << img_name << endl;
+            return -1;
+        }
+        background_sprite->setTexture(*background_img);
+        background_textures.push_back(background_img);
+        backgrounds.insert(pair<string, Sprite*>(airport->getName(), background_sprite));
+    }
+
     /* -------------------------------- SFML loop ------------------------------- */
 
     while (app.isOpen()) {
@@ -92,8 +100,18 @@ int main(void) {
         if(stop_prgm) app.close();
         
         app.clear();
-        app.draw(background_sprite);
-
+        
+        // Draw backgrounds
+        size_t i(0);
+        for (auto& background : backgrounds) {
+            Sprite* to_draw = background.second;
+            Vector2f pos((i == 1 ? 0 : 1) * WINDOW_WIDTH, (i > 0 ? 1 : 0) * WINDOW_HEIGHT);
+            to_draw->setPosition(pos);
+            app.draw(*to_draw);
+            i++;
+        }
+        
+        // Draw planes
         for (auto& plane : planes) {
             app.draw(plane->toSFML());
             app.draw(plane->getAltitudeLabel());
@@ -107,6 +125,9 @@ int main(void) {
 
     stop_prgm = true;
     if(world_thread.joinable()) world_thread.join();
+    for (auto& bg : backgrounds) delete bg.second;
+    for (auto &bg : background_textures) delete bg;
+    for (auto& airport : airports) delete airport;
     for (auto& plane : planes) delete plane;
 
     return 0;
