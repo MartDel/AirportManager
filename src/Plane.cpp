@@ -6,11 +6,15 @@
 /*                             Location functions                             */
 /* -------------------------------------------------------------------------- */
 
+/* --------------------------- Getters and setters -------------------------- */
+
 void Location::setLocation(const float &_x, const float &_y, const float &_z) {
     this->x = _x;
     this->y = _y;
     this->z = _z;
 }
+
+/* ----------------------------- Public methods ----------------------------- */
 
 Vector2f Location::toVector() const {
     Vector2f v;
@@ -66,6 +70,8 @@ float Location::get3dDistanceTo(const Location &l) const {
     return sqrt(pow(l.getX() - this->x, 2) + pow(l.getY() - this->y, 2) + pow(l.getZ() - this->z, 2));
 }
 
+/* -------------------------------- Operators ------------------------------- */
+
 bool Location::operator==(const Location &l) const {
     // cout.precision(10);
     return this->x == l.getX() && this->y == l.getY() && round(this->z) == l.getZ();
@@ -91,6 +97,8 @@ ostream& operator<<(ostream& stream, const Location& l) {
 /*                            Trajectory functions                            */
 /* -------------------------------------------------------------------------- */
 
+/* ----------------------------- Private methods ---------------------------- */
+
 size_t Trajectory::getPointPos(const Location &l) const {
     size_t i(0);
     Location current;
@@ -101,6 +109,21 @@ size_t Trajectory::getPointPos(const Location &l) const {
     return --i;
 }
 
+
+/* --------------------------- Getters and setters -------------------------- */
+
+bool Trajectory::isCyclic() const {
+    if (this->points.size() < 2) return false;
+    else return this->points.at(0) == this->getLastPoint();
+}
+
+void Trajectory::setAltitude(const float& altitude) {
+    if (!this->isCyclic()) return;
+    for (size_t i = 0; i < this->points.size(); i++) {
+        this->points.at(i).setZ(altitude);
+    }
+}
+
 size_t Trajectory::getNearPointPos(const Location& from) {
     map<float, Location> points_away;
     for (auto& current_point : this->points) {
@@ -109,10 +132,7 @@ size_t Trajectory::getNearPointPos(const Location& from) {
     return this->getPointPos(points_away.begin()->second);
 }
 
-bool Trajectory::isCyclic() const {
-    if (this->points.size() < 2) return false;
-    else return this->points.at(0) == this->getLastPoint();
-}
+/* ----------------------------- Public methods ----------------------------- */
 
 Location Trajectory::getNextLocation(const Location &from, const float &speed, const bool& verbose) {
     if (verbose) cout << "-- Next location --" << endl;
@@ -184,12 +204,6 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
     return next;
 }
 
-void Trajectory::setAltitude(const float& altitude) {
-    if (!this->isCyclic()) return;
-    for (size_t i = 0; i < this->points.size(); i++) {
-        this->points.at(i).setZ(altitude);
-    }
-}
 
 void Trajectory::cutTrajectory(const size_t& pos) {
     // Checking pos
@@ -216,8 +230,6 @@ void Trajectory::cutTrajectory(const size_t& pos) {
 /* -------------------------------------------------------------------------- */
 /*                               Plane functions                              */
 /* -------------------------------------------------------------------------- */
-
-Font Plane::default_font = Font();
 
 Plane::Plane(const string& _name, const Location& _spawn)
 : name(_name), location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION) {
@@ -270,6 +282,8 @@ Plane::Plane(const Location& _spawn)
     
 }
 
+/* --------------------------- Getters and setters -------------------------- */
+
 Text Plane::getAltitudeLabel() {
     Vector2f location_v = this->location.toVector();
     this->altitude_label.setString(to_string(int(round(this->location.getZ()))) + "m");
@@ -284,6 +298,21 @@ Text Plane::getNameLabel() {
     return this->name_label;
 }
 
+CircleShape Plane::toSFML() {
+    this->graphical_plane.setPosition(this->location.toVector());
+    return this->graphical_plane;
+}
+
+void Plane::setLocation(const Location& l) {
+    this->location = l;
+
+    // Update the plane speed
+    if (l.getSpeed() != -1)
+        this->speed = l.getSpeed();
+}
+
+/* ----------------------------- Public methods ----------------------------- */
+
 void Plane::start(const Trajectory& traj) {
     this->trajectory = traj;
     this->destination = trajectory.getLastPoint();
@@ -297,27 +326,49 @@ void Plane::updateLocation() {
     this->destination = this->trajectory.getLastPoint();
 }
 
-void Plane::setLocation(const Location& l) {
-    this->location = l;
-
-    // Update the plane speed
-    if (l.getSpeed() != -1)
-        this->speed = l.getSpeed();
-}
-
-CircleShape Plane::toSFML() {
-    this->graphical_plane.setPosition(this->location.toVector());
-    return this->graphical_plane;
-}
 
 void Plane::stopAt(const size_t& stop_pos) {
     this->trajectory.cutTrajectory(stop_pos);
 }
 
-ostream& operator<<(ostream& stream, const Plane& plane) {
+/* -------------------------------- Operators ------------------------------- */
+
+ostream &operator<<(ostream &stream, const Plane &plane) {
     stream << plane.getName() << " :" << endl;
     stream << "    " << plane.getLocation() << " -> " << plane.getDestination() << endl;
     stream << "    Speed: " << plane.getSpeed() << " m/s" << endl;
     stream << "    Fuel: " << plane.getFuel() << " % Consumption: " << plane.getConsumption() << " %/s" << endl;
     return stream;
 }
+
+/* ---------------------- Static attributes and methods --------------------- */
+
+void Plane::world(vector<Plane *> &planes, bool &stop_prgm) {
+    chrono::milliseconds interval(WORLD_INTERVAL);
+
+    while (!stop_prgm) {
+        for (auto &current_plane : planes) {
+            if (!current_plane->isDestinationReached()) {
+                // Update plane location
+                Plane::cout_lock.lock();
+                current_plane->updateLocation();
+                Plane::cout_lock.unlock();
+            }
+
+            // Debug plane data
+            // cout_lock.lock();
+            // cout << *current_plane << endl;
+            // cout_lock.unlock();
+        }
+
+        // Add 1s timeout
+        this_thread::sleep_for(interval);
+    }
+
+    Plane::cout_lock.lock();
+    cout << "World stop" << endl;
+    Plane::cout_lock.unlock();
+}
+
+mutex Plane::cout_lock;
+Font Plane::default_font = Font();

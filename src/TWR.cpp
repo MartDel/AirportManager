@@ -41,6 +41,8 @@ TWR::TWR(
     this->parking_spots = tmp_spots;
 }
 
+/* ----------------------------- Private methods ---------------------------- */
+
 std::_Rb_tree_const_iterator<std::pair<const Location, bool>> TWR::getFreeParkingSpot() const {
     auto spot = std::find_if(
         this->parking_spots.begin(),
@@ -50,6 +52,8 @@ std::_Rb_tree_const_iterator<std::pair<const Location, bool>> TWR::getFreeParkin
     );
     return spot != end(this->parking_spots) ? (spot) : this->parking_spots.end();
 }
+
+/* ----------------------------- Public methods ----------------------------- */
 
 void TWR::landPlane(Plane* plane) {
     // Choose the parking spot

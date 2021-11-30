@@ -12,6 +12,9 @@
 #define NAME_LABEL_Y 25
 #define NAME_LABEL_SIZE 15
 
+// Thread timeout (in ms)
+#define WORLD_INTERVAL 250
+
 /**
  * @brief A Location is a 3D point.
  * It can be linked to a speed in order to update the plane speed during a trajectory.
@@ -40,6 +43,11 @@ class Location {
         void setTheta(const float &_theta) { this->theta = _theta; }
         void setSpeed(const float& _speed) { this->speed = _speed; }
         void setLocation(const float& _x, const float& _y, const float& _z);
+        
+        /**
+         * @brief Convert the location to a SFML vector
+         * @return Vector2f A SMFL Vector object
+         */
         Vector2f toVector() const;
 
         /**
@@ -97,26 +105,26 @@ class Trajectory {
     public:
         Trajectory() : reached_point(NULL), cutting_pos(-1) {}
         Trajectory(const vector<Location>& _points) : points(_points), reached_point(NULL), cutting_pos(-1) {}
+        void setCuttingPos(const int& _pos) { this->cutting_pos = _pos < this->points.size() ? _pos : -1; }
+        
+        /* --------------------------- Getters and setters -------------------------- */
+
+        // Read or manage points
         Location getPointAt(const size_t& i) const { return points.at(i); }
         Location getLastPoint() const { return points.at(points.size() - 1); }
-        bool isStarted() const { return this->reached_point != NULL; }
-        void setCuttingPos(const int& _pos) { this->cutting_pos = _pos < this->points.size() ? _pos : -1; }
         void addPoint(const Location& new_point) { this->points.push_back(new_point); }
+        
+        /**
+         * @brief Check if the plane has reached the first point
+         * @return bool The plane started the trajectory or not
+         */
+        bool isStarted() const { return this->reached_point != NULL; }
 
         /**
          * @brief Check if the trajectory is cylic.
          * The size of list of points must be < 2 and the first point must be equal to the last.
          */
         bool isCyclic() const;
-
-        /**
-         * @brief Get the next position in the trajectory
-         * @param from The start location (the plane location)
-         * @param speed The plane speed (the distance to travel)
-         * @param verbose If I want to print some debug data
-         * @return Location The new step location
-         */
-        Location getNextLocation(const Location& from, const float& speed, const bool& verbose = false);
 
         /**
          * @brief Set all trajectory points altitude
@@ -130,6 +138,17 @@ class Trajectory {
          * @return Location* The near point
          */
         size_t getNearPointPos(const Location &from);
+
+        /* ----------------------------- Public methods ----------------------------- */
+
+        /**
+         * @brief Get the next position in the trajectory
+         * @param from The start location (the plane location)
+         * @param speed The plane speed (the distance to travel)
+         * @param verbose If I want to print some debug data
+         * @return Location The new step location
+         */
+        Location getNextLocation(const Location& from, const float& speed, const bool& verbose = false);
 
         /**
          * @brief Cut the trajectory to remove all of points after the pos argument
@@ -153,11 +172,11 @@ class Plane {
         Text altitude_label, name_label;
 
     public:
-        static Font default_font;
         Plane(const string &_name, const Location &_spawn);
         Plane(const Location &_spawn);
 
-        // Getters
+        /* --------------------------------- Getters -------------------------------- */
+
         string getName() const { return this->name; }
         Location getLocation() const { return this->location; }
         Location getDestination() const { return this->destination; }
@@ -167,12 +186,21 @@ class Plane {
         Text getAltitudeLabel();
         Text getNameLabel();
 
-        // Setters
+        /**
+         * @brief Get the plane SFML version
+         * @return CircleShape The plane to display
+         */
+        CircleShape toSFML();
+
+        /* --------------------------------- Setters -------------------------------- */
+
         void setLocation(const Location& l);
         void setDestination(const Location& d) { this->destination = d; }
         void setSpeed(const float& s) { this->speed = s; }
         void setFuel(const float& f) { this->fuel = f; }
         void setTrajectoryAltitude(const float& alt) { this->trajectory.setAltitude(alt); }
+
+        /* ---------------------------- Public methods ---------------------------- */
 
         /**
          * @brief Check if the plane reached the first point
@@ -197,17 +225,24 @@ class Plane {
         void updateLocation();
 
         /**
-         * @brief Get the plane SFML version
-         * @return CircleShape The plane to display
-         */
-        CircleShape toSFML();
-
-        /**
          * @brief Cut the plane trajectory with the given point pos
          * @param stop_pos The stopping point pos
          */
         void stopAt(const size_t& stop_pos);
 
-        // Operators
-        friend ostream & operator<<(ostream &stream, const Plane &plane);
+        /* -------------------------------- Operators ------------------------------- */
+
+        friend ostream& operator<<(ostream &stream, const Plane &plane);
+
+        /* ---------------------- Static attributes and methods --------------------- */
+
+        /**
+         * @brief Manage plane locations each second.
+         * @param planes Planes to manage
+         * @param stop_prgm If the simulation must stoped
+         */
+        static void world(vector<Plane *> &planes, bool &stop_prgm);
+
+        static mutex cout_lock;
+        static Font default_font;
 };

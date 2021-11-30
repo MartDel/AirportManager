@@ -31,10 +31,12 @@ class APP {
         void removePlaneFrom(Plane* plane, vector<Plane*>& list);
 
     public:
-        static mutex cout_lock;
         APP(TWR* _twr, const Location& _perimeter_entrance, const Location& center, const float& radius);
         APP(const json& data);
         ~APP();
+
+        /* --------------------------- Getters and setters -------------------------- */
+
         TWR* getTWR() const { return this->linked_twr; }
         Trajectory getCircularTrajectory() const { return this->circular_traj; }
         bool isPlaneWaiting() const { return !this->waiting_planes.empty() && this->landing_plane == NULL; }
@@ -42,16 +44,18 @@ class APP {
         void setThread(bool &stop_prgm);
 
         /**
-         * @brief Spawn a plane to the perimeter entrance.
-         * @return Plane* The spawned plane
-         */
-        Plane* spawnPlane();
-
-        /**
          * @brief Get all arrived planes in the coming planes array
          * @return vector<Plane*> Arrived planes
          */
         vector<Plane*> getArrivedPlanes() const;
+
+        /* ----------------------------- Public methods ----------------------------- */
+
+        /**
+         * @brief Spawn a plane to the perimeter entrance.
+         * @return Plane* The spawned plane
+         */
+        Plane* spawnPlane();
 
         /**
          * @brief Put a plane to the waiting mode.

@@ -1,49 +1,13 @@
 #include "APP.hpp"
 
-// Thread timeouts (in ms)
-#define WORLD_INTERVAL 250
-
-/* -------------------------------------------------------------------------- */
-/*                              Thread functions                              */
-/* -------------------------------------------------------------------------- */
-
-/**
- * @brief Manage plane locations each second.
- * @param planes Planes to manage
- * @param stop_prgm If the simulation must stoped
- */
-void world(vector<Plane*>& planes, bool& stop_prgm) {
-    chrono::milliseconds interval(WORLD_INTERVAL);
-
-    while (!stop_prgm) {
-        for (auto& current_plane : planes) {
-            if (!current_plane->isDestinationReached()) {
-                // Update plane location
-                APP::cout_lock.lock();
-                current_plane->updateLocation();
-                APP::cout_lock.unlock();
-            }
-
-            // Debug plane data
-            // cout_lock.lock();
-            // cout << *current_plane << endl;
-            // cout_lock.unlock();
-        }
-
-        // Add 1s timeout
-        this_thread::sleep_for(interval);
-    }
-
-    APP::cout_lock.lock();
-    cout << "World stop" << endl;
-    APP::cout_lock.unlock();
-}
-
 /* -------------------------------------------------------------------------- */
 /*                                Main function                               */
 /* -------------------------------------------------------------------------- */
 
 int main(void) {
+    bool stop_prgm(false);
+
+    /* ------------------------------ Init log file ----------------------------- */
 
     time_t now = time(0);
     char* dt = ctime(&now);
@@ -51,8 +15,6 @@ int main(void) {
     file.open(LOGS_FILE,std::ofstream::out | std::ofstream::trunc);
     file << dt << "Roll the dice, the program has begun" << endl;
     file.close();
-
-    bool stop_prgm(false);
 
     /* ------------------------------- Init window ------------------------------ */
 
@@ -119,12 +81,14 @@ int main(void) {
     // planes.push_back(app1.spawnPlane());
     // planes.push_back(app1.spawnPlane());
 
-    /* ------------------------- Threads and window loop ------------------------ */
+    /* ------------------------------ Init threads ------------------------------ */
 
     // Create and start threads
     for (auto& airport : airports)
         airport->setThread(ref(stop_prgm));
-    thread world_thread(world, ref(planes), ref(stop_prgm));
+    thread world_thread(Plane::world, ref(planes), ref(stop_prgm));
+
+    /* -------------------------------- SFML loop ------------------------------- */
 
     while (app.isOpen()) {
         // Events
@@ -149,7 +113,8 @@ int main(void) {
         app.display();
     }
 
-    // Shut down threads
+    /* ------------------------ Shut down the simulation ------------------------ */
+
     stop_prgm = true;
     if(world_thread.joinable()) world_thread.join();
     for (auto& plane : planes) delete plane;

@@ -15,12 +15,18 @@
 class TWR {
     private:
         queue<Plane*> parking; // All of parked planes
-        map<Location, bool> parking_spots; // All of parking spot locations
+        map<Location, bool> parking_spots; // All of parking spot locations and if the spot is used or not
         Trajectory takeoff, landing; // The taking off and landing trajectory
         bool is_runway_used;
         Sprite background; // The airport background image
         Plane* plane_using_runway; // The plane which is using the runway
 
+        /**
+         * @brief Get the first occurence of a free parking spot.
+         * Loop through the parking_spots map to find a free spot.
+         * @return std::_Rb_tree_const_iterator<std::pair<const Location, bool>> The found free spot.
+         * Return parking_spots.end() if there isn't free spot available.
+         */
         std::_Rb_tree_const_iterator<std::pair<const Location, bool>> getFreeParkingSpot() const;
 
     public:
@@ -32,16 +38,25 @@ class TWR {
             Location &perimeter_limit
         );
 
+        /* --------------------------------- Getters -------------------------------- */
+
+        // Read the TWR parking
         queue<Plane*> getParking() const { return this->parking; }
         bool isParkingEmpty() const { return this->parking.empty(); }
         bool isParkingFull() const { return this->parking.size() == this->parking_spots.size(); }
+       
         Trajectory getLandingTrajectory() const { return this->landing; }
         bool isRunwayUsed() const { return this->is_runway_used; }
-        void toggleIsRunwayUsed() { this->is_runway_used = !this->is_runway_used; }
         Sprite getBackground() const { return this->background; }
-        void setBackground(const Sprite& bg) { this->background = bg; }
         Plane* getPlaneInRunway() const { return this->plane_using_runway; }
+        
+        /* --------------------------------- Setters -------------------------------- */
+
+        void toggleIsRunwayUsed() { this->is_runway_used = !this->is_runway_used; }
+        void setBackground(const Sprite& bg) { this->background = bg; }
         void setPlaneInRunway(Plane* p) { this->plane_using_runway = p; }
+
+        /* ----------------------------- Public methods ----------------------------- */
 
         /**
          * @brief Manage a plane to land it and park it

@@ -1,5 +1,4 @@
 #include "APP.hpp"
-#include <cmath>
 
 /* -------------------------------------------------------------------------- */
 /*                                APP functions                               */
@@ -70,6 +69,8 @@ APP::~APP() {
     delete this->airport_thread;
 }
 
+/* ----------------------------- Private methods ---------------------------- */
+
 void APP::removePlaneFrom(Plane* plane, vector<Plane*>& list) {
     vector<Plane *>::iterator it = list.begin();
     while (it != list.end()) {
@@ -79,10 +80,11 @@ void APP::removePlaneFrom(Plane* plane, vector<Plane*>& list) {
     list.erase(it);
 }
 
-Plane* APP::spawnPlane() {
-    Plane* p = new Plane(this->perimeter_entrance);
-    this->coming_planes.push_back(p);
-    return p;
+/* --------------------------- Getters and setters -------------------------- */
+
+void APP::setThread(bool &stop_prgm) {
+    thread* tmp = new thread(APP::airportControl, ref(*this), ref(stop_prgm));
+    this->airport_thread = tmp;
 }
 
 vector<Plane*> APP::getArrivedPlanes() const {
@@ -92,6 +94,14 @@ vector<Plane*> APP::getArrivedPlanes() const {
             arrived.push_back(comming_plane);
     }
     return arrived;
+}
+
+/* ----------------------------- Public methods ----------------------------- */
+
+Plane* APP::spawnPlane() {
+    Plane* p = new Plane(this->perimeter_entrance);
+    this->coming_planes.push_back(p);
+    return p;
 }
 
 void APP::askPlaneToWait(Plane* p) {
@@ -138,13 +148,7 @@ void APP::startLanding() {
     this->landing_plane = NULL;
 }
 
-// A thread lock
-mutex APP::cout_lock;
-
-void APP::setThread(bool &stop_prgm) {
-    thread* tmp = new thread(APP::airportControl, ref(*this), ref(stop_prgm));
-    this->airport_thread = tmp;
-}
+/* ---------------------- Static attributes and methods --------------------- */
 
 void APP::airportControl(APP &app, bool &stop_prgm) {
     chrono::milliseconds interval(AIRPORTS_INTERVAL);
@@ -154,10 +158,10 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
         // Check arrived planes
         vector<Plane *> arrived_planes = app.getArrivedPlanes();
         for (auto &arrived_plane : arrived_planes) {
-            APP::cout_lock.lock();
+            Plane::cout_lock.lock();
             cout << " -- Move " << arrived_plane->getName() << " to circular trajectory --" << endl << endl;
             app.askPlaneToWait(arrived_plane);
-            APP::cout_lock.unlock();
+            Plane::cout_lock.unlock();
         }
 
         if (!twr->isRunwayUsed()) {
@@ -165,14 +169,14 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
 
             if (!twr->isParkingFull() && app.isPlaneWaiting()) {
                 // Land the most important plane
-                APP::cout_lock.lock();
+                Plane::cout_lock.lock();
                 app.landPriorityPlane();
-                APP::cout_lock.unlock();
+                Plane::cout_lock.unlock();
             } else if (!twr->isParkingEmpty()) {
                 // Take off a plane
-                APP::cout_lock.lock();
+                Plane::cout_lock.lock();
                 twr->takeOffPlane();
-                APP::cout_lock.unlock();
+                Plane::cout_lock.unlock();
             }
         } else {
             // The runway is used
@@ -181,18 +185,18 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
 
             if (landing_plane != NULL && landing_plane->isDestinationReached()) {
                 // The landing plane reached the runway start
-                APP::cout_lock.lock();
+                Plane::cout_lock.lock();
                 cout << " -- " << landing_plane->getName() << " is reaching the runway --" << endl;
                 updateLogs(" -- " + landing_plane->getName() + " is reaching the runway --");
                 app.startLanding();
-                APP::cout_lock.unlock();
+                Plane::cout_lock.unlock();
             } else if (plane_using_runway != NULL && plane_using_runway->isDestinationReached()) {
                 // The plane which is landing or taking off has finished
-                APP::cout_lock.lock();
+                Plane::cout_lock.lock();
                 cout << " -- " << plane_using_runway->getName() << " has finished its landing or taking off --" << endl;
                 updateLogs(" -- " + plane_using_runway->getName() + " has finished its landing or taking off --");
                 twr->toggleIsRunwayUsed();
-                APP::cout_lock.unlock();
+                Plane::cout_lock.unlock();
             }
         }
 
@@ -200,7 +204,7 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
         this_thread::sleep_for(interval);
     }
 
-    cout_lock.lock();
+    Plane::cout_lock.lock();
     cout << "Airport stop" << endl;
-    cout_lock.unlock();
+    Plane::cout_lock.unlock();
 }
