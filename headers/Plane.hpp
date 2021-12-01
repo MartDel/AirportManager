@@ -22,26 +22,36 @@
 class Location {
     private:
         float x, y, z, phi, theta, speed;
+        ReferenceFrame ref_frame;
 
     public:
         Location(
             const float &_x = 0,
             const float &_y = 0,
             const float &_z = 0,
-            const float &_speed = -1
-        ) : x(_x), y(_y), z(_z), speed(_speed), phi(0), theta(0) {}
+            const float &_speed = -1,
+            const ReferenceFrame _ref = ReferenceFrame::APP1
+        ) : x(_x), y(_y), z(_z), speed(_speed), phi(0), theta(0), ref_frame(_ref) {}
+
+        /* --------------------------------- Getters -------------------------------- */
+
         float getX() const { return this->x; }
         float getY() const { return this->y; }
         float getZ() const { return this->z; }
         float getPhi() const { return this->phi; }
         float getTheta() const { return this->theta; }
         float getSpeed() const { return this->speed; }
+        ReferenceFrame getRefFrame() const { return this->ref_frame; }
+
+        /* --------------------------------- Setters -------------------------------- */
+        
         void setX(const float& _x) { this->x = _x; }
         void setY(const float& _y) { this->y = _y; }
         void setZ(const float &_z) { this->z = _z; }
         void setPhi(const float &_phi) { this->phi = _phi; }
         void setTheta(const float &_theta) { this->theta = _theta; }
-        void setSpeed(const float& _speed) { this->speed = _speed; }
+        void setSpeed(const float &_speed) { this->speed = _speed; }
+        void setRefFrame(const ReferenceFrame& _ref) { this->ref_frame = _ref; }
         void setLocation(const float& _x, const float& _y, const float& _z);
         
         /**
@@ -110,8 +120,8 @@ class Trajectory {
         /* --------------------------- Getters and setters -------------------------- */
 
         // Read or manage points
-        Location getPointAt(const size_t& i) const { return points.at(i); }
-        Location getLastPoint() const { return points.at(points.size() - 1); }
+        Location getPointAt(const size_t& i) const { return this->points.at(i); }
+        Location getLastPoint() const { return this->points.at(points.size() - 1); }
         void addPoint(const Location& new_point) { this->points.push_back(new_point); }
         
         /**
@@ -178,6 +188,7 @@ class Plane {
         /* --------------------------------- Getters -------------------------------- */
 
         string getName() const { return this->name; }
+        Location &getLocation() { return this->location; }
         Location getLocation() const { return this->location; }
         Location getDestination() const { return this->destination; }
         float getSpeed() const { return this->speed; }

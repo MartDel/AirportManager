@@ -16,8 +16,11 @@ void Location::setLocation(const float &_x, const float &_y, const float &_z) {
 
 Vector2f Location::toVector() const {
     Vector2f v;
+
     v.x = WINDOW_WIDTH * (this->x / WINDOW_REAL_WIDTH);
     v.y = WINDOW_HEIGHT * (this->y / WINDOW_REAL_HEIGHT);
+    v += getFrameStartPoint(this->ref_frame);
+
     return v;
 }
 
@@ -199,6 +202,7 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
         cout << next << endl;
         cout << "------" << endl;
     }
+    next.setRefFrame(from.getRefFrame());
     return next;
 }
 
@@ -228,25 +232,6 @@ void Trajectory::cutTrajectory(const size_t& pos) {
 /* -------------------------------------------------------------------------- */
 /*                               Plane functions                              */
 /* -------------------------------------------------------------------------- */
-
-Plane::Plane(const string& _name, const Location& _spawn)
-: name(_name), location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION) {
-    // Set graphical plane
-    this->graphical_plane = CircleShape(PLANE_CIRCLE_RADIUS);
-    this->graphical_plane.setFillColor(PLANE_COLOR_DEFAULT);
-
-    // Set altitude and name label
-    Text altitude_label, name_label;
-    altitude_label.setFont(Plane::default_font);
-    altitude_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
-    altitude_label.setFillColor(Color::Black);
-    this->altitude_label = altitude_label;
-    name_label.setFont(Plane::default_font);
-    name_label.setCharacterSize(ALTITUDE_LABEL_SIZE);
-    name_label.setFillColor(Color::Black);
-    this->name_label = name_label;
-    updateLogs("Plane "+this->name + " created");
-}
 
 Plane::Plane(const Location& _spawn)
 : location(_spawn), destination(_spawn), speed(0), fuel(100), consumption(DEFAULT_CONSUMPTION) {

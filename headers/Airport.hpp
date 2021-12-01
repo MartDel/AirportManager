@@ -19,6 +19,9 @@ using json = nlohmann::json;
 
 /* ------------------------------ SFML defines ------------------------------ */
 
+// Debug mode : don't generate planes and print important points
+#define DEBUG
+
 // Window size
 #define WINDOW_WIDTH 800.0
 #define WINDOW_REAL_WIDTH 3000.0
@@ -40,6 +43,25 @@ const string OPENSANS_FONT = "OpenSans.ttf";
 #define LOGS_FILE "../config/logs.log"
 
 /* ---------------------------------- Utils --------------------------------- */
+
+/**
+ * @brief Represent the frame where the plane will be printed
+ */
+enum class ReferenceFrame { CCR, APP1, APP2, APP3 };
+
+/**
+ * @brief Get the frame start point
+ * @param ref The frame
+ * @return Vector2f The start point
+ */
+Vector2f getFrameStartPoint(const ReferenceFrame& ref);
+
+/**
+ * @brief Get frame from its id
+ * @param id The frame id
+ * @return ReferenceFrame The frame
+ */
+ReferenceFrame getFrameFromId(const size_t& id);
 
 /**
  * @brief Round a float with a given precision 
@@ -68,4 +90,18 @@ float mapValue(const float &x, const float &in_min, const float &in_max, const f
  */
 void updateLogs(const string& logs);
 
+/**
+ * @brief Get the full image name
+ * @param trigramme The airport trigramme
+ * @return string The full image path
+ */
 string imgAirport(const string &trigramme);
+
+#ifdef DEBUG
+/**
+ * @brief Generate a point to debug a position
+ * @param pos The circle position
+ * @return CircleShape The generated point
+ */
+CircleShape generateDebugCircle(const Vector2f& pos);
+#endif

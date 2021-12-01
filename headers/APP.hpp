@@ -24,6 +24,11 @@ class APP {
         Trajectory circular_traj; // Circular trajectory to lead waiting planes
         Plane* landing_plane;
         thread* airport_thread;
+        ReferenceFrame ref_frame;
+
+        #ifdef DEBUG
+        vector<Location> important_points;
+        #endif
 
         /**
          * @brief Remove a plane from a vector
@@ -33,7 +38,7 @@ class APP {
         void removePlaneFrom(Plane* plane, vector<Plane*>& list);
 
     public:
-        APP(const json& data);
+        APP(const json& data, const ReferenceFrame& ref);
         ~APP();
 
         /* --------------------------- Getters and setters -------------------------- */
@@ -51,6 +56,10 @@ class APP {
          * @return vector<Plane*> Arrived planes
          */
         vector<Plane*> getArrivedPlanes() const;
+
+        #ifdef DEBUG
+        vector<Location> getImportantPoints() const { return this->important_points; }
+        #endif
 
         /* ----------------------------- Public methods ----------------------------- */
 

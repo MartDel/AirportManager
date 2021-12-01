@@ -44,29 +44,33 @@ int main(void) {
     } else {
         json j;
         file_in >> j;
-        for (auto& airport : j) {
-            cout << "Generating the airport : " << airport["name"] << endl;
-            airports.push_back(new APP(airport));
+        for (size_t i = 0; i < j.size(); i++) {
+            cout << "Generating the airport : " << j[i]["name"] << endl;
+            airports.push_back(new APP(j[i], getFrameFromId(i)));
         }
     }
 
+    #ifndef DEBUG
     // Create planes
     vector<Plane*> planes;
     for (auto& app : airports) {
-        TWR* current_twr = app->getTWR();
         Plane* p;
         do {
-            p = current_twr->spawnPlane();
+            p = app->spawnPlane();
             if (p != NULL) planes.push_back(p);
         } while (p != NULL);
     }
+    #endif
 
     /* ------------------------------ Init threads ------------------------------ */
 
     // Create and start threads
     for (auto& airport : airports)
         airport->setThread(ref(stop_prgm));
+
+    #ifndef DEBUG
     thread world_thread(Plane::world, ref(planes), ref(stop_prgm));
+    #endif
 
     /* ---------------------------- Load backgrounds ---------------------------- */
 
@@ -111,6 +115,8 @@ int main(void) {
             i++;
         }
         
+        #ifndef DEBUG
+
         // Draw planes
         for (auto& plane : planes) {
             app.draw(plane->toSFML());
@@ -118,17 +124,33 @@ int main(void) {
             app.draw(plane->getNameLabel());
         }
 
+        #else
+
+        // Draw important points
+        for (auto& airport : airports) {
+            for (const auto& p : airport->getImportantPoints()) {
+                Vector2f pos = p.toVector();
+                app.draw(generateDebugCircle(pos));
+            }
+        }
+
+        #endif
+
         app.display();
     }
 
     /* ------------------------ Shut down the simulation ------------------------ */
 
     stop_prgm = true;
+
+    #ifndef DEBUG
     if(world_thread.joinable()) world_thread.join();
+    for (auto& plane : planes) delete plane;
+    #endif
+
     for (auto& bg : backgrounds) delete bg.second;
     for (auto &bg : background_textures) delete bg;
     for (auto& airport : airports) delete airport;
-    for (auto& plane : planes) delete plane;
 
     return 0;
 }

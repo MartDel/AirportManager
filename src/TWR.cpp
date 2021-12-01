@@ -77,7 +77,7 @@ void TWR::landPlane(Plane* plane) {
 void TWR::takeOffPlane() {
     Plane* plane = this->parking.front();
     this->parking_spots.at(plane->getLocation()) = false;
-    cout << "🛬 -- Starting take off for " << plane->getName() << " --" << endl << endl;
+    updateLogs("🛬 -- Starting take off for " + plane->getName() + " --");
     plane->start(this->takeoff);
     this->parking.pop();
     this->toggleIsRunwayUsed();

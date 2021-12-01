@@ -4,7 +4,7 @@
 /*                                APP functions                               */
 /* -------------------------------------------------------------------------- */
 
-APP::APP(const json& data) : landing_plane(NULL) {
+APP::APP(const json& data, const ReferenceFrame& _ref) : landing_plane(NULL), ref_frame(_ref) {
     this->name = data["name"];
     this->trigramme = data["trigramme"];
     
@@ -22,26 +22,58 @@ APP::APP(const json& data) : landing_plane(NULL) {
     Location new_point;
     new_point.setZ(CIRCULAR_TRAJ_ALTITUDE_MIN);
     new_point.setSpeed(CIRCULAR_TRAJ_SPEED);
+    new_point.setRefFrame(this->ref_frame);
     for (size_t i = 0; i < CIRCULAR_TRAJ_NB_POINTS; i++) {
         theta = mapValue(i, 0, CIRCULAR_TRAJ_NB_POINTS, 0, 2 * M_PI);
         new_point.setX(center_x + (float(data["circular_traj_radius"]) * cos(theta)));
         new_point.setY(center_y + (float(data["circular_traj_radius"]) * sin(theta)));
         traj.push_back(new_point);
+        #ifdef DEBUG
+        this->important_points.push_back(new_point);
+        #endif
     }
     traj.push_back(traj.at(0));
     this->circular_traj = Trajectory(traj);
     
     vector<Location> tmp_park;
     for (size_t i = 0; i < data["parking"].size(); i++) {
-        tmp_park.push_back(Location(data["parking"][i]["x"], data["parking"][i]["y"]));
+        Location tmp_spot(data["parking"][i]["x"], data["parking"][i]["y"]);
+        tmp_spot.setRefFrame(this->ref_frame);
+        tmp_park.push_back(tmp_spot);
+        #ifdef DEBUG
+        this->important_points.push_back(tmp_spot);
+        #endif
     }
 
     Location tmp_entrance(data["perimeter_entrance"]["x"], data["perimeter_entrance"]["y"], data["perimeter_entrance"]["z"]);
+    tmp_entrance.setRefFrame(this->ref_frame);
+    #ifdef DEBUG
+    this->important_points.push_back(tmp_entrance);
+    #endif
 
     Location runway_entrance(data["runway_start"]["x"], data["runway_start"]["y"], data["runway_start"]["z"]);
+    runway_entrance.setRefFrame(this->ref_frame);
+    #ifdef DEBUG
+    this->important_points.push_back(runway_entrance);
+    #endif
+
     Location runway_exit(data["runway_end"]["x"], data["runway_end"]["y"], data["runway_end"]["z"]);
+    runway_exit.setRefFrame(this->ref_frame);
+    #ifdef DEBUG
+    this->important_points.push_back(runway_exit);
+    #endif
+
     Location parking_entrance(data["parking_entrance"]["x"], data["parking_entrance"]["y"], data["parking_entrance"]["z"]);
+    parking_entrance.setRefFrame(this->ref_frame);
+    #ifdef DEBUG
+    this->important_points.push_back(parking_entrance);
+    #endif
+
     Location perimeter_end(data["perimeter_exit"]["x"], data["perimeter_exit"]["y"], data["perimeter_exit"]["z"]);
+    perimeter_end.setRefFrame(this->ref_frame);
+    #ifdef DEBUG
+    this->important_points.push_back(perimeter_end);
+    #endif
 
     linked_twr = new TWR(tmp_park, runway_entrance, runway_exit, parking_entrance, perimeter_end);
     updateLogs("Generating TWR " + this->name);
@@ -83,8 +115,8 @@ vector<Plane*> APP::getArrivedPlanes() const {
 /* ----------------------------- Public methods ----------------------------- */
 
 Plane* APP::spawnPlane() {
-    Plane* p = new Plane(this->perimeter_entrance);
-    this->coming_planes.push_back(p);
+    Plane* p = this->linked_twr->spawnPlane();
+    if (p != NULL) p->getLocation().setRefFrame(this->ref_frame);
     return p;
 }
 
@@ -105,7 +137,6 @@ void APP::landPriorityPlane() {
 
     // Check if the plane started the circular trajectory
     if (!to_land->isTrajectoryStarted()) return;
-    cout << "🛬 -- Land plane " << to_land->getName() << " --" << endl << endl;
     updateLogs("🛬 -- Land plane " + to_land->getName() + " --" );
 
     // Choose the stoping point before landing
@@ -170,14 +201,12 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
             if (landing_plane != NULL && landing_plane->isDestinationReached()) {
                 // The landing plane reached the runway start
                 Plane::cout_lock.lock();
-                cout << " -- " << landing_plane->getName() << " is reaching the runway --" << endl;
                 updateLogs(" -- " + landing_plane->getName() + " is reaching the runway --");
                 app.startLanding();
                 Plane::cout_lock.unlock();
             } else if (plane_using_runway != NULL && plane_using_runway->isDestinationReached()) {
                 // The plane which is landing or taking off has finished
                 Plane::cout_lock.lock();
-                cout << " -- " << plane_using_runway->getName() << " has finished its landing or taking off --" << endl;
                 updateLogs(" -- " + plane_using_runway->getName() + " has finished its landing or taking off --");
                 twr->toggleIsRunwayUsed();
                 Plane::cout_lock.unlock();
