@@ -2,6 +2,10 @@
     {
         "name": "Lille-Lesquin",
         "trigramme": "LIL",
+        "global_location": {
+            "x": 1575,
+            "y": 105
+        },
         "parking": [
             {
                 "x": 1440,
@@ -51,56 +55,10 @@
     {
         "name": "Paris-Charles-de-Gaulle",
         "trigramme": "CDG",
-        "parking": [
-            {
-                "x": 1580,
-                "y": 700
-            },
-            {
-                "x": 1640,
-                "y": 720
-            },
-            {
-                "x": 1700,
-                "y": 735
-            }
-        ],
-        "parking_entrance": {
-            "x": 1620,
-            "y": 800,
-            "z": 0
+        "global_location": {
+            "x": 1537.5,
+            "y": 360
         },
-        "runway_start": {
-            "x": 1200,
-            "y": 700,
-            "z": 0
-        },
-        "runway_end": {
-            "x": 1850,
-            "y": 870,
-            "z": 0
-        },
-        "perimeter_exit": {
-            "x": 2900,
-            "y": 1300,
-            "z": 200,
-            "speed": 250
-        },
-        "perimeter_entrance": {
-            "x": 100,
-            "y": 100,
-            "z": 1000
-        },
-        "airport_center": {
-            "x": 1500,
-            "y": 800
-        },
-        "circular_traj_radius": 700
-    }, 
-
-    {
-        "name": "Maubeuge - Élesmes",
-        "trigramme": "XME",
         "parking": [
             {
                 "x": 1210,
@@ -146,5 +104,58 @@
             "y": 780
         },
         "circular_traj_radius": 750
+    },
+    {
+        "name": "Limoges-Bellegarde",
+        "trigramme": "LIG",
+        "global_location": {
+            "x": 1338.75,
+            "y": 832.5
+        },
+        "parking": [
+            {
+                "x": 1580,
+                "y": 700
+            },
+            {
+                "x": 1640,
+                "y": 720
+            },
+            {
+                "x": 1700,
+                "y": 735
+            }
+        ],
+        "parking_entrance": {
+            "x": 1620,
+            "y": 800,
+            "z": 0
+        },
+        "runway_start": {
+            "x": 1200,
+            "y": 700,
+            "z": 0
+        },
+        "runway_end": {
+            "x": 1850,
+            "y": 870,
+            "z": 0
+        },
+        "perimeter_exit": {
+            "x": 2900,
+            "y": 1300,
+            "z": 200,
+            "speed": 250
+        },
+        "perimeter_entrance": {
+            "x": 100,
+            "y": 100,
+            "z": 1000
+        },
+        "airport_center": {
+            "x": 1500,
+            "y": 800
+        },
+        "circular_traj_radius": 700
     }
 ]

@@ -15,11 +15,15 @@ void Location::setLocation(const float &_x, const float &_y, const float &_z) {
 /* ----------------------------- Public methods ----------------------------- */
 
 Vector2f Location::toVector() const {
-    Vector2f v;
+    Vector2f v = getFrameStartPoint(this->ref_frame);
 
-    v.x = WINDOW_WIDTH * (this->x / WINDOW_REAL_WIDTH);
-    v.y = WINDOW_HEIGHT * (this->y / WINDOW_REAL_HEIGHT);
-    v += getFrameStartPoint(this->ref_frame);
+    if (this->ref_frame == ReferenceFrame::CCR) {
+        v.x += WINDOW_WIDTH * (this->x / WINDOW_REAL_WIDTH);
+        v.y += WINDOW_HEIGHT * (this->y / WINDOW_REAL_HEIGHT);
+    } else {
+        v.x += WINDOW_WIDTH * (this->x / WINDOW_CCR_REAL_WIDTH);
+        v.y += WINDOW_HEIGHT * (this->y / WINDOW_CCR_REAL_HEIGHT);
+    }
 
     return v;
 }
@@ -348,6 +352,7 @@ void Plane::world(vector<Plane *> &planes, bool &stop_prgm) {
     }
     Plane::cout_lock.lock();
     cout << "World stopped" << endl;
+    updateLogs("World stopped");
     Plane::cout_lock.unlock();
 }
 

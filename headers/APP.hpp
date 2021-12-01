@@ -9,6 +9,10 @@
 // Airport refresh interval
 #define AIRPORTS_INTERVAL 250
 
+// SFML defines
+#define AIRPORTS_RADIUS 8.f
+#define AIRPORTS_COLOR_DEFAULT Color(159, 168, 113)
+
 /**
  * @brief A APP manage airport perimeter and landing.
  * It manage all of waiting planes for landing.
@@ -21,10 +25,12 @@ class APP {
         vector<Plane *> coming_planes;
         TWR* linked_twr;
         Location perimeter_entrance, airport_center;
+        CircleShape global_point;
         Trajectory circular_traj; // Circular trajectory to lead waiting planes
         Plane* landing_plane;
         thread* airport_thread;
         ReferenceFrame ref_frame;
+        Sprite* background; // The airport background image
 
         #ifdef DEBUG
         vector<Location> important_points;
@@ -41,7 +47,7 @@ class APP {
         APP(const json& data, const ReferenceFrame& ref);
         ~APP();
 
-        /* --------------------------- Getters and setters -------------------------- */
+        /* --------------------------------- Getters -------------------------------- */
 
         string getName() const { return this->name; }
         string getTrigramme() const { return this->trigramme; }
@@ -49,6 +55,13 @@ class APP {
         Trajectory getCircularTrajectory() const { return this->circular_traj; }
         bool isPlaneWaiting() const { return !this->waiting_planes.empty() && this->landing_plane == NULL; }
         Plane* getLandingPlane() const { return this->landing_plane; }
+        Sprite* getBackground() const { return this->background; }
+        ReferenceFrame getReferenceFrame() const { return this->ref_frame; }
+        CircleShape getGlobalPoint() { return this->global_point; }
+
+        /* --------------------------------- Setters -------------------------------- */
+
+        void setBackground(Sprite* bg) { this->background = bg; }
         void setThread(bool &stop_prgm);
 
         /**

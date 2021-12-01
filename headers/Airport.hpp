@@ -20,13 +20,15 @@ using json = nlohmann::json;
 /* ------------------------------ SFML defines ------------------------------ */
 
 // Debug mode : don't generate planes and print important points
-#define DEBUG
+// #define DEBUG
 
 // Window size
 #define WINDOW_WIDTH 800.0
 #define WINDOW_REAL_WIDTH 3000.0
+#define WINDOW_CCR_REAL_WIDTH 2000.0
 #define WINDOW_HEIGHT 450.0
 #define WINDOW_REAL_HEIGHT (WINDOW_REAL_WIDTH * (WINDOW_HEIGHT / WINDOW_WIDTH))
+#define WINDOW_CCR_REAL_HEIGHT (WINDOW_CCR_REAL_WIDTH * (WINDOW_HEIGHT / WINDOW_WIDTH))
 
 // Images
 const string IMG_FOLDER = "../img/";
@@ -47,7 +49,7 @@ const string OPENSANS_FONT = "OpenSans.ttf";
 /**
  * @brief Represent the frame where the plane will be printed
  */
-enum class ReferenceFrame { CCR, APP1, APP2, APP3 };
+enum class ReferenceFrame { CCR=0, APP1=1, APP2=2, APP3=3 };
 
 /**
  * @brief Get the frame start point

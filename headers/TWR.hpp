@@ -18,7 +18,6 @@ class TWR {
         map<Location, bool> parking_spots; // All of parking spot locations and if the spot is used or not
         Trajectory takeoff, landing; // The taking off and landing trajectory
         bool is_runway_used;
-        Sprite background; // The airport background image
         Plane* plane_using_runway; // The plane which is using the runway
 
         /**
@@ -47,13 +46,11 @@ class TWR {
        
         Trajectory getLandingTrajectory() const { return this->landing; }
         bool isRunwayUsed() const { return this->is_runway_used; }
-        Sprite getBackground() const { return this->background; }
         Plane* getPlaneInRunway() const { return this->plane_using_runway; }
         
         /* --------------------------------- Setters -------------------------------- */
 
         void toggleIsRunwayUsed() { this->is_runway_used = !this->is_runway_used; }
-        void setBackground(const Sprite& bg) { this->background = bg; }
         void setPlaneInRunway(Plane* p) { this->plane_using_runway = p; }
 
         /* ----------------------------- Public methods ----------------------------- */

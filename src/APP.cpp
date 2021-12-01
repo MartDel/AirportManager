@@ -7,10 +7,16 @@
 APP::APP(const json& data, const ReferenceFrame& _ref) : landing_plane(NULL), ref_frame(_ref) {
     this->name = data["name"];
     this->trigramme = data["trigramme"];
-    
+
+    // Set global location
+    Location global_loc(data["global_location"]["x"], data["global_location"]["y"]);
+    global_loc.setRefFrame(ReferenceFrame::CCR);
+    this->global_point = CircleShape(AIRPORTS_RADIUS);
+    this->global_point.setFillColor(AIRPORTS_COLOR_DEFAULT);
+    this->global_point.setPosition(global_loc.toVector());
 
     // Init waiting and comming planes
-    vector<Plane*> tmp1, tmp2;
+    vector<Plane *> tmp1, tmp2;
     this->waiting_planes = tmp1;
     this->coming_planes = tmp2;
 
@@ -83,6 +89,7 @@ APP::~APP() {
     if (this->airport_thread->joinable()) this->airport_thread->join();
     delete this->airport_thread;
     delete this->linked_twr;
+    delete this->background;
 }
 
 /* ----------------------------- Private methods ---------------------------- */
@@ -137,7 +144,7 @@ void APP::landPriorityPlane() {
 
     // Check if the plane started the circular trajectory
     if (!to_land->isTrajectoryStarted()) return;
-    updateLogs("🛬 -- Land plane " + to_land->getName() + " --" );
+    updateLogs("🛬 Land plane " + to_land->getName() );
 
     // Choose the stoping point before landing
     Location runway_start = this->linked_twr->getLandingTrajectory().getPointAt(0);
@@ -175,6 +182,7 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
         for (auto &arrived_plane : arrived_planes) {
             Plane::cout_lock.lock();
             cout << " -- Move " << arrived_plane->getName() << " to circular trajectory --" << endl << endl;
+            updateLogs("Move " + arrived_plane->getName() + " to circular trajectory");
             app.askPlaneToWait(arrived_plane);
             Plane::cout_lock.unlock();
         }
@@ -201,13 +209,13 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
             if (landing_plane != NULL && landing_plane->isDestinationReached()) {
                 // The landing plane reached the runway start
                 Plane::cout_lock.lock();
-                updateLogs(" -- " + landing_plane->getName() + " is reaching the runway --");
+                updateLogs(landing_plane->getName() + " is reaching the runway");
                 app.startLanding();
                 Plane::cout_lock.unlock();
             } else if (plane_using_runway != NULL && plane_using_runway->isDestinationReached()) {
                 // The plane which is landing or taking off has finished
                 Plane::cout_lock.lock();
-                updateLogs(" -- " + plane_using_runway->getName() + " has finished its landing or taking off --");
+                updateLogs(plane_using_runway->getName() + " has finished its landing or taking off");
                 twr->toggleIsRunwayUsed();
                 Plane::cout_lock.unlock();
             }
@@ -219,5 +227,6 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
 
     Plane::cout_lock.lock();
     cout << "The airport " << app.getName() << " stopped" << endl;
+    updateLogs("The airport " + app.getName() + " stopped");
     Plane::cout_lock.unlock();
 }

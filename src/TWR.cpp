@@ -60,6 +60,7 @@ void TWR::landPlane(Plane* plane) {
     auto free_spot = this->getFreeParkingSpot();
     if (free_spot == this->parking_spots.end()) {
         cerr << " 🛬 Trying to land plane but no free parking spot is available..." << endl;
+        updateLogs("🛬 Trying to land plane but no free parking spot is available...");
         return;
     }
     Location spot = (*free_spot).first;

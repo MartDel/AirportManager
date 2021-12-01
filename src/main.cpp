@@ -1,4 +1,4 @@
-#include "APP.hpp"
+#include "CCR.hpp"
 
 /* -------------------------------------------------------------------------- */
 /*                                Main function                               */
@@ -35,20 +35,9 @@ int main(void) {
 
     /* ------------------------ Init planes and airports ------------------------ */
 
-    // Create airports
-    vector<APP*> airports;
-    ifstream file_in(AIRPORTS_FILE);
-    if (!file_in.is_open()) {
-        cerr << "Cannot open file : " << AIRPORTS_FILE << endl;
-        return -1;
-    } else {
-        json j;
-        file_in >> j;
-        for (size_t i = 0; i < j.size(); i++) {
-            cout << "Generating the airport : " << j[i]["name"] << endl;
-            airports.push_back(new APP(j[i], getFrameFromId(i)));
-        }
-    }
+    // Create CCR
+    CCR world;
+    vector<APP*> airports = world.getAirports();
 
     #ifndef DEBUG
     // Create planes
@@ -74,8 +63,19 @@ int main(void) {
 
     /* ---------------------------- Load backgrounds ---------------------------- */
 
-    // Set up the background image
-    map<string, Sprite*> backgrounds;
+    // Set up CCR image
+    Texture CCR_img;
+    Sprite CCR_sprite;
+    string img_name = imgAirport("CCR");
+    if (!CCR_img.loadFromFile(img_name)) {
+        cerr << "Cannot load image file : " << img_name << endl;
+        updateLogs("Cannot load image file : " + img_name);
+        return -1;
+    }
+    CCR_sprite.setTexture(CCR_img);
+    CCR_sprite.setPosition(Vector2f(0, 0));
+
+    // Set up the airport images
     vector<Texture*> background_textures;
     for (auto& airport : airports) {
         Texture* background_img = new Texture();
@@ -83,11 +83,12 @@ int main(void) {
         string img_name = imgAirport(airport->getTrigramme());
         if (!background_img->loadFromFile(img_name)) {
             cerr << "Cannot load image file : " << img_name << endl;
+            updateLogs("Cannot load image file : " + img_name);
             return -1;
         }
         background_sprite->setTexture(*background_img);
         background_textures.push_back(background_img);
-        backgrounds.insert(pair<string, Sprite*>(airport->getName(), background_sprite));
+        airport->setBackground(background_sprite);
     }
 
     /* -------------------------------- SFML loop ------------------------------- */
@@ -104,15 +105,19 @@ int main(void) {
         if(stop_prgm) app.close();
         
         app.clear();
+
+        // Draw CCR
+        app.draw(CCR_sprite);
+        for (auto& airport : airports) {
+            app.draw(airport->getGlobalPoint());
+        }
         
-        // Draw backgrounds
-        size_t i(0);
-        for (auto& background : backgrounds) {
-            Sprite* to_draw = background.second;
-            Vector2f pos((i == 1 ? 0 : 1) * WINDOW_WIDTH, (i > 0 ? 1 : 0) * WINDOW_HEIGHT);
+        // Draw world->airports
+        for (auto& airport : airports) {
+            Sprite* to_draw = airport->getBackground();
+            Vector2f pos = getFrameStartPoint(airport->getReferenceFrame());
             to_draw->setPosition(pos);
             app.draw(*to_draw);
-            i++;
         }
         
         #ifndef DEBUG
@@ -148,7 +153,6 @@ int main(void) {
     for (auto& plane : planes) delete plane;
     #endif
 
-    for (auto& bg : backgrounds) delete bg.second;
     for (auto &bg : background_textures) delete bg;
     for (auto& airport : airports) delete airport;
 
