@@ -4,7 +4,8 @@
 /*                                APP functions                               */
 /* -------------------------------------------------------------------------- */
 
-APP::APP(const json& data, const ReferenceFrame& _ref) : landing_plane(NULL), ref_frame(_ref) {
+APP::APP(const json& data, const ReferenceFrame& _ref)
+: landing_plane(NULL), exiting_plane(NULL), ref_frame(_ref), background(NULL), airport_thread(NULL) {
     this->name = data["name"];
     this->trigramme = data["trigramme"];
 
@@ -86,8 +87,12 @@ APP::APP(const json& data, const ReferenceFrame& _ref) : landing_plane(NULL), re
 }
 
 APP::~APP() {
-    if (this->airport_thread->joinable()) this->airport_thread->join();
-    delete this->airport_thread;
+    if (this->airport_thread != NULL) {
+        if (this->airport_thread->joinable())
+            this->airport_thread->join();
+        delete this->airport_thread;
+    }
+
     delete this->linked_twr;
     delete this->background;
 }
@@ -170,6 +175,11 @@ void APP::startLanding() {
     this->landing_plane = NULL;
 }
 
+void APP::endTakeOff() {
+    this->linked_twr->toggleIsRunwayUsed();
+    this->linked_twr->setPlaneInRunway(NULL);
+}
+
 /* ---------------------- Static attributes and methods --------------------- */
 
 void APP::airportControl(APP &app, bool &stop_prgm) {
@@ -177,6 +187,7 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
     TWR *twr = app.getTWR();
 
     while (!stop_prgm) {
+
         // Check arrived planes
         vector<Plane *> arrived_planes = app.getArrivedPlanes();
         for (auto &arrived_plane : arrived_planes) {
@@ -201,6 +212,7 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
                 twr->takeOffPlane();
                 Plane::cout_lock.unlock();
             }
+
         } else {
             // The runway is used
             Plane *landing_plane = app.getLandingPlane();
@@ -216,9 +228,10 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
                 // The plane which is landing or taking off has finished
                 Plane::cout_lock.lock();
                 updateLogs(plane_using_runway->getName() + " has finished its landing or taking off");
-                twr->toggleIsRunwayUsed();
+                app.endTakeOff();
                 Plane::cout_lock.unlock();
             }
+
         }
 
         // Add 0.25s timeout

@@ -9,8 +9,8 @@ int main(void) {
 
     /* ------------------------------ Init log file ----------------------------- */
 
-    srand(time(NULL));
     time_t now = time(0);
+    srand(now);
     char* dt = ctime(&now);
     ofstream file;
     file.open(LOGS_FILE,std::ofstream::out | std::ofstream::trunc);
@@ -36,8 +36,8 @@ int main(void) {
     /* ------------------------ Init planes and airports ------------------------ */
 
     // Create CCR
-    CCR world;
-    vector<APP*> airports = world.getAirports();
+    CCR ccr;
+    vector<APP*> airports = ccr.getAirports();
 
     #ifndef DEBUG
     // Create planes
@@ -54,6 +54,7 @@ int main(void) {
     /* ------------------------------ Init threads ------------------------------ */
 
     // Create and start threads
+    ccr.setThread(ref(stop_prgm));
     for (auto& airport : airports)
         airport->setThread(ref(stop_prgm));
 

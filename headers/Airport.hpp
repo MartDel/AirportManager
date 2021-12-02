@@ -20,7 +20,7 @@ using json = nlohmann::json;
 /* ------------------------------ SFML defines ------------------------------ */
 
 // Debug mode : don't generate planes and print important points
-#define DEBUG
+// #define DEBUG
 
 // Window size
 #define WINDOW_WIDTH 800.0

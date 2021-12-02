@@ -28,6 +28,7 @@ class APP {
         CircleShape global_point;
         Trajectory circular_traj; // Circular trajectory to lead waiting planes
         Plane* landing_plane;
+        Plane* exiting_plane;
         thread* airport_thread;
         ReferenceFrame ref_frame;
         Sprite* background; // The airport background image
@@ -55,12 +56,14 @@ class APP {
         Trajectory getCircularTrajectory() const { return this->circular_traj; }
         bool isPlaneWaiting() const { return !this->waiting_planes.empty() && this->landing_plane == NULL; }
         Plane* getLandingPlane() const { return this->landing_plane; }
+        Plane* getExitingPlane() const { return this->exiting_plane; }
         Sprite* getBackground() const { return this->background; }
         ReferenceFrame getReferenceFrame() const { return this->ref_frame; }
         CircleShape getGlobalPoint() { return this->global_point; }
 
         /* --------------------------------- Setters -------------------------------- */
 
+        void setExitingPlane(Plane* p) { this->exiting_plane = p; }
         void setBackground(Sprite* bg) { this->background = bg; }
         void setThread(bool &stop_prgm);
 
@@ -101,6 +104,12 @@ class APP {
          * Transfert the landing plane to the TWR.
          */
         void startLanding();
+
+        /**
+         * @brief The taked off plane is exiting the airport.
+         * Update the TWR and give the plane to the CCR.
+         */
+        void endTakeOff();
 
         /**
          * @brief Airport thread function.
