@@ -154,7 +154,6 @@ int main(void) {
     #endif
 
     for (auto &bg : background_textures) delete bg;
-    for (auto& airport : airports) delete airport;
 
     return 0;
 }

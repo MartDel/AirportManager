@@ -18,11 +18,11 @@ Vector2f Location::toVector() const {
     Vector2f v = getFrameStartPoint(this->ref_frame);
 
     if (this->ref_frame == ReferenceFrame::CCR) {
-        v.x += WINDOW_WIDTH * (this->x / WINDOW_REAL_WIDTH);
-        v.y += WINDOW_HEIGHT * (this->y / WINDOW_REAL_HEIGHT);
-    } else {
         v.x += WINDOW_WIDTH * (this->x / WINDOW_CCR_REAL_WIDTH);
         v.y += WINDOW_HEIGHT * (this->y / WINDOW_CCR_REAL_HEIGHT);
+    } else {
+        v.x += WINDOW_WIDTH * (this->x / WINDOW_REAL_WIDTH);
+        v.y += WINDOW_HEIGHT * (this->y / WINDOW_REAL_HEIGHT);
     }
 
     return v;

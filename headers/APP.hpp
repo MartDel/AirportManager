@@ -11,7 +11,7 @@
 
 // SFML defines
 #define AIRPORTS_RADIUS 8.f
-#define AIRPORTS_COLOR_DEFAULT Color(159, 168, 113)
+#define AIRPORTS_COLOR_DEFAULT Color::Red
 
 /**
  * @brief A APP manage airport perimeter and landing.

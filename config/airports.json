@@ -3,7 +3,7 @@
         "name": "Lille-Lesquin",
         "trigramme": "LIL",
         "global_location": {
-            "x": 1575,
+            "x": 500,
             "y": 105
         },
         "parking": [
@@ -56,7 +56,7 @@
         "name": "Paris-Charles-de-Gaulle",
         "trigramme": "CDG",
         "global_location": {
-            "x": 1537.5,
+            "x": 1000,
             "y": 360
         },
         "parking": [
@@ -109,7 +109,7 @@
         "name": "Limoges-Bellegarde",
         "trigramme": "LIG",
         "global_location": {
-            "x": 1338.75,
+            "x": 700,
             "y": 832.5
         },
         "parking": [
