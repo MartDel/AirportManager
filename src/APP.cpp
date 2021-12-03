@@ -175,7 +175,8 @@ void APP::startLanding() {
     this->landing_plane = NULL;
 }
 
-void APP::endTakeOff() {
+void APP::endTakeOff(Plane* p) {
+    this->exiting_plane = p;
     this->linked_twr->toggleIsRunwayUsed();
     this->linked_twr->setPlaneInRunway(NULL);
 }
@@ -228,7 +229,7 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
                 // The plane which is landing or taking off has finished
                 Plane::cout_lock.lock();
                 updateLogs(plane_using_runway->getName() + " has finished its landing or taking off");
-                app.endTakeOff();
+                app.endTakeOff(plane_using_runway);
                 Plane::cout_lock.unlock();
             }
 

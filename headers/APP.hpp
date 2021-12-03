@@ -108,8 +108,9 @@ class APP {
         /**
          * @brief The taked off plane is exiting the airport.
          * Update the TWR and give the plane to the CCR.
+         * @param p The plane wich ended its take off
          */
-        void endTakeOff();
+        void endTakeOff(Plane* p);
 
         /**
          * @brief Airport thread function.
