@@ -62,10 +62,17 @@ void CCR::moveToRandomAirport(Plane *p, APP* from) {
         app_id = rand() % this->airports.size();
     } while (app_id == from_id);
     APP* to = this->airports.at(app_id);
-
-    // Update the travelling plane
-    cout << to->getName() << endl;
     updateLogs(p->getName() + " is going to " + to->getName());
+
+    // Tp the travelling plane
+    Location start = from->getGlobalLocation();
+    start.setSpeed(PLANE_FLIGHT_SPEED);
+    p->setLocation(start);
+    
+    // Start the plane
+    vector<Location> traj;
+    traj.push_back(to->getGlobalLocation());
+    p->start(Trajectory(traj));
 }
 
 /* ---------------------- Static attributes and methods --------------------- */

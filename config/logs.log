@@ -1,90 +1,90 @@
-Fri Dec  3 09:20:43 2021
+Fri Dec  3 09:42:29 2021
 Roll the dice, the program has begun
-Fri Dec  3 09:20:44 2021
+Fri Dec  3 09:42:30 2021
 Generating TWR Lille-Lesquin
-Fri Dec  3 09:20:44 2021
+Fri Dec  3 09:42:30 2021
 Generating TWR Paris-Charles-de-Gaulle
-Fri Dec  3 09:20:44 2021
+Fri Dec  3 09:42:30 2021
 Generating TWR Limoges-Bellegarde
-Fri Dec  3 09:20:44 2021
-🚁 Plane EK755 created
-Fri Dec  3 09:20:44 2021
-🚁 Plane NZ110 created
-Fri Dec  3 09:20:44 2021
-🚁 Plane AC389 created
-Fri Dec  3 09:20:44 2021
-🚁 Plane EO139 created
-Fri Dec  3 09:20:44 2021
-🚁 Plane AF133 created
-Fri Dec  3 09:20:44 2021
-🚁 Plane AI117 created
-Fri Dec  3 09:20:44 2021
-🚁 Plane CA44 created
-Fri Dec  3 09:20:44 2021
-🚁 Plane CA692 created
-Fri Dec  3 09:20:44 2021
-🚁 Plane AC10 created
-Fri Dec  3 09:20:44 2021
-🛬 -- Starting take off for CA44 --
-Fri Dec  3 09:20:44 2021
-🛬 -- Starting take off for EO139 --
-Fri Dec  3 09:20:44 2021
-🛬 -- Starting take off for EK755 --
-Fri Dec  3 09:20:53 2021
-EO139 has finished its landing or taking off -> Paris
-Fri Dec  3 09:20:53 2021
-EO139 is going to Limoges-Bellegarde
-Fri Dec  3 09:20:53 2021
-🛬 -- Starting take off for AF133 --
-Fri Dec  3 09:20:55 2021
-CA44 has finished its landing or taking off -> Limoges
-Fri Dec  3 09:20:55 2021
-CA44 is going to Lille-Lesquin
-Fri Dec  3 09:20:55 2021
-🛬 -- Starting take off for CA692 --
-Fri Dec  3 09:20:56 2021
-EK755 has finished its landing or taking off  -> Lille
-Fri Dec  3 09:20:56 2021
-EK755 is going to Paris-Charles-de-Gaulle
-Fri Dec  3 09:20:56 2021
-🛬 -- Starting take off for NZ110 --
-Fri Dec  3 09:21:01 2021
-AF133 has finished its landing or taking off -> Paris
-Fri Dec  3 09:21:02 2021
-AF133 is going to Limoges-Bellegarde
-Fri Dec  3 09:21:02 2021
-🛬 -- Starting take off for AI117 --
-Fri Dec  3 09:21:06 2021
-CA692 has finished its landing or taking off -> Limoges
-Fri Dec  3 09:21:06 2021
-CA692 is going to Paris-Charles-de-Gaulle
-Fri Dec  3 09:21:06 2021
-🛬 -- Starting take off for AC10 --
-Fri Dec  3 09:21:08 2021
-NZ110 has finished its landing or taking off -> Lille
-Fri Dec  3 09:21:09 2021
-🛬 -- Starting take off for AC389 --
-Fri Dec  3 09:21:09 2021
-NZ110 is going to Limoges-Bellegarde
-Fri Dec  3 09:21:11 2021
-AI117 has finished its landing or taking off -> Paris
-Fri Dec  3 09:21:11 2021
-AI117 is going to Limoges-Bellegarde
-Fri Dec  3 09:21:17 2021
-AC10 has finished its landing or taking off -> Limoges
-Fri Dec  3 09:21:18 2021
-AC10 is going to Paris-Charles-de-Gaulle
-Fri Dec  3 09:21:21 2021
-AC389 has finished its landing or taking off -> Lille
-Fri Dec  3 09:21:21 2021
-AC389 is going to Limoges-Bellegarde
-Fri Dec  3 09:21:23 2021
+Fri Dec  3 09:42:30 2021
+🚁 Plane FR88 created
+Fri Dec  3 09:42:30 2021
+🚁 Plane EC544 created
+Fri Dec  3 09:42:30 2021
+🚁 Plane NZ931 created
+Fri Dec  3 09:42:30 2021
+🚁 Plane LH915 created
+Fri Dec  3 09:42:30 2021
+🚁 Plane EC597 created
+Fri Dec  3 09:42:30 2021
+🚁 Plane EC263 created
+Fri Dec  3 09:42:30 2021
+🚁 Plane FR248 created
+Fri Dec  3 09:42:30 2021
+🚁 Plane FR965 created
+Fri Dec  3 09:42:30 2021
+🚁 Plane TK472 created
+Fri Dec  3 09:42:30 2021
+🛬 Starting take off for FR88
+Fri Dec  3 09:42:30 2021
+🛬 Starting take off for LH915
+Fri Dec  3 09:42:30 2021
+🛬 Starting take off for FR248
+Fri Dec  3 09:42:39 2021
+LH915 has finished its landing or taking off
+Fri Dec  3 09:42:39 2021
+LH915 is going to Lille-Lesquin
+Fri Dec  3 09:42:39 2021
+🛬 Starting take off for EC597
+Fri Dec  3 09:42:41 2021
+FR248 has finished its landing or taking off
+Fri Dec  3 09:42:41 2021
+FR248 is going to Paris-Charles-de-Gaulle
+Fri Dec  3 09:42:41 2021
+🛬 Starting take off for FR965
+Fri Dec  3 09:42:42 2021
+FR88 has finished its landing or taking off
+Fri Dec  3 09:42:42 2021
+FR88 is going to Paris-Charles-de-Gaulle
+Fri Dec  3 09:42:42 2021
+🛬 Starting take off for EC544
+Fri Dec  3 09:42:47 2021
+EC597 has finished its landing or taking off
+Fri Dec  3 09:42:48 2021
+🛬 Starting take off for EC263
+Fri Dec  3 09:42:48 2021
+EC597 is going to Limoges-Bellegarde
+Fri Dec  3 09:42:52 2021
+FR965 has finished its landing or taking off
+Fri Dec  3 09:42:52 2021
+FR965 is going to Paris-Charles-de-Gaulle
+Fri Dec  3 09:42:52 2021
+🛬 Starting take off for TK472
+Fri Dec  3 09:42:54 2021
+EC544 has finished its landing or taking off
+Fri Dec  3 09:42:54 2021
+EC544 is going to Paris-Charles-de-Gaulle
+Fri Dec  3 09:42:54 2021
+🛬 Starting take off for NZ931
+Fri Dec  3 09:42:56 2021
+EC263 has finished its landing or taking off
+Fri Dec  3 09:42:56 2021
+EC263 is going to Limoges-Bellegarde
+Fri Dec  3 09:43:03 2021
+TK472 has finished its landing or taking off
+Fri Dec  3 09:43:04 2021
+TK472 is going to Paris-Charles-de-Gaulle
+Fri Dec  3 09:43:07 2021
+NZ931 has finished its landing or taking off
+Fri Dec  3 09:43:07 2021
+NZ931 is going to Paris-Charles-de-Gaulle
+Fri Dec  3 09:43:11 2021
 The airport Limoges-Bellegarde stopped
-Fri Dec  3 09:21:23 2021
-The CCR stopped
-Fri Dec  3 09:21:23 2021
-World stopped
-Fri Dec  3 09:21:23 2021
-The airport Lille-Lesquin stopped
-Fri Dec  3 09:21:23 2021
+Fri Dec  3 09:43:11 2021
 The airport Paris-Charles-de-Gaulle stopped
+Fri Dec  3 09:43:11 2021
+World stopped
+Fri Dec  3 09:43:11 2021
+The CCR stopped
+Fri Dec  3 09:43:11 2021
+The airport Lille-Lesquin stopped

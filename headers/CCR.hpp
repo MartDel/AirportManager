@@ -1,6 +1,7 @@
 #include "APP.hpp"
 
-#define PLANE_FLIGHT_SPEED 654
+// The plane speed on the CCR frame
+#define PLANE_FLIGHT_SPEED 654.0 / 10
 
 // CCR refresh interval
 #define CCR_INTERVAL 250

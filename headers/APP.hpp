@@ -24,7 +24,7 @@ class APP {
         vector<Plane *> waiting_planes;
         vector<Plane *> coming_planes;
         TWR* linked_twr;
-        Location perimeter_entrance, airport_center;
+        Location perimeter_entrance, airport_center, global_location;
         CircleShape global_point;
         Trajectory circular_traj; // Circular trajectory to lead waiting planes
         Plane* landing_plane;
@@ -59,6 +59,7 @@ class APP {
         Plane* getExitingPlane() const { return this->exiting_plane; }
         Sprite* getBackground() const { return this->background; }
         ReferenceFrame getReferenceFrame() const { return this->ref_frame; }
+        Location getGlobalLocation() { return this->global_location; }
         CircleShape getGlobalPoint() { return this->global_point; }
 
         /* --------------------------------- Setters -------------------------------- */

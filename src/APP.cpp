@@ -10,11 +10,11 @@ APP::APP(const json& data, const ReferenceFrame& _ref)
     this->trigramme = data["trigramme"];
 
     // Set global location
-    Location global_loc(data["global_location"]["x"], data["global_location"]["y"]);
-    global_loc.setRefFrame(ReferenceFrame::CCR);
+    this->global_location = Location(data["global_location"]["x"], data["global_location"]["y"]);
+    this->global_location.setRefFrame(ReferenceFrame::CCR);
     this->global_point = CircleShape(AIRPORTS_RADIUS);
     this->global_point.setFillColor(AIRPORTS_COLOR_DEFAULT);
-    this->global_point.setPosition(global_loc.toVector());
+    this->global_point.setPosition(this->global_location.toVector());
 
     // Init waiting and comming planes
     vector<Plane *> tmp1, tmp2;
