@@ -206,6 +206,7 @@ Location Trajectory::getNextLocation(const Location &from, const float &speed, c
         cout << next << endl;
         cout << "------" << endl;
     }
+
     next.setRefFrame(from.getRefFrame());
     return next;
 }
@@ -231,6 +232,17 @@ void Trajectory::cutTrajectory(const size_t& pos) {
                 this->reached_point = &this->points.at(0);
         }
     }
+}
+
+/* -------------------------------- Operators ------------------------------- */
+
+ostream& operator<<(ostream& stream, const Trajectory& traj) {
+    vector<Location> points = traj.getPoints();
+    Location* reached_point = traj.getReachedPoint();
+    for (Location& point : points) {
+        cout << " - " << point << (reached_point != NULL && point == *reached_point ? " <-" : "") << endl;
+    }
+    return stream;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -307,7 +319,8 @@ void Plane::start(const Trajectory& traj) {
 }
 
 void Plane::updateLocation() {
-    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed));
+    cout << *this << endl;
+    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed, true));
     this->fuel -= this->consumption;
     this->destination = this->trajectory.getLastPoint();
 }

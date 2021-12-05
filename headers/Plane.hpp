@@ -13,7 +13,7 @@
 #define NAME_LABEL_SIZE 15
 
 // Thread timeout (in ms)
-#define WORLD_INTERVAL 250
+#define WORLD_INTERVAL 500
 
 /**
  * @brief A Location is a 3D point.
@@ -120,9 +120,11 @@ class Trajectory {
         /* --------------------------- Getters and setters -------------------------- */
 
         // Read or manage points
+        vector<Location> getPoints() const { return this->points; }
         Location getPointAt(const size_t& i) const { return this->points.at(i); }
         Location getLastPoint() const { return this->points.at(points.size() - 1); }
         void addPoint(const Location& new_point) { this->points.push_back(new_point); }
+        Location* getReachedPoint() const { return this->reached_point; }
         
         /**
          * @brief Check if the plane has reached the first point
@@ -165,6 +167,10 @@ class Trajectory {
          * @param pos The id of the last point
          */
         void cutTrajectory(const size_t& pos);
+
+        /* -------------------------------- Operators ------------------------------- */
+
+        friend ostream& operator<<(ostream& stream, const Trajectory& traj);
 };
 
 /**

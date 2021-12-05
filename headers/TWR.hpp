@@ -19,6 +19,7 @@ class TWR {
         Trajectory takeoff, landing; // The taking off and landing trajectory
         bool is_runway_used;
         Plane* plane_using_runway; // The plane which is using the runway
+        const string app_trigramme;
 
         /**
          * @brief Get the first occurence of a free parking spot.
@@ -34,7 +35,8 @@ class TWR {
             Location &runway_start,
             Location &runway_end,
             Location &parking_entrance,
-            Location &perimeter_limit
+            Location &perimeter_limit,
+            const string& trigramme
         );
 
         /* --------------------------------- Getters -------------------------------- */

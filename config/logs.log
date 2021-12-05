@@ -1,90 +1,136 @@
-Fri Dec  3 09:42:29 2021
+Sun Dec  5 19:33:32 2021
 Roll the dice, the program has begun
-Fri Dec  3 09:42:30 2021
+Sun Dec  5 19:33:32 2021
 Generating TWR Lille-Lesquin
-Fri Dec  3 09:42:30 2021
+Sun Dec  5 19:33:32 2021
 Generating TWR Paris-Charles-de-Gaulle
-Fri Dec  3 09:42:30 2021
+Sun Dec  5 19:33:32 2021
 Generating TWR Limoges-Bellegarde
-Fri Dec  3 09:42:30 2021
-🚁 Plane FR88 created
-Fri Dec  3 09:42:30 2021
-🚁 Plane EC544 created
-Fri Dec  3 09:42:30 2021
-🚁 Plane NZ931 created
-Fri Dec  3 09:42:30 2021
-🚁 Plane LH915 created
-Fri Dec  3 09:42:30 2021
-🚁 Plane EC597 created
-Fri Dec  3 09:42:30 2021
-🚁 Plane EC263 created
-Fri Dec  3 09:42:30 2021
-🚁 Plane FR248 created
-Fri Dec  3 09:42:30 2021
-🚁 Plane FR965 created
-Fri Dec  3 09:42:30 2021
-🚁 Plane TK472 created
-Fri Dec  3 09:42:30 2021
-🛬 Starting take off for FR88
-Fri Dec  3 09:42:30 2021
-🛬 Starting take off for LH915
-Fri Dec  3 09:42:30 2021
-🛬 Starting take off for FR248
-Fri Dec  3 09:42:39 2021
-LH915 has finished its landing or taking off
-Fri Dec  3 09:42:39 2021
-LH915 is going to Lille-Lesquin
-Fri Dec  3 09:42:39 2021
-🛬 Starting take off for EC597
-Fri Dec  3 09:42:41 2021
-FR248 has finished its landing or taking off
-Fri Dec  3 09:42:41 2021
-FR248 is going to Paris-Charles-de-Gaulle
-Fri Dec  3 09:42:41 2021
-🛬 Starting take off for FR965
-Fri Dec  3 09:42:42 2021
-FR88 has finished its landing or taking off
-Fri Dec  3 09:42:42 2021
-FR88 is going to Paris-Charles-de-Gaulle
-Fri Dec  3 09:42:42 2021
-🛬 Starting take off for EC544
-Fri Dec  3 09:42:47 2021
-EC597 has finished its landing or taking off
-Fri Dec  3 09:42:48 2021
-🛬 Starting take off for EC263
-Fri Dec  3 09:42:48 2021
-EC597 is going to Limoges-Bellegarde
-Fri Dec  3 09:42:52 2021
-FR965 has finished its landing or taking off
-Fri Dec  3 09:42:52 2021
-FR965 is going to Paris-Charles-de-Gaulle
-Fri Dec  3 09:42:52 2021
-🛬 Starting take off for TK472
-Fri Dec  3 09:42:54 2021
-EC544 has finished its landing or taking off
-Fri Dec  3 09:42:54 2021
-EC544 is going to Paris-Charles-de-Gaulle
-Fri Dec  3 09:42:54 2021
-🛬 Starting take off for NZ931
-Fri Dec  3 09:42:56 2021
-EC263 has finished its landing or taking off
-Fri Dec  3 09:42:56 2021
-EC263 is going to Limoges-Bellegarde
-Fri Dec  3 09:43:03 2021
-TK472 has finished its landing or taking off
-Fri Dec  3 09:43:04 2021
-TK472 is going to Paris-Charles-de-Gaulle
-Fri Dec  3 09:43:07 2021
-NZ931 has finished its landing or taking off
-Fri Dec  3 09:43:07 2021
-NZ931 is going to Paris-Charles-de-Gaulle
-Fri Dec  3 09:43:11 2021
-The airport Limoges-Bellegarde stopped
-Fri Dec  3 09:43:11 2021
-The airport Paris-Charles-de-Gaulle stopped
-Fri Dec  3 09:43:11 2021
-World stopped
-Fri Dec  3 09:43:11 2021
-The CCR stopped
-Fri Dec  3 09:43:11 2021
-The airport Lille-Lesquin stopped
+Sun Dec  5 19:33:32 2021
+🚁 Plane EO2 created
+Sun Dec  5 19:33:32 2021
+🚁 Plane FR791 created
+Sun Dec  5 19:33:32 2021
+🚁 Plane AI735 created
+Sun Dec  5 19:33:32 2021
+🚁 Plane EK786 created
+Sun Dec  5 19:33:32 2021
+🚁 Plane CA738 created
+Sun Dec  5 19:33:32 2021
+🚁 Plane NZ303 created
+Sun Dec  5 19:33:32 2021
+🚁 Plane EO348 created
+Sun Dec  5 19:33:32 2021
+🚁 Plane AF51 created
+Sun Dec  5 19:33:32 2021
+🚁 Plane AI172 created
+Sun Dec  5 19:33:32 2021
+[LIL] Starting take off for EO2
+Sun Dec  5 19:33:32 2021
+[CDG] Starting take off for EK786
+Sun Dec  5 19:33:32 2021
+[LIG] Starting take off for EO348
+Sun Dec  5 19:33:50 2021
+[CDG] EK786 is exiting the airport.
+Sun Dec  5 19:33:50 2021
+[CCR] EK786 is going to Limoges-Bellegarde(LIG)
+Sun Dec  5 19:33:50 2021
+[CDG] Starting take off for CA738
+Sun Dec  5 19:33:55 2021
+[LIG] EO348 is exiting the airport.
+Sun Dec  5 19:33:55 2021
+[CCR] EO348 is going to Paris-Charles-de-Gaulle(CDG)
+Sun Dec  5 19:33:55 2021
+[LIG] Starting take off for AF51
+Sun Dec  5 19:33:57 2021
+[LIL] EO2 is exiting the airport.
+Sun Dec  5 19:33:57 2021
+[CCR] EO2 is going to Paris-Charles-de-Gaulle(CDG)
+Sun Dec  5 19:33:57 2021
+[LIL] Starting take off for FR791
+Sun Dec  5 19:34:07 2021
+[CDG] CA738 is exiting the airport.
+Sun Dec  5 19:34:07 2021
+[CCR] CA738 is going to Lille-Lesquin(LIL)
+Sun Dec  5 19:34:07 2021
+[CDG] Starting take off for NZ303
+Sun Dec  5 19:34:12 2021
+[LIG] Move EK786 to circular trajectory
+Sun Dec  5 19:34:16 2021
+[CDG] Move EO348 to circular trajectory
+Sun Dec  5 19:34:16 2021
+[LIG] AF51 is exiting the airport.
+Sun Dec  5 19:34:16 2021
+[CCR] AF51 is going to Lille-Lesquin(LIL)
+Sun Dec  5 19:34:17 2021
+[LIG] Land plane EK786.
+Sun Dec  5 19:34:18 2021
+[CDG] Move EO2 to circular trajectory
+Sun Dec  5 19:34:21 2021
+[LIL] FR791 is exiting the airport.
+Sun Dec  5 19:34:21 2021
+[CCR] FR791 is going to Limoges-Bellegarde(LIG)
+Sun Dec  5 19:34:21 2021
+[LIL] Starting take off for AI735
+Sun Dec  5 19:34:25 2021
+[CDG] NZ303 is exiting the airport.
+Sun Dec  5 19:34:25 2021
+[CCR] NZ303 is going to Limoges-Bellegarde(LIG)
+Sun Dec  5 19:34:25 2021
+[CDG] Land plane EO348.
+Sun Dec  5 19:34:29 2021
+[LIL] Move CA738 to circular trajectory
+Sun Dec  5 19:34:39 2021
+[LIG] EK786 is reaching the runway.
+Sun Dec  5 19:34:45 2021
+[CDG] EO348 is reaching the runway.
+Sun Dec  5 19:34:45 2021
+[LIL] Move AF51 to circular trajectory
+Sun Dec  5 19:34:45 2021
+[LIL] AI735 is exiting the airport.
+Sun Dec  5 19:34:45 2021
+[CCR] AI735 is going to Limoges-Bellegarde(LIG)
+Sun Dec  5 19:34:45 2021
+[LIL] Land plane CA738.
+Sun Dec  5 19:34:46 2021
+[LIG] Move NZ303 to circular trajectory
+Sun Dec  5 19:34:50 2021
+[LIG] Move FR791 to circular trajectory
+Sun Dec  5 19:34:56 2021
+[LIL] CA738 is reaching the runway.
+Sun Dec  5 19:35:05 2021
+[LIG] EK786 is exiting the airport.
+Sun Dec  5 19:35:05 2021
+[CCR] EK786 is going to Lille-Lesquin(LIL)
+Sun Dec  5 19:35:05 2021
+[LIG] Land plane NZ303.
+Sun Dec  5 19:35:13 2021
+[LIG] NZ303 is reaching the runway.
+Sun Dec  5 19:35:14 2021
+[LIG] Move AI735 to circular trajectory
+Sun Dec  5 19:35:15 2021
+[CDG] EO348 is exiting the airport.
+Sun Dec  5 19:35:15 2021
+[CCR] EO348 is going to Lille-Lesquin(LIL)
+Sun Dec  5 19:35:15 2021
+[CDG] Land plane EO2.
+Sun Dec  5 19:35:23 2021
+[LIL] CA738 is exiting the airport.
+Sun Dec  5 19:35:23 2021
+[CCR] CA738 is going to Limoges-Bellegarde(LIG)
+Sun Dec  5 19:35:23 2021
+[LIL] Land plane AF51.
+Sun Dec  5 19:35:34 2021
+[CDG] EO2 is reaching the runway.
+Sun Dec  5 19:35:34 2021
+[LIL] Move EK786 to circular trajectory
+Sun Dec  5 19:35:35 2021
+[LIL] AF51 is reaching the runway.
+Sun Dec  5 19:35:36 2021
+[LIL] Move EO348 to circular trajectory
+Sun Dec  5 19:35:37 2021
+[LIG] NZ303 is exiting the airport.
+Sun Dec  5 19:35:37 2021
+[CCR] NZ303 is going to Lille-Lesquin(LIL)
+Sun Dec  5 19:35:37 2021
+[LIG] Starting take off for AI172

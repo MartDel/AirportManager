@@ -10,7 +10,7 @@ APP::APP(const json& data, const ReferenceFrame& _ref)
     this->trigramme = data["trigramme"];
 
     // Set global location
-    this->global_location = Location(data["global_location"]["x"], data["global_location"]["y"]);
+    this->global_location = Location(data["global_location"]["x"], data["global_location"]["y"], PLANE_FLIGHT_ALTITUDE);
     this->global_location.setRefFrame(ReferenceFrame::CCR);
     this->global_point = CircleShape(AIRPORTS_RADIUS);
     this->global_point.setFillColor(AIRPORTS_COLOR_DEFAULT);
@@ -76,13 +76,16 @@ APP::APP(const json& data, const ReferenceFrame& _ref)
     this->important_points.push_back(parking_entrance);
     #endif
 
+    this->perimeter_entrance = Location(data["perimeter_entrance"]["x"], data["perimeter_entrance"]["y"], data["perimeter_entrance"]["z"]);
+    this->perimeter_entrance.setRefFrame(this->ref_frame);
+
     Location perimeter_end(data["perimeter_exit"]["x"], data["perimeter_exit"]["y"], data["perimeter_exit"]["z"]);
     perimeter_end.setRefFrame(this->ref_frame);
     #ifdef DEBUG
     this->important_points.push_back(perimeter_end);
     #endif
 
-    linked_twr = new TWR(tmp_park, runway_entrance, runway_exit, parking_entrance, perimeter_end);
+    linked_twr = new TWR(tmp_park, runway_entrance, runway_exit, parking_entrance, perimeter_end, this->trigramme);
     updateLogs("Generating TWR " + this->name);
 }
 
@@ -110,8 +113,8 @@ void APP::removePlaneFrom(Plane* plane, vector<Plane*>& list) {
 
 /* --------------------------- Getters and setters -------------------------- */
 
-void APP::setThread(bool &stop_prgm) {
-    thread* tmp = new thread(APP::airportControl, ref(*this), ref(stop_prgm));
+void APP::setThread(vector<Plane*>& planes, bool &stop_prgm) {
+    thread* tmp = new thread(APP::airportControl, ref(*this), ref(planes), ref(stop_prgm));
     this->airport_thread = tmp;
 }
 
@@ -133,7 +136,11 @@ Plane* APP::spawnPlane() {
 }
 
 void APP::askPlaneToWait(Plane* p) {
+    updateLogs("[" + this->trigramme + "] Move " + p->getName() + " to circular trajectory");
+
     // Remove the plane from the coming planes list
+    if (p->getLocation().getRefFrame() == ReferenceFrame::CCR)
+        p->setLocation(this->perimeter_entrance);
     this->removePlaneFrom(p, this->coming_planes);
 
     // Add the plane to waiting planes
@@ -141,6 +148,8 @@ void APP::askPlaneToWait(Plane* p) {
     circular_t.setAltitude(CIRCULAR_TRAJ_ALTITUDE_MIN + (CIRCULAR_TRAJ_ALTITUDE_STEP * this->waiting_planes.size()));
     this->waiting_planes.push_back(p);
     p->start(circular_t);
+    cout << p->getName() << " start :" << endl;
+    cout << circular_t << endl;
 }
 
 void APP::landPriorityPlane() {
@@ -149,7 +158,7 @@ void APP::landPriorityPlane() {
 
     // Check if the plane started the circular trajectory
     if (!to_land->isTrajectoryStarted()) return;
-    updateLogs("🛬 Land plane " + to_land->getName() );
+    updateLogs("[" + this->trigramme + "] Land plane " + to_land->getName() + ".");
 
     // Choose the stoping point before landing
     Location runway_start = this->linked_twr->getLandingTrajectory().getPointAt(0);
@@ -163,8 +172,10 @@ void APP::landPriorityPlane() {
 }
 
 void APP::startLanding() {
+    updateLogs("[" + this->trigramme + "] " + this->landing_plane->getName() + " is reaching the runway.");
+
     // Update other planes altitude
-    for (Plane* current_waiting_p : this->waiting_planes) {
+    for (Plane *current_waiting_p : this->waiting_planes) {
         float new_alt = current_waiting_p->getLocation().getZ() - CIRCULAR_TRAJ_ALTITUDE_STEP;
         current_waiting_p->setTrajectoryAltitude(new_alt);
     }
@@ -176,6 +187,7 @@ void APP::startLanding() {
 }
 
 void APP::endTakeOff(Plane* p) {
+    updateLogs("[" + this->trigramme + "] " + p->getName() + " is exiting the airport.");
     this->exiting_plane = p;
     this->linked_twr->toggleIsRunwayUsed();
     this->linked_twr->setPlaneInRunway(NULL);
@@ -183,7 +195,7 @@ void APP::endTakeOff(Plane* p) {
 
 /* ---------------------- Static attributes and methods --------------------- */
 
-void APP::airportControl(APP &app, bool &stop_prgm) {
+void APP::airportControl(APP &app, vector<Plane*>& planes, bool &stop_prgm) {
     chrono::milliseconds interval(AIRPORTS_INTERVAL);
     TWR *twr = app.getTWR();
 
@@ -193,8 +205,6 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
         vector<Plane *> arrived_planes = app.getArrivedPlanes();
         for (auto &arrived_plane : arrived_planes) {
             Plane::cout_lock.lock();
-            cout << " -- Move " << arrived_plane->getName() << " to circular trajectory --" << endl << endl;
-            updateLogs("Move " + arrived_plane->getName() + " to circular trajectory");
             app.askPlaneToWait(arrived_plane);
             Plane::cout_lock.unlock();
         }
@@ -222,13 +232,11 @@ void APP::airportControl(APP &app, bool &stop_prgm) {
             if (landing_plane != NULL && landing_plane->isDestinationReached()) {
                 // The landing plane reached the runway start
                 Plane::cout_lock.lock();
-                updateLogs(landing_plane->getName() + " is reaching the runway");
                 app.startLanding();
                 Plane::cout_lock.unlock();
             } else if (plane_using_runway != NULL && plane_using_runway->isDestinationReached()) {
                 // The plane which is landing or taking off has finished
                 Plane::cout_lock.lock();
-                updateLogs(plane_using_runway->getName() + " has finished its landing or taking off");
                 app.endTakeOff(plane_using_runway);
                 Plane::cout_lock.unlock();
             }

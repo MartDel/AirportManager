@@ -1,5 +1,8 @@
 #include "TWR.hpp"
 
+// The plane data on the CCR frame
+#define PLANE_FLIGHT_ALTITUDE 10000
+
 // The circular trajectory config
 #define CIRCULAR_TRAJ_NB_POINTS 20
 #define CIRCULAR_TRAJ_SPEED 100
@@ -24,7 +27,7 @@ class APP {
         vector<Plane *> waiting_planes;
         vector<Plane *> coming_planes;
         TWR* linked_twr;
-        Location perimeter_entrance, airport_center, global_location;
+        Location perimeter_entrance, global_location;
         CircleShape global_point;
         Trajectory circular_traj; // Circular trajectory to lead waiting planes
         Plane* landing_plane;
@@ -60,13 +63,15 @@ class APP {
         Sprite* getBackground() const { return this->background; }
         ReferenceFrame getReferenceFrame() const { return this->ref_frame; }
         Location getGlobalLocation() { return this->global_location; }
+        Location getPerimeterEntrance() { return this->perimeter_entrance; }
         CircleShape getGlobalPoint() { return this->global_point; }
 
         /* --------------------------------- Setters -------------------------------- */
 
         void setExitingPlane(Plane* p) { this->exiting_plane = p; }
         void setBackground(Sprite* bg) { this->background = bg; }
-        void setThread(bool &stop_prgm);
+        void setThread(vector<Plane*>& planes, bool &stop_prgm);
+        void addComingPlane(Plane* p) { this->coming_planes.push_back(p); }
 
         /**
          * @brief Get all arrived planes in the coming planes array
@@ -119,5 +124,5 @@ class APP {
          * @param twr The TWR to manage
          * @param stop_prgm If the simulation must stoped
          */
-        static void airportControl(APP &app, bool &stop_prgm);
+        static void airportControl(APP &app, vector<Plane*>& planes, bool &stop_prgm);
 };

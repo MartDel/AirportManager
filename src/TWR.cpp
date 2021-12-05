@@ -9,8 +9,9 @@ TWR::TWR(
     Location& runway_start,
     Location& runway_end,
     Location& parking_entrance,
-    Location& perimeter_limit
-) : is_runway_used(false) {
+    Location& perimeter_limit,
+    const string& trigramme
+) : is_runway_used(false), app_trigramme(trigramme) {
 
     // Create take off trajectory
     vector<Location> takeoff_vector;
@@ -59,8 +60,8 @@ void TWR::landPlane(Plane* plane) {
     // Choose the parking spot
     auto free_spot = this->getFreeParkingSpot();
     if (free_spot == this->parking_spots.end()) {
-        cerr << " 🛬 Trying to land plane but no free parking spot is available..." << endl;
-        updateLogs("🛬 Trying to land plane but no free parking spot is available...");
+        cerr << "[" + this->app_trigramme + "] Trying to land plane but no free parking spot is available." << endl;
+        updateLogs("[" + this->app_trigramme + "] Trying to land plane but no free parking spot is available.");
         return;
     }
     Location spot = (*free_spot).first;
@@ -78,7 +79,7 @@ void TWR::landPlane(Plane* plane) {
 void TWR::takeOffPlane() {
     Plane* plane = this->parking.front();
     this->parking_spots.at(plane->getLocation()) = false;
-    updateLogs("🛬 Starting take off for " + plane->getName());
+    updateLogs("[" + this->app_trigramme + "] Starting take off for " + plane->getName());
     plane->start(this->takeoff);
     this->parking.pop();
     this->toggleIsRunwayUsed();

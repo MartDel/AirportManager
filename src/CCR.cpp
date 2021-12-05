@@ -62,7 +62,7 @@ void CCR::moveToRandomAirport(Plane *p, APP* from) {
         app_id = rand() % this->airports.size();
     } while (app_id == from_id);
     APP* to = this->airports.at(app_id);
-    updateLogs(p->getName() + " is going to " + to->getName());
+    updateLogs("[CCR] " + p->getName() + " is going to " + to->getName() + "(" + to->getTrigramme() + ")");
 
     // Tp the travelling plane
     Location start = from->getGlobalLocation();
@@ -73,6 +73,10 @@ void CCR::moveToRandomAirport(Plane *p, APP* from) {
     vector<Location> traj;
     traj.push_back(to->getGlobalLocation());
     p->start(Trajectory(traj));
+
+    // Update airports
+    from->setExitingPlane(NULL);
+    to->addComingPlane(p);
 }
 
 /* ---------------------- Static attributes and methods --------------------- */
@@ -90,7 +94,6 @@ void CCR::threadCCR(CCR &ccr, bool &stop_prgm) {
             if (exiting_plane != NULL && exiting_plane->isDestinationReached()) {
                 // A plane exited its airport
                 ccr.moveToRandomAirport(exiting_plane, app);
-                app->setExitingPlane(NULL);
             }
 
         }
