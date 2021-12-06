@@ -113,8 +113,8 @@ void APP::removePlaneFrom(Plane* plane, vector<Plane*>& list) {
 
 /* --------------------------- Getters and setters -------------------------- */
 
-void APP::setThread(vector<Plane*>& planes, bool &stop_prgm) {
-    thread* tmp = new thread(APP::airportControl, ref(*this), ref(planes), ref(stop_prgm));
+void APP::setThread(bool &stop_prgm) {
+    thread* tmp = new thread(APP::airportControl, ref(*this), ref(stop_prgm));
     this->airport_thread = tmp;
 }
 
@@ -158,7 +158,6 @@ void APP::landPriorityPlane() {
 
     // Check if the plane started the circular trajectory
     if (!to_land->isTrajectoryStarted()) return;
-    updateLogs("[" + this->trigramme + "] Land plane " + to_land->getName() + ".");
 
     // Choose the stoping point before landing
     Location runway_start = this->linked_twr->getLandingTrajectory().getPointAt(0);
@@ -168,7 +167,8 @@ void APP::landPriorityPlane() {
     to_land->stopAt(dest_pos);
     this->landing_plane = to_land;
     this->linked_twr->toggleIsRunwayUsed();
-    this->linked_twr->setPlaneInRunway(this->landing_plane);
+
+    updateLogs("[" + this->trigramme + "] Land plane " + to_land->getName() + ". (runway is " + (this->linked_twr->isRunwayUsed() ? "used)" : "free)"));
 }
 
 void APP::startLanding() {
@@ -186,16 +186,15 @@ void APP::startLanding() {
     this->landing_plane = NULL;
 }
 
-void APP::endTakeOff(Plane* p) {
-    updateLogs("[" + this->trigramme + "] " + p->getName() + " is exiting the airport.");
-    this->exiting_plane = p;
-    this->linked_twr->toggleIsRunwayUsed();
-    this->linked_twr->setPlaneInRunway(NULL);
+void APP::endLanding(Plane* p) {
+    this->linked_twr->endLanding(p);
+    this->parking_plane = NULL;
+    updateLogs("[" + this->trigramme + "] " + p->getName() + " is landed and parked ! (runway is " + (this->linked_twr->isRunwayUsed() ? "used)" : "free)"));
 }
 
 /* ---------------------- Static attributes and methods --------------------- */
 
-void APP::airportControl(APP &app, vector<Plane*>& planes, bool &stop_prgm) {
+void APP::airportControl(APP &app, bool &stop_prgm) {
     chrono::milliseconds interval(AIRPORTS_INTERVAL);
     TWR *twr = app.getTWR();
 
@@ -220,24 +219,25 @@ void APP::airportControl(APP &app, vector<Plane*>& planes, bool &stop_prgm) {
             } else if (!twr->isParkingEmpty()) {
                 // Take off a plane
                 Plane::cout_lock.lock();
-                twr->takeOffPlane();
+                Plane* taking_off_plane = twr->takeOffPlane();
+                app.setExitingPlane(taking_off_plane);
                 Plane::cout_lock.unlock();
             }
 
         } else {
             // The runway is used
             Plane *landing_plane = app.getLandingPlane();
-            Plane *plane_using_runway = twr->getPlaneInRunway();
+            Plane *parking_plane = app.getParkingPlane();
 
             if (landing_plane != NULL && landing_plane->isDestinationReached()) {
                 // The landing plane reached the runway start
                 Plane::cout_lock.lock();
                 app.startLanding();
                 Plane::cout_lock.unlock();
-            } else if (plane_using_runway != NULL && plane_using_runway->isDestinationReached()) {
-                // The plane which is landing or taking off has finished
+            } else if (parking_plane != NULL && parking_plane->isDestinationReached()) {
+                // The plane is landed and park
                 Plane::cout_lock.lock();
-                app.endTakeOff(plane_using_runway);
+                app.endLanding(parking_plane);
                 Plane::cout_lock.unlock();
             }
 

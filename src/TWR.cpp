@@ -70,20 +70,22 @@ void TWR::landPlane(Plane* plane) {
     Trajectory landing_copy(this->landing);
     landing_copy.addPoint(spot);
     plane->start(landing_copy);
-
-    // Update TWR
-    this->parking.push(plane);
-    this->parking_spots.at(spot) = true;
 }
 
-void TWR::takeOffPlane() {
+void TWR::endLanding(Plane* p) {
+    this->parking.push(p);
+    this->parking_spots.at(p->getLocation()) = true;
+    this->toggleIsRunwayUsed();
+}
+
+Plane* TWR::takeOffPlane() {
     Plane* plane = this->parking.front();
     this->parking_spots.at(plane->getLocation()) = false;
-    updateLogs("[" + this->app_trigramme + "] Starting take off for " + plane->getName());
     plane->start(this->takeoff);
     this->parking.pop();
     this->toggleIsRunwayUsed();
-    this->plane_using_runway = plane;
+    updateLogs("[" + this->app_trigramme + "] Starting take off for " + plane->getName() + " (runway is " + (this->is_runway_used ? "used)" : "free)"));
+    return plane;
 }
 
 Plane* TWR::spawnPlane(){

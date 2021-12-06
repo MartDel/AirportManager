@@ -56,8 +56,7 @@ int main(void) {
     // Create and start threads
     ccr.setThread(ref(stop_prgm));
     for (auto& airport : airports)
-        airport->setThread(ref(planes), ref(stop_prgm));
-    // airports.at(1)->setThread(ref(planes), ref(stop_prgm));
+        airport->setThread(ref(stop_prgm));
 
     #ifndef DEBUG
     thread world_thread(Plane::world, ref(planes), ref(stop_prgm));

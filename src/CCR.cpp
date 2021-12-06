@@ -56,13 +56,15 @@ void CCR::setThread(bool &stop_prgm) {
 /* ----------------------------- Public methods ----------------------------- */
 
 void CCR::moveToRandomAirport(Plane *p, APP* from) {
+    updateLogs("[" + from->getTrigramme() + "] " + p->getName() + " is exiting the airport. (runway is " + (from->getTWR()->isRunwayUsed() ? "used)" : "free)"));
+    
     // Choose a random airport
     size_t app_id, from_id = this->getAppId(from);
     do {
         app_id = rand() % this->airports.size();
     } while (app_id == from_id);
     APP* to = this->airports.at(app_id);
-    updateLogs("[CCR] " + p->getName() + " is going to " + to->getName() + "(" + to->getTrigramme() + ")");
+    updateLogs("[CCR] " + p->getName() + " is going to " + to->getName() + " (" + to->getTrigramme() + ")");
 
     // Tp the travelling plane
     Location start = from->getGlobalLocation();
@@ -75,6 +77,7 @@ void CCR::moveToRandomAirport(Plane *p, APP* from) {
     p->start(Trajectory(traj));
 
     // Update airports
+    from->getTWR()->toggleIsRunwayUsed();
     from->setExitingPlane(NULL);
     to->addComingPlane(p);
 }

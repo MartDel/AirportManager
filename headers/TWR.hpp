@@ -18,7 +18,6 @@ class TWR {
         map<Location, bool> parking_spots; // All of parking spot locations and if the spot is used or not
         Trajectory takeoff, landing; // The taking off and landing trajectory
         bool is_runway_used;
-        Plane* plane_using_runway; // The plane which is using the runway
         const string app_trigramme;
 
         /**
@@ -48,12 +47,10 @@ class TWR {
        
         Trajectory getLandingTrajectory() const { return this->landing; }
         bool isRunwayUsed() const { return this->is_runway_used; }
-        Plane* getPlaneInRunway() const { return this->plane_using_runway; }
         
         /* --------------------------------- Setters -------------------------------- */
 
         void toggleIsRunwayUsed() { this->is_runway_used = !this->is_runway_used; }
-        void setPlaneInRunway(Plane* p) { this->plane_using_runway = p; }
 
         /* ----------------------------- Public methods ----------------------------- */
 
@@ -64,9 +61,16 @@ class TWR {
         void landPlane(Plane* plane);
 
         /**
-         * @brief Manage the first arrived plane to take it off
+         * @brief End a plane landing
+         * @param p The plane which has reached the parking
          */
-        void takeOffPlane();
+        void endLanding(Plane* p);
+
+        /**
+         * @brief Manage the first arrived plane to take it off
+         * @return The taking off plane
+         */
+        Plane* takeOffPlane();
 
         /**
          * @brief Spawn a new plane in the parking

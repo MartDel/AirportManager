@@ -30,8 +30,9 @@ class APP {
         Location perimeter_entrance, global_location;
         CircleShape global_point;
         Trajectory circular_traj; // Circular trajectory to lead waiting planes
-        Plane* landing_plane;
-        Plane* exiting_plane;
+        Plane* landing_plane; // The plane which is reaching the runway to land
+        Plane *parking_plane; // The plane which is reaching the parking
+        Plane *exiting_plane; // The plane which is reaching the perimeter limit
         thread* airport_thread;
         ReferenceFrame ref_frame;
         Sprite* background; // The airport background image
@@ -58,7 +59,8 @@ class APP {
         TWR* getTWR() const { return this->linked_twr; }
         Trajectory getCircularTrajectory() const { return this->circular_traj; }
         bool isPlaneWaiting() const { return !this->waiting_planes.empty() && this->landing_plane == NULL; }
-        Plane* getLandingPlane() const { return this->landing_plane; }
+        Plane *getLandingPlane() const { return this->landing_plane; }
+        Plane *getParkingPlane() const { return this->parking_plane; }
         Plane* getExitingPlane() const { return this->exiting_plane; }
         Sprite* getBackground() const { return this->background; }
         ReferenceFrame getReferenceFrame() const { return this->ref_frame; }
@@ -68,9 +70,10 @@ class APP {
 
         /* --------------------------------- Setters -------------------------------- */
 
-        void setExitingPlane(Plane* p) { this->exiting_plane = p; }
+        void setLandingPlane(Plane *p) { this->landing_plane = p; }
+        void setExitingPlane(Plane *p) { this->exiting_plane = p; }
         void setBackground(Sprite* bg) { this->background = bg; }
-        void setThread(vector<Plane*>& planes, bool &stop_prgm);
+        void setThread(bool &stop_prgm);
         void addComingPlane(Plane* p) { this->coming_planes.push_back(p); }
 
         /**
@@ -112,11 +115,10 @@ class APP {
         void startLanding();
 
         /**
-         * @brief The taked off plane is exiting the airport.
-         * Update the TWR and give the plane to the CCR.
-         * @param p The plane wich ended its take off
+         * @brief End the plane landing
+         * @param p The plane which has reached the parking
          */
-        void endTakeOff(Plane* p);
+        void endLanding(Plane* p);
 
         /**
          * @brief Airport thread function.
@@ -124,5 +126,5 @@ class APP {
          * @param twr The TWR to manage
          * @param stop_prgm If the simulation must stoped
          */
-        static void airportControl(APP &app, vector<Plane*>& planes, bool &stop_prgm);
+        static void airportControl(APP &app, bool &stop_prgm);
 };
