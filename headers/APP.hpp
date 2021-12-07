@@ -48,6 +48,13 @@ class APP {
          */
         void removePlaneFrom(Plane* plane, vector<Plane*>& list);
 
+        /**
+         * @brief Get the plane position in the waiting_planes vector
+         * @param waiting_plane The plane to search
+         * @return The plane position
+         */
+        size_t getWaitingPlanePos(Plane* waiting_plane) const;
+
     public:
         APP(const json& data, const ReferenceFrame& ref);
         ~APP();

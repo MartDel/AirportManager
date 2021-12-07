@@ -249,6 +249,7 @@ class Plane {
 
         /* -------------------------------- Operators ------------------------------- */
 
+        bool operator==(const Plane& p) const;
         friend ostream& operator<<(ostream &stream, const Plane &plane);
 
         /* ---------------------- Static attributes and methods --------------------- */

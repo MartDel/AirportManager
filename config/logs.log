@@ -1,338 +1,242 @@
-Tue Dec  7 13:16:39 2021
+Tue Dec  7 14:10:16 2021
 Roll the dice, the program has begun
-Tue Dec  7 13:16:39 2021
+Tue Dec  7 14:10:17 2021
 Generating TWR Lille-Lesquin
-Tue Dec  7 13:16:39 2021
+Tue Dec  7 14:10:17 2021
 Generating TWR Paris-Charles-de-Gaulle
-Tue Dec  7 13:16:39 2021
+Tue Dec  7 14:10:17 2021
 Generating TWR Limoges-Bellegarde
-Tue Dec  7 13:16:39 2021
-🚁 Plane LH582 created
-Tue Dec  7 13:16:39 2021
-🚁 Plane AI583 created
-Tue Dec  7 13:16:39 2021
-🚁 Plane AC347 created
-Tue Dec  7 13:16:39 2021
-🚁 Plane TK968 created
-Tue Dec  7 13:16:39 2021
-🚁 Plane EC505 created
-Tue Dec  7 13:16:39 2021
-🚁 Plane CA835 created
-Tue Dec  7 13:16:39 2021
-🚁 Plane TK655 created
-Tue Dec  7 13:16:39 2021
-🚁 Plane EC839 created
-Tue Dec  7 13:16:39 2021
-🚁 Plane LH167 created
-Tue Dec  7 13:16:39 2021
-[LIL] Starting take off for LH582 (runway is used)
-Tue Dec  7 13:16:39 2021
-[CDG] Starting take off for TK968 (runway is used)
-Tue Dec  7 13:16:39 2021
-[LIG] Starting take off for TK655 (runway is used)
-Tue Dec  7 13:16:56 2021
-[CDG] TK968 is exiting the airport. (runway is used)
-Tue Dec  7 13:16:56 2021
-[CCR] TK968 is going to Lille-Lesquin (LIL)
-Tue Dec  7 13:16:56 2021
-[CDG] Starting take off for EC505 (runway is used)
-Tue Dec  7 13:17:01 2021
-[LIG] TK655 is exiting the airport. (runway is used)
-Tue Dec  7 13:17:01 2021
-[CCR] TK655 is going to Lille-Lesquin (LIL)
-Tue Dec  7 13:17:01 2021
-[LIG] Starting take off for EC839 (runway is used)
-Tue Dec  7 13:17:03 2021
-[LIL] LH582 is exiting the airport. (runway is used)
-Tue Dec  7 13:17:03 2021
-[CCR] LH582 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 13:17:03 2021
-[LIL] Starting take off for AI583 (runway is used)
-Tue Dec  7 13:17:13 2021
-[CDG] EC505 is exiting the airport. (runway is used)
-Tue Dec  7 13:17:13 2021
-[CCR] EC505 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 13:17:13 2021
-[CDG] Starting take off for CA835 (runway is used)
-Tue Dec  7 13:17:18 2021
-[LIL] Move TK968 to circular trajectory
-Tue Dec  7 13:17:22 2021
-[LIG] EC839 is exiting the airport. (runway is used)
-Tue Dec  7 13:17:22 2021
-[CCR] EC839 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 13:17:23 2021
-[LIG] Starting take off for LH167 (runway is used)
-Tue Dec  7 13:17:24 2021
-[CDG] Move LH582 to circular trajectory
-Tue Dec  7 13:17:27 2021
-[LIL] AI583 is exiting the airport. (runway is used)
-Tue Dec  7 13:17:27 2021
-[CCR] AI583 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 13:17:27 2021
-[LIL] Land plane TK968. (runway is used)
-Tue Dec  7 13:17:30 2021
-[LIL] Move TK655 to circular trajectory
-Tue Dec  7 13:17:31 2021
-[CDG] CA835 is exiting the airport. (runway is used)
-Tue Dec  7 13:17:31 2021
-[CCR] CA835 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 13:17:31 2021
-[CDG] Land plane LH582. (runway is used)
-Tue Dec  7 13:17:35 2021
-[LIG] Move EC505 to circular trajectory
-Tue Dec  7 13:17:44 2021
-[CDG] Move EC839 to circular trajectory
-Tue Dec  7 13:17:44 2021
-[LIG] LH167 is exiting the airport. (runway is used)
-Tue Dec  7 13:17:44 2021
-[CCR] LH167 is going to Lille-Lesquin (LIL)
-Tue Dec  7 13:17:44 2021
-[LIG] Land plane EC505. (runway is used)
-Tue Dec  7 13:17:45 2021
-[LIL] TK968 is reaching the runway.
-Tue Dec  7 13:17:45 2021
-TK968 -> 150.000000
-Tue Dec  7 13:17:45 2021
-TK655 -> 500.000000
-Tue Dec  7 13:17:52 2021
-[LIG] Move CA835 to circular trajectory
-Tue Dec  7 13:17:53 2021
-[CDG] LH582 is reaching the runway.
-Tue Dec  7 13:17:53 2021
-LH582 -> 150.000000
-Tue Dec  7 13:17:53 2021
-EC839 -> 500.000000
-Tue Dec  7 13:17:56 2021
-[LIG] Move AI583 to circular trajectory
-Tue Dec  7 13:18:02 2021
-[LIG] EC505 is reaching the runway.
-Tue Dec  7 13:18:02 2021
-EC505 -> 150.000000
-Tue Dec  7 13:18:02 2021
-CA835 -> 500.000000
-Tue Dec  7 13:18:02 2021
-AI583 -> 850.000000
-Tue Dec  7 13:18:12 2021
-[LIL] TK968 is landed and parked ! (runway is free)
-Tue Dec  7 13:18:12 2021
-[LIL] Land plane TK655. (runway is used)
-Tue Dec  7 13:18:13 2021
-[LIL] Move LH167 to circular trajectory
-Tue Dec  7 13:18:20 2021
-[LIL] TK655 is reaching the runway.
-Tue Dec  7 13:18:20 2021
-TK655 -> 150.000000
-Tue Dec  7 13:18:20 2021
-LH167 -> 500.000000
-Tue Dec  7 13:18:23 2021
-[CDG] LH582 is landed and parked ! (runway is free)
-Tue Dec  7 13:18:23 2021
-[CDG] Land plane EC839. (runway is used)
-Tue Dec  7 13:18:28 2021
-[LIG] EC505 is landed and parked ! (runway is free)
-Tue Dec  7 13:18:29 2021
-[LIG] Land plane CA835. (runway is used)
-Tue Dec  7 13:18:36 2021
-[CDG] EC839 is reaching the runway.
-Tue Dec  7 13:18:36 2021
-EC839 -> 150.000000
-Tue Dec  7 13:18:42 2021
-[LIG] CA835 is reaching the runway.
-Tue Dec  7 13:18:42 2021
-CA835 -> 150.000000
-Tue Dec  7 13:18:42 2021
-AI583 -> 500.000000
-Tue Dec  7 13:18:45 2021
-[LIL] TK655 is landed and parked ! (runway is free)
-Tue Dec  7 13:18:45 2021
-[LIL] Starting take off for AC347 (runway is used)
-Tue Dec  7 13:19:03 2021
-[CDG] EC839 is landed and parked ! (runway is free)
-Tue Dec  7 13:19:04 2021
-[CDG] Starting take off for LH582 (runway is used)
-Tue Dec  7 13:19:06 2021
-[LIG] CA835 is landed and parked ! (runway is free)
-Tue Dec  7 13:19:07 2021
-[LIG] Land plane AI583. (runway is used)
-Tue Dec  7 13:19:09 2021
-[LIG] AI583 is reaching the runway.
-Tue Dec  7 13:19:09 2021
-AI583 -> 150.000000
-Tue Dec  7 13:19:09 2021
-[LIL] AC347 is exiting the airport. (runway is used)
-Tue Dec  7 13:19:09 2021
-[CCR] AC347 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 13:19:09 2021
-[LIL] Land plane LH167. (runway is used)
-Tue Dec  7 13:19:21 2021
-[CDG] LH582 is exiting the airport. (runway is used)
-Tue Dec  7 13:19:21 2021
-[CCR] LH582 is going to Lille-Lesquin (LIL)
-Tue Dec  7 13:19:21 2021
-[CDG] Starting take off for EC839 (runway is used)
-Tue Dec  7 13:19:25 2021
-[LIL] LH167 is reaching the runway.
-Tue Dec  7 13:19:25 2021
-LH167 -> 150.000000
-Tue Dec  7 13:19:31 2021
-[CDG] Move AC347 to circular trajectory
-Tue Dec  7 13:19:35 2021
-[LIG] AI583 is landed and parked ! (runway is free)
-Tue Dec  7 13:19:35 2021
-[LIG] Starting take off for EC505 (runway is used)
-Tue Dec  7 13:19:38 2021
-[CDG] EC839 is exiting the airport. (runway is used)
-Tue Dec  7 13:19:38 2021
-[CCR] EC839 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 13:19:38 2021
-[CDG] Land plane AC347. (runway is used)
-Tue Dec  7 13:19:42 2021
-[LIL] Move LH582 to circular trajectory
-Tue Dec  7 13:19:54 2021
-[LIL] LH167 is landed and parked ! (runway is free)
-Tue Dec  7 13:19:54 2021
-[LIL] Starting take off for TK968 (runway is used)
-Tue Dec  7 13:19:57 2021
-[LIG] EC505 is exiting the airport. (runway is used)
-Tue Dec  7 13:19:57 2021
-[CCR] EC505 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 13:19:57 2021
-[LIG] Starting take off for CA835 (runway is used)
-Tue Dec  7 13:19:59 2021
-[LIG] Move EC839 to circular trajectory
-Tue Dec  7 13:19:59 2021
-[CDG] AC347 is reaching the runway.
-Tue Dec  7 13:19:59 2021
-AC347 -> 150.000000
-Tue Dec  7 13:20:18 2021
-[LIL] TK968 is exiting the airport. (runway is used)
-Tue Dec  7 13:20:18 2021
-[CCR] TK968 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 13:20:18 2021
-[LIL] Land plane LH582. (runway is used)
-Tue Dec  7 13:20:18 2021
-[LIG] CA835 is exiting the airport. (runway is used)
-Tue Dec  7 13:20:18 2021
-[CCR] CA835 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 13:20:18 2021
-[LIG] Land plane EC839. (runway is used)
-Tue Dec  7 13:20:18 2021
-[CDG] Move EC505 to circular trajectory
-Tue Dec  7 13:20:26 2021
-[LIG] EC839 is reaching the runway.
-Tue Dec  7 13:20:26 2021
-EC839 -> 150.000000
-Tue Dec  7 13:20:29 2021
-[CDG] AC347 is landed and parked ! (runway is free)
-Tue Dec  7 13:20:30 2021
-[CDG] Land plane EC505. (runway is used)
-Tue Dec  7 13:20:31 2021
-[LIL] LH582 is reaching the runway.
-Tue Dec  7 13:20:31 2021
-LH582 -> 150.000000
-Tue Dec  7 13:20:39 2021
-[CDG] Move TK968 to circular trajectory
-Tue Dec  7 13:20:40 2021
-[CDG] Move CA835 to circular trajectory
-Tue Dec  7 13:20:47 2021
-[CDG] EC505 is reaching the runway.
-Tue Dec  7 13:20:47 2021
-EC505 -> 150.000000
-Tue Dec  7 13:20:47 2021
-TK968 -> 500.000000
-Tue Dec  7 13:20:47 2021
-CA835 -> 850.000000
-Tue Dec  7 13:20:53 2021
-[LIG] EC839 is landed and parked ! (runway is free)
-Tue Dec  7 13:20:53 2021
-[LIG] Starting take off for AI583 (runway is used)
-Tue Dec  7 13:20:58 2021
-[LIL] LH582 is landed and parked ! (runway is free)
-Tue Dec  7 13:20:59 2021
-[LIL] Starting take off for TK655 (runway is used)
-Tue Dec  7 13:21:14 2021
-[CDG] EC505 is landed and parked ! (runway is free)
-Tue Dec  7 13:21:14 2021
-[CDG] Land plane TK968. (runway is used)
-Tue Dec  7 13:21:15 2021
-[LIG] AI583 is exiting the airport. (runway is used)
-Tue Dec  7 13:21:15 2021
-[CCR] AI583 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 13:21:15 2021
-[LIG] Starting take off for EC839 (runway is used)
-Tue Dec  7 13:21:23 2021
-[LIL] TK655 is exiting the airport. (runway is used)
-Tue Dec  7 13:21:23 2021
-[CCR] TK655 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 13:21:23 2021
-[LIL] Starting take off for LH167 (runway is used)
-Tue Dec  7 13:21:33 2021
-[CDG] TK968 is reaching the runway.
-Tue Dec  7 13:21:33 2021
-TK968 -> 150.000000
-Tue Dec  7 13:21:33 2021
-CA835 -> 500.000000
-Tue Dec  7 13:21:37 2021
-[CDG] Move AI583 to circular trajectory
-Tue Dec  7 13:21:37 2021
-[LIG] EC839 is exiting the airport. (runway is used)
-Tue Dec  7 13:21:37 2021
-[CCR] EC839 is going to Lille-Lesquin (LIL)
-Tue Dec  7 13:21:44 2021
-[CDG] Move TK655 to circular trajectory
-Tue Dec  7 13:21:47 2021
-[LIL] LH167 is exiting the airport. (runway is used)
-Tue Dec  7 13:21:47 2021
-[CCR] LH167 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 13:21:47 2021
-[LIL] Starting take off for LH582 (runway is used)
-Tue Dec  7 13:22:02 2021
-[CDG] TK968 is landed and parked ! (runway is free)
-Tue Dec  7 13:22:02 2021
-[CDG] Starting take off for AC347 (runway is used)
-Tue Dec  7 13:22:06 2021
-[LIL] Move EC839 to circular trajectory
-Tue Dec  7 13:22:11 2021
-[LIL] LH582 is exiting the airport. (runway is used)
-Tue Dec  7 13:22:11 2021
-[CCR] LH582 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 13:22:12 2021
-[LIL] Land plane EC839. (runway is used)
-Tue Dec  7 13:22:16 2021
-[LIG] Move LH167 to circular trajectory
-Tue Dec  7 13:22:19 2021
-[CDG] AC347 is exiting the airport. (runway is used)
-Tue Dec  7 13:22:19 2021
-[CCR] AC347 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 13:22:19 2021
-[CDG] Land plane CA835. (runway is used)
-Tue Dec  7 13:22:21 2021
-[CDG] CA835 is reaching the runway.
-Tue Dec  7 13:22:21 2021
-CA835 -> 150.000000
-Tue Dec  7 13:22:21 2021
-AI583 -> 500.000000
-Tue Dec  7 13:22:21 2021
-TK655 -> 850.000000
-Tue Dec  7 13:22:22 2021
-[LIG] Land plane LH167. (runway is used)
-Tue Dec  7 13:22:33 2021
-[LIL] EC839 is reaching the runway.
-Tue Dec  7 13:22:33 2021
-EC839 -> 150.000000
-Tue Dec  7 13:22:40 2021
-[LIG] Move LH582 to circular trajectory
-Tue Dec  7 13:22:41 2021
-[LIG] Move AC347 to circular trajectory
-Tue Dec  7 13:22:43 2021
-[LIG] LH167 is reaching the runway.
-Tue Dec  7 13:22:43 2021
-LH167 -> 150.000000
-Tue Dec  7 13:22:43 2021
-LH582 -> 549.098633
-Tue Dec  7 13:22:43 2021
-AC347 -> 760.899658
-Tue Dec  7 13:22:51 2021
-[CDG] CA835 is landed and parked ! (runway is free)
-Tue Dec  7 13:22:51 2021
-[CDG] Starting take off for EC505 (runway is used)
+Tue Dec  7 14:10:17 2021
+🚁 Plane EK819 created
+Tue Dec  7 14:10:17 2021
+🚁 Plane EK675 created
+Tue Dec  7 14:10:17 2021
+🚁 Plane EO396 created
+Tue Dec  7 14:10:17 2021
+🚁 Plane LH478 created
+Tue Dec  7 14:10:17 2021
+🚁 Plane TK463 created
+Tue Dec  7 14:10:17 2021
+🚁 Plane EC724 created
+Tue Dec  7 14:10:17 2021
+🚁 Plane NZ478 created
+Tue Dec  7 14:10:17 2021
+🚁 Plane EK8 created
+Tue Dec  7 14:10:17 2021
+🚁 Plane EO936 created
+Tue Dec  7 14:10:17 2021
+[LIL] Starting take off for EK819 (runway is used)
+Tue Dec  7 14:10:17 2021
+[CDG] Starting take off for LH478 (runway is used)
+Tue Dec  7 14:10:17 2021
+[LIG] Starting take off for NZ478 (runway is used)
+Tue Dec  7 14:10:34 2021
+[CDG] LH478 is exiting the airport. (runway is used)
+Tue Dec  7 14:10:34 2021
+[CCR] LH478 is going to Limoges-Bellegarde (LIG)
+Tue Dec  7 14:10:34 2021
+[CDG] Starting take off for TK463 (runway is used)
+Tue Dec  7 14:10:38 2021
+[LIG] NZ478 is exiting the airport. (runway is used)
+Tue Dec  7 14:10:38 2021
+[CCR] NZ478 is going to Paris-Charles-de-Gaulle (CDG)
+Tue Dec  7 14:10:39 2021
+[LIG] Starting take off for EK8 (runway is used)
+Tue Dec  7 14:10:40 2021
+[LIL] EK819 is exiting the airport. (runway is used)
+Tue Dec  7 14:10:40 2021
+[CCR] EK819 is going to Limoges-Bellegarde (LIG)
+Tue Dec  7 14:10:41 2021
+[LIL] Starting take off for EK675 (runway is used)
+Tue Dec  7 14:10:51 2021
+[CDG] TK463 is exiting the airport. (runway is used)
+Tue Dec  7 14:10:51 2021
+[CCR] TK463 is going to Limoges-Bellegarde (LIG)
+Tue Dec  7 14:10:51 2021
+[CDG] Starting take off for EC724 (runway is used)
+Tue Dec  7 14:10:55 2021
+[LIG] Move LH478 to circular trajectory
+Tue Dec  7 14:11:00 2021
+[CDG] Move NZ478 to circular trajectory
+Tue Dec  7 14:11:00 2021
+[LIG] EK8 is exiting the airport. (runway is used)
+Tue Dec  7 14:11:00 2021
+[CCR] EK8 is going to Lille-Lesquin (LIL)
+Tue Dec  7 14:11:01 2021
+[LIG] Land plane LH478. (runway is used)
+Tue Dec  7 14:11:04 2021
+[LIL] EK675 is exiting the airport. (runway is used)
+Tue Dec  7 14:11:04 2021
+[CCR] EK675 is going to Limoges-Bellegarde (LIG)
+Tue Dec  7 14:11:05 2021
+[LIL] Starting take off for EO396 (runway is used)
+Tue Dec  7 14:11:08 2021
+[CDG] EC724 is exiting the airport. (runway is used)
+Tue Dec  7 14:11:08 2021
+[CCR] EC724 is going to Limoges-Bellegarde (LIG)
+Tue Dec  7 14:11:09 2021
+[CDG] Land plane NZ478. (runway is used)
+Tue Dec  7 14:11:09 2021
+[LIG] Move EK819 to circular trajectory
+Tue Dec  7 14:11:12 2021
+[LIG] Move TK463 to circular trajectory
+Tue Dec  7 14:11:22 2021
+[LIG] LH478 is reaching the runway.
+Tue Dec  7 14:11:22 2021
+EK819 -> 850.000000
+Tue Dec  7 14:11:22 2021
+TK463 -> 500.000000
+Tue Dec  7 14:11:28 2021
+[CDG] NZ478 is reaching the runway.
+Tue Dec  7 14:11:29 2021
+[LIL] Move EK8 to circular trajectory
+Tue Dec  7 14:11:29 2021
+[LIL] EO396 is exiting the airport. (runway is used)
+Tue Dec  7 14:11:29 2021
+[CCR] EO396 is going to Paris-Charles-de-Gaulle (CDG)
+Tue Dec  7 14:11:30 2021
+[LIG] Move EC724 to circular trajectory
+Tue Dec  7 14:11:33 2021
+[LIG] Move EK675 to circular trajectory
+Tue Dec  7 14:11:34 2021
+[LIL] Land plane EK8. (runway is used)
+Tue Dec  7 14:11:49 2021
+[LIG] LH478 is landed and parked ! (runway is free)
+Tue Dec  7 14:11:49 2021
+[LIG] Land plane EK819. (runway is used)
+Tue Dec  7 14:11:50 2021
+[CDG] Move EO396 to circular trajectory
+Tue Dec  7 14:11:56 2021
+[LIL] EK8 is reaching the runway.
+Tue Dec  7 14:11:58 2021
+[LIG] EK819 is reaching the runway.
+Tue Dec  7 14:11:58 2021
+TK463 -> 850.000000
+Tue Dec  7 14:11:58 2021
+EC724 -> 500.000000
+Tue Dec  7 14:11:58 2021
+EK675 -> 500.000000
+Tue Dec  7 14:11:58 2021
+[CDG] NZ478 is landed and parked ! (runway is free)
+Tue Dec  7 14:11:59 2021
+[CDG] Land plane EO396. (runway is used)
+Tue Dec  7 14:12:19 2021
+[CDG] EO396 is reaching the runway.
+Tue Dec  7 14:12:23 2021
+[LIL] EK8 is landed and parked ! (runway is free)
+Tue Dec  7 14:12:23 2021
+[LIL] Starting take off for EK8 (runway is used)
+Tue Dec  7 14:12:25 2021
+[LIG] EK819 is landed and parked ! (runway is free)
+Tue Dec  7 14:12:25 2021
+[LIG] Starting take off for EO936 (runway is used)
+Tue Dec  7 14:12:46 2021
+[CDG] EO396 is landed and parked ! (runway is free)
+Tue Dec  7 14:12:46 2021
+[CDG] Starting take off for NZ478 (runway is used)
+Tue Dec  7 14:12:47 2021
+[LIL] EK8 is exiting the airport. (runway is used)
+Tue Dec  7 14:12:47 2021
+[CCR] EK8 is going to Limoges-Bellegarde (LIG)
+Tue Dec  7 14:12:47 2021
+[LIG] EO936 is exiting the airport. (runway is used)
+Tue Dec  7 14:12:47 2021
+[CCR] EO936 is going to Lille-Lesquin (LIL)
+Tue Dec  7 14:12:47 2021
+[LIG] Land plane TK463. (runway is used)
+Tue Dec  7 14:12:49 2021
+[LIG] TK463 is reaching the runway.
+Tue Dec  7 14:12:49 2021
+EC724 -> 850.000000
+Tue Dec  7 14:12:49 2021
+EK675 -> 500.000000
+Tue Dec  7 14:13:04 2021
+[CDG] NZ478 is exiting the airport. (runway is used)
+Tue Dec  7 14:13:04 2021
+[CCR] NZ478 is going to Lille-Lesquin (LIL)
+Tue Dec  7 14:13:04 2021
+[CDG] Starting take off for EO396 (runway is used)
+Tue Dec  7 14:13:16 2021
+[LIL] Move EO936 to circular trajectory
+Tue Dec  7 14:13:16 2021
+[LIG] Move EK8 to circular trajectory
+Tue Dec  7 14:13:18 2021
+[LIG] TK463 is landed and parked ! (runway is free)
+Tue Dec  7 14:13:18 2021
+[LIG] Starting take off for LH478 (runway is used)
+Tue Dec  7 14:13:21 2021
+[CDG] EO396 is exiting the airport. (runway is used)
+Tue Dec  7 14:13:21 2021
+[CCR] EO396 is going to Lille-Lesquin (LIL)
+Tue Dec  7 14:13:22 2021
+[LIL] Land plane EO936. (runway is used)
+Tue Dec  7 14:13:25 2021
+[LIL] Move NZ478 to circular trajectory
+Tue Dec  7 14:13:40 2021
+[LIG] LH478 is exiting the airport. (runway is used)
+Tue Dec  7 14:13:40 2021
+[CCR] LH478 is going to Lille-Lesquin (LIL)
+Tue Dec  7 14:13:40 2021
+[LIG] Land plane EC724. (runway is used)
+Tue Dec  7 14:13:42 2021
+[LIL] Move EO396 to circular trajectory
+Tue Dec  7 14:13:43 2021
+[LIL] EO936 is reaching the runway.
+Tue Dec  7 14:13:43 2021
+NZ478 -> 850.000000
+Tue Dec  7 14:13:43 2021
+EO396 -> 500.000000
+Tue Dec  7 14:13:51 2021
+[LIG] EC724 is reaching the runway.
+Tue Dec  7 14:13:51 2021
+EK675 -> 850.000000
+Tue Dec  7 14:13:51 2021
+EK8 -> 500.000000
+Tue Dec  7 14:14:09 2021
+[LIL] Move LH478 to circular trajectory
+Tue Dec  7 14:14:10 2021
+[LIL] EO936 is landed and parked ! (runway is free)
+Tue Dec  7 14:14:11 2021
+[LIL] Land plane NZ478. (runway is used)
+Tue Dec  7 14:14:14 2021
+[LIL] NZ478 is reaching the runway.
+Tue Dec  7 14:14:14 2021
+EO396 -> 850.000000
+Tue Dec  7 14:14:14 2021
+LH478 -> 500.000000
+Tue Dec  7 14:14:20 2021
+[LIG] EC724 is landed and parked ! (runway is free)
+Tue Dec  7 14:14:21 2021
+[LIG] Starting take off for EK819 (runway is used)
+Tue Dec  7 14:14:42 2021
+[LIG] EK819 is exiting the airport. (runway is used)
+Tue Dec  7 14:14:42 2021
+[CCR] EK819 is going to Paris-Charles-de-Gaulle (CDG)
+Tue Dec  7 14:14:42 2021
+[LIG] Land plane EK675. (runway is used)
+Tue Dec  7 14:14:44 2021
+[LIL] NZ478 is landed and parked ! (runway is free)
+Tue Dec  7 14:14:44 2021
+[LIL] Land plane EO396. (runway is used)
+Tue Dec  7 14:14:55 2021
+[LIL] EO396 is reaching the runway.
+Tue Dec  7 14:14:55 2021
+LH478 -> 500.000000
+Tue Dec  7 14:15:03 2021
+[LIG] EK675 is reaching the runway.
+Tue Dec  7 14:15:03 2021
+EK8 -> 500.000000
+Tue Dec  7 14:15:03 2021
+[CDG] Move EK819 to circular trajectory
+Tue Dec  7 14:15:08 2021
+[CDG] Land plane EK819. (runway is used)
+Tue Dec  7 14:15:14 2021
+World stopped
+Tue Dec  7 14:15:14 2021
+The CCR stopped
+Tue Dec  7 14:15:14 2021
+The airport Paris-Charles-de-Gaulle stopped
+Tue Dec  7 14:15:14 2021
+The airport Limoges-Bellegarde stopped
+Tue Dec  7 14:15:14 2021
+The airport Lille-Lesquin stopped

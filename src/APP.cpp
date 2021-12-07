@@ -16,7 +16,7 @@ APP::APP(const json& data, const ReferenceFrame& _ref)
     this->global_point.setFillColor(AIRPORTS_COLOR_DEFAULT);
     this->global_point.setPosition(this->global_location.toVector());
 
-    // Init waiting and comming planes
+    // Init waiting and coming planes
     vector<Plane *> tmp1, tmp2;
     this->waiting_planes = tmp1;
     this->coming_planes = tmp2;
@@ -111,6 +111,16 @@ void APP::removePlaneFrom(Plane* plane, vector<Plane*>& list) {
     list.erase(it);
 }
 
+size_t APP::getWaitingPlanePos(Plane *waiting_plane) const {
+    size_t i(0);
+    Plane* current;
+    do {
+        current = this->waiting_planes.at(i);
+        i++;
+    } while(current == waiting_plane && i < this->waiting_planes.size());
+    return --i;
+}
+
 /* --------------------------- Getters and setters -------------------------- */
 
 void APP::setThread(bool &stop_prgm) {
@@ -159,7 +169,7 @@ void APP::landPriorityPlane() {
     // Check if the plane started the circular trajectory
     if (!to_land->isTrajectoryStarted()) return;
 
-    // Choose the stoping point before landing
+    // Choose the stopping point before landing
     Location runway_start = this->linked_twr->getLandingTrajectory().getPointAt(0);
     size_t dest_pos = this->circular_traj.getNearPointPos(runway_start);
     
@@ -173,16 +183,17 @@ void APP::landPriorityPlane() {
 
 void APP::startLanding() {
     updateLogs("[" + this->trigramme + "] " + this->landing_plane->getName() + " is reaching the runway.");
+    this->removePlaneFrom(this->landing_plane, waiting_planes);
 
     // Update other planes altitude
     for (Plane *current_waiting_p : this->waiting_planes) {
-        float new_alt = current_waiting_p->getLocation().getZ() - CIRCULAR_TRAJ_ALTITUDE_STEP;
+        size_t pos = this->getWaitingPlanePos(current_waiting_p);
+        float new_alt = CIRCULAR_TRAJ_ALTITUDE_MIN + (CIRCULAR_TRAJ_ALTITUDE_STEP * pos);
         current_waiting_p->setTrajectoryAltitude(new_alt);
         updateLogs(current_waiting_p->getName() + " -> " + to_string(new_alt));
     }
 
     // Remove the landing plane from the waiting planes list
-    this->removePlaneFrom(this->landing_plane, waiting_planes);
     this->linked_twr->landPlane(this->landing_plane);
     this->parking_plane = this->landing_plane;
     this->landing_plane = NULL;

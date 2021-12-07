@@ -4,12 +4,12 @@
 /*                                Main function                               */
 /* -------------------------------------------------------------------------- */
 
-int main(void) {
+int main() {
     bool stop_prgm(false);
 
     /* ------------------------------ Init log file ----------------------------- */
 
-    time_t now = time(0);
+    time_t now = time(nullptr);
     srand(now);
     char* dt = ctime(&now);
     ofstream file;

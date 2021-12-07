@@ -371,3 +371,7 @@ void Plane::world(vector<Plane *> &planes, bool &stop_prgm) {
 
 mutex Plane::cout_lock;
 Font Plane::default_font = Font();
+
+bool Plane::operator==(const Plane& p) const {
+    return this->getLocation() == p.getLocation();
+}
