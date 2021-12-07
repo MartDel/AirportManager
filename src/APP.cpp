@@ -116,8 +116,8 @@ size_t APP::getWaitingPlanePos(Plane *waiting_plane) const {
     Plane* current;
     do {
         current = this->waiting_planes.at(i);
-        i++;
-    } while(current == waiting_plane && i < this->waiting_planes.size());
+        ++i;
+    } while(current != waiting_plane && i < this->waiting_planes.size());
     return --i;
 }
 
@@ -190,7 +190,7 @@ void APP::startLanding() {
         size_t pos = this->getWaitingPlanePos(current_waiting_p);
         float new_alt = CIRCULAR_TRAJ_ALTITUDE_MIN + (CIRCULAR_TRAJ_ALTITUDE_STEP * pos);
         current_waiting_p->setTrajectoryAltitude(new_alt);
-        updateLogs(current_waiting_p->getName() + " -> " + to_string(new_alt));
+        updateLogs(current_waiting_p->getName() + " (" + to_string(pos) + ") -> " + to_string(new_alt));
     }
 
     // Remove the landing plane from the waiting planes list

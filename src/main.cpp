@@ -10,7 +10,7 @@ int main() {
     /* ------------------------------ Init log file ----------------------------- */
 
     time_t now = time(nullptr);
-    srand(now);
+    srand(0);
     char* dt = ctime(&now);
     ofstream file;
     file.open(LOGS_FILE,std::ofstream::out | std::ofstream::trunc);
