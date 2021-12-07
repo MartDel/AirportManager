@@ -178,11 +178,13 @@ void APP::startLanding() {
     for (Plane *current_waiting_p : this->waiting_planes) {
         float new_alt = current_waiting_p->getLocation().getZ() - CIRCULAR_TRAJ_ALTITUDE_STEP;
         current_waiting_p->setTrajectoryAltitude(new_alt);
+        updateLogs(current_waiting_p->getName() + " -> " + to_string(new_alt));
     }
 
     // Remove the landing plane from the waiting planes list
     this->removePlaneFrom(this->landing_plane, waiting_planes);
     this->linked_twr->landPlane(this->landing_plane);
+    this->parking_plane = this->landing_plane;
     this->landing_plane = NULL;
 }
 

@@ -70,7 +70,6 @@ class APP {
 
         /* --------------------------------- Setters -------------------------------- */
 
-        void setLandingPlane(Plane *p) { this->landing_plane = p; }
         void setExitingPlane(Plane *p) { this->exiting_plane = p; }
         void setBackground(Sprite* bg) { this->background = bg; }
         void setThread(bool &stop_prgm);
