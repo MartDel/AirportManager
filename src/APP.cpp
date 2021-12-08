@@ -158,8 +158,6 @@ void APP::askPlaneToWait(Plane* p) {
     circular_t.setAltitude(CIRCULAR_TRAJ_ALTITUDE_MIN + (CIRCULAR_TRAJ_ALTITUDE_STEP * this->waiting_planes.size()));
     this->waiting_planes.push_back(p);
     p->start(circular_t);
-    cout << p->getName() << " start :" << endl;
-    cout << circular_t << endl;
 }
 
 void APP::landPriorityPlane() {

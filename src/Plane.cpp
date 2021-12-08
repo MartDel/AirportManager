@@ -25,6 +25,9 @@ Vector2f Location::toVector() const {
         v.y += WINDOW_HEIGHT * (this->y / WINDOW_REAL_HEIGHT);
     }
 
+    v.x += PLANE_CENTER_X;
+    v.y += PLANE_CENTER_Y;
+
     return v;
 }
 
@@ -300,6 +303,7 @@ Text Plane::getNameLabel() {
 
 Sprite Plane::toSFML() {
     this->graphical_plane.setPosition(this->location.toVector());
+    this->graphical_plane.setRotation(this->location.getPhiDegree());
     return this->graphical_plane;
 }
 

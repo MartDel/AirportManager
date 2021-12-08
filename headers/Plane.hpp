@@ -3,6 +3,8 @@
 /* ------------------------------ Plane defines ----------------------------- */
 #define DEFAULT_CONSUMPTION 0.25
 #define PLANE_SCALE 0.3
+#define PLANE_CENTER_X -2
+#define PLANE_CENTER_Y -5
 #define ALTITUDE_LABEL_X 15
 #define ALTITUDE_LABEL_Y 10
 #define ALTITUDE_LABEL_SIZE 10
@@ -37,7 +39,9 @@ class Location {
         float getY() const { return this->y; }
         float getZ() const { return this->z; }
         float getPhi() const { return this->phi; }
+        float getPhiDegree() const { return this->phi * (180 / M_PI); }
         float getTheta() const { return this->theta; }
+        float getThetaDegree() const { return this->theta * (180 / M_PI); }
         float getSpeed() const { return this->speed; }
         ReferenceFrame getRefFrame() const { return this->ref_frame; }
 
