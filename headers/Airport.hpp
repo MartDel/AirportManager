@@ -36,7 +36,7 @@ const string IMG_EXTENSION = ".jpg";
 
 // Fonts
 const string FONTS_FOLDER = "../fonts/";
-const string OPENSANS_FONT = "OpenSans.ttf";
+const string OPENSANS_FONT = "FiraSans.ttf";
 
 /* ------------------------------ Config Files ------------------------------ */
 

@@ -10,7 +10,7 @@ int main() {
     /* ------------------------------ Init log file ----------------------------- */
 
     time_t now = time(NULL);
-    srand(0);
+    srand(now);
     char* dt = ctime(&now);
     ofstream file;
     file.open(LOGS_FILE,std::ofstream::out | std::ofstream::trunc);
@@ -140,8 +140,14 @@ int main() {
         for (auto& plane : planes) {
             if (plane->getLocation().getRefFrame() == ReferenceFrame::NOT_PRINTED) continue;
             app.draw(plane->toSFML());
-            app.draw(plane->getAltitudeLabel());
-            app.draw(plane->getNameLabel());
+            if (plane->getLocation().getRefFrame() == ReferenceFrame::CCR) {
+                Text tmp_name_label = plane->getNameLabel();
+                tmp_name_label.setPosition(plane->getAltitudeLabel().getPosition());
+                app.draw(tmp_name_label);
+            } else {
+                app.draw(plane->getAltitudeLabel());
+                app.draw(plane->getNameLabel());
+            }
         }
 
         #else
@@ -162,6 +168,7 @@ int main() {
     /* ------------------------ Shut down the simulation ------------------------ */
 
     stop_prgm = true;
+    cout << endl;
 
     #ifndef DEBUG
     if(world_thread.joinable()) world_thread.join();

@@ -13,7 +13,7 @@
 #define NAME_LABEL_SIZE 15
 
 // Thread timeout (in ms)
-#define WORLD_INTERVAL 500
+#define WORLD_INTERVAL 250
 
 /**
  * @brief A Location is a 3D point.
