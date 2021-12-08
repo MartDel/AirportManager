@@ -2,9 +2,7 @@
 
 /* ------------------------------ Plane defines ----------------------------- */
 #define DEFAULT_CONSUMPTION 0.25
-#define PLANE_COLOR_DEFAULT Color::Blue
-#define PLANE_COLOR_URGENCY Color::Red
-#define PLANE_CIRCLE_RADIUS 5.f
+#define PLANE_SCALE 0.3
 #define ALTITUDE_LABEL_X 15
 #define ALTITUDE_LABEL_Y 10
 #define ALTITUDE_LABEL_SIZE 10
@@ -184,7 +182,7 @@ class Plane {
         Trajectory trajectory;
         float speed, fuel;
         const float consumption;
-        CircleShape graphical_plane;
+        Sprite graphical_plane;
         Text altitude_label, name_label;
 
     public:
@@ -207,7 +205,7 @@ class Plane {
          * @brief Get the plane SFML version
          * @return CircleShape The plane to display
          */
-        CircleShape toSFML();
+        Sprite toSFML();
 
         /* --------------------------------- Setters -------------------------------- */
 
@@ -249,7 +247,6 @@ class Plane {
 
         /* -------------------------------- Operators ------------------------------- */
 
-        bool operator==(const Plane& p) const;
         friend ostream& operator<<(ostream &stream, const Plane &plane);
 
         /* ---------------------- Static attributes and methods --------------------- */
@@ -263,4 +260,5 @@ class Plane {
 
         static mutex cout_lock;
         static Font default_font;
+        static Texture plane_texture;
 };

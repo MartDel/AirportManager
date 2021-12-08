@@ -265,8 +265,10 @@ Plane::Plane(const Location& _spawn)
     }
     updateLogs("🚁 Plane "+this->name + " created");
     // Set graphical plane
-    this->graphical_plane = CircleShape(PLANE_CIRCLE_RADIUS);
-    this->graphical_plane.setFillColor(PLANE_COLOR_DEFAULT);
+    Sprite tmp_sprite;
+    tmp_sprite.setTexture(Plane::plane_texture);
+    tmp_sprite.setScale(Vector2f(PLANE_SCALE, PLANE_SCALE));
+    this->graphical_plane = tmp_sprite;
 
     // Set altitude and name label
     Text altitude_label, name_label;
@@ -296,7 +298,7 @@ Text Plane::getNameLabel() {
     return this->name_label;
 }
 
-CircleShape Plane::toSFML() {
+Sprite Plane::toSFML() {
     this->graphical_plane.setPosition(this->location.toVector());
     return this->graphical_plane;
 }
@@ -365,7 +367,4 @@ void Plane::world(vector<Plane *> &planes, bool &stop_prgm) {
 
 mutex Plane::cout_lock;
 Font Plane::default_font = Font();
-
-bool Plane::operator==(const Plane& p) const {
-    return this->getLocation() == p.getLocation();
-}
+Texture Plane::plane_texture = Texture();

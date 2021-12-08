@@ -21,17 +21,27 @@ int main() {
 
     // Set up the window
     ContextSettings settings;
-    settings.antialiasingLevel = 8;
+    settings.antialiasingLevel = 8.0;
     RenderWindow app(VideoMode(WINDOW_WIDTH*2, WINDOW_HEIGHT*2, 32), "Airport simulation", Style::Default, settings);
     app.setFramerateLimit(30);
 
-    // Set up the font
+    // Load the font
     Font font;
     if (!font.loadFromFile(FONTS_FOLDER + OPENSANS_FONT)) {
         cerr << "Cannot load font file : " << FONTS_FOLDER << OPENSANS_FONT << endl;
         return -1;
     }
     Plane::default_font = font;
+
+    // Load the plane img
+    Texture plane_img;
+    string plane_path = IMG_FOLDER + "plane.png";
+    if (!plane_img.loadFromFile(plane_path)) {
+        cerr << "Cannot load image file : " << plane_path << endl;
+        updateLogs("Cannot load image file : " + plane_path);
+        return -1;
+    }
+    Plane::plane_texture = plane_img;
 
     /* ------------------------ Init planes and airports ------------------------ */
 
@@ -64,7 +74,7 @@ int main() {
 
     /* ---------------------------- Load backgrounds ---------------------------- */
 
-    // Set up CCR image
+    // Load CCR image
     Texture CCR_img;
     Sprite CCR_sprite;
     string img_name = imgAirport("CCR");
@@ -76,7 +86,7 @@ int main() {
     CCR_sprite.setTexture(CCR_img);
     CCR_sprite.setPosition(Vector2f(0, 0));
 
-    // Set up the airport images
+    // Load the airport images
     vector<Texture*> background_textures;
     for (auto& airport : airports) {
         Texture* background_img = new Texture();
