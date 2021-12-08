@@ -22,7 +22,7 @@ int main() {
     // Set up the window
     ContextSettings settings;
     settings.antialiasingLevel = 8.0;
-    RenderWindow app(VideoMode(WINDOW_WIDTH*2, WINDOW_HEIGHT*2, 32), "Airport simulation", Style::Default, settings);
+    RenderWindow app(VideoMode(WINDOW_WIDTH*2 + 50, WINDOW_HEIGHT*2 + 50, 32), "Airport simulation", Style::Default, settings);
     app.setFramerateLimit(30);
 
     // Load the font
@@ -89,6 +89,7 @@ int main() {
     // Load the airport images
     vector<Texture*> background_textures;
     for (auto& airport : airports) {
+        if (airport->getReferenceFrame() == ReferenceFrame::NOT_PRINTED) continue;
         Texture* background_img = new Texture();
         Sprite* background_sprite = new Sprite();
         string img_name = imgAirport(airport->getTrigramme());
@@ -125,7 +126,8 @@ int main() {
         
         // Draw world->airports
         for (auto& airport : airports) {
-            Sprite* to_draw = airport->getBackground();
+            if (airport->getReferenceFrame() == ReferenceFrame::NOT_PRINTED) continue;
+            Sprite *to_draw = airport->getBackground();
             Vector2f pos = getFrameStartPoint(airport->getReferenceFrame());
             to_draw->setPosition(pos);
             app.draw(*to_draw);
@@ -135,6 +137,7 @@ int main() {
 
         // Draw planes
         for (auto& plane : planes) {
+            if (plane->getLocation().getRefFrame() == ReferenceFrame::NOT_PRINTED) continue;
             app.draw(plane->toSFML());
             app.draw(plane->getAltitudeLabel());
             app.draw(plane->getNameLabel());

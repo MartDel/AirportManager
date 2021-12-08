@@ -20,17 +20,21 @@ Vector2f getFrameStartPoint(const ReferenceFrame& ref) {
             start_point.x = WINDOW_WIDTH;
             start_point.y = WINDOW_HEIGHT;
             break;
+        default:
+            break;
     }
 
     return start_point;
 }
 
 ReferenceFrame getFrameFromId(const size_t &id) {
-    ReferenceFrame f = ReferenceFrame::APP1;
+    ReferenceFrame f = ReferenceFrame::NOT_PRINTED;
 
     switch (id) {
+        case 0: f = ReferenceFrame::APP1; break;
         case 1: f = ReferenceFrame::APP2; break;
         case 2: f = ReferenceFrame::APP3; break;
+        default: break;
     }
 
     return f;

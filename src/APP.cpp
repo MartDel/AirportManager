@@ -4,7 +4,7 @@
 /*                                APP functions                               */
 /* -------------------------------------------------------------------------- */
 
-APP::APP(const json &data, const ReferenceFrame &_ref)
+APP::APP(const json &data, const ReferenceFrame &_ref = ReferenceFrame::NOT_PRINTED)
 : landing_plane(NULL), parking_plane(NULL), exiting_plane(NULL), ref_frame(_ref), background(NULL), airport_thread(NULL) {
     this->name = data["name"];
     this->trigramme = data["trigramme"];
@@ -36,7 +36,8 @@ APP::APP(const json &data, const ReferenceFrame &_ref)
         new_point.setY(center_y + (float(data["circular_traj_radius"]) * sin(theta)));
         traj.push_back(new_point);
         #ifdef DEBUG
-        this->important_points.push_back(new_point);
+        if (this->ref_frame != ReferenceFrame::NOT_PRINTED)
+            this->important_points.push_back(new_point);
         #endif
     }
     traj.push_back(traj.at(0));
@@ -48,32 +49,37 @@ APP::APP(const json &data, const ReferenceFrame &_ref)
         tmp_spot.setRefFrame(this->ref_frame);
         tmp_park.push_back(tmp_spot);
         #ifdef DEBUG
-        this->important_points.push_back(tmp_spot);
+        if (this->ref_frame != ReferenceFrame::NOT_PRINTED)
+            this->important_points.push_back(tmp_spot);
         #endif
     }
 
     Location tmp_entrance(data["perimeter_entrance"]["x"], data["perimeter_entrance"]["y"], data["perimeter_entrance"]["z"]);
     tmp_entrance.setRefFrame(this->ref_frame);
     #ifdef DEBUG
-    this->important_points.push_back(tmp_entrance);
+    if (this->ref_frame != ReferenceFrame::NOT_PRINTED)
+        this->important_points.push_back(tmp_entrance);
     #endif
 
     Location runway_entrance(data["runway_start"]["x"], data["runway_start"]["y"], data["runway_start"]["z"]);
     runway_entrance.setRefFrame(this->ref_frame);
     #ifdef DEBUG
-    this->important_points.push_back(runway_entrance);
+    if (this->ref_frame != ReferenceFrame::NOT_PRINTED)
+        this->important_points.push_back(runway_entrance);
     #endif
 
     Location runway_exit(data["runway_end"]["x"], data["runway_end"]["y"], data["runway_end"]["z"]);
     runway_exit.setRefFrame(this->ref_frame);
     #ifdef DEBUG
-    this->important_points.push_back(runway_exit);
+    if (this->ref_frame != ReferenceFrame::NOT_PRINTED)
+        this->important_points.push_back(runway_exit);
     #endif
 
     Location parking_entrance(data["parking_entrance"]["x"], data["parking_entrance"]["y"], data["parking_entrance"]["z"]);
     parking_entrance.setRefFrame(this->ref_frame);
     #ifdef DEBUG
-    this->important_points.push_back(parking_entrance);
+    if (this->ref_frame != ReferenceFrame::NOT_PRINTED)
+        this->important_points.push_back(parking_entrance);
     #endif
 
     this->perimeter_entrance = Location(data["perimeter_entrance"]["x"], data["perimeter_entrance"]["y"], data["perimeter_entrance"]["z"]);
@@ -82,7 +88,8 @@ APP::APP(const json &data, const ReferenceFrame &_ref)
     Location perimeter_end(data["perimeter_exit"]["x"], data["perimeter_exit"]["y"], data["perimeter_exit"]["z"]);
     perimeter_end.setRefFrame(this->ref_frame);
     #ifdef DEBUG
-    this->important_points.push_back(perimeter_end);
+    if (this->ref_frame != ReferenceFrame::NOT_PRINTED)
+        this->important_points.push_back(perimeter_end);
     #endif
 
     linked_twr = new TWR(tmp_park, runway_entrance, runway_exit, parking_entrance, perimeter_end, this->trigramme);

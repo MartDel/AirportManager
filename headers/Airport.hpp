@@ -49,7 +49,7 @@ const string OPENSANS_FONT = "OpenSans.ttf";
 /**
  * @brief Represent the frame where the plane will be printed
  */
-enum class ReferenceFrame { CCR=0, APP1=1, APP2=2, APP3=3 };
+enum class ReferenceFrame { CCR=0, APP1=1, APP2=2, APP3=3, NOT_PRINTED=4 };
 
 /**
  * @brief Get the frame start point
