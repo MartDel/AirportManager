@@ -1,134 +1,42 @@
-Tue Dec  7 14:52:21 2021
+Wed Dec  8 10:41:21 2021
 Roll the dice, the program has begun
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 Generating TWR Lille-Lesquin
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 Generating TWR Paris-Charles-de-Gaulle
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 Generating TWR Limoges-Bellegarde
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 🚁 Plane TK886 created
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 🚁 Plane TK915 created
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 🚁 Plane AC335 created
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 🚁 Plane AF492 created
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 🚁 Plane EC421 created
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 🚁 Plane AI27 created
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 🚁 Plane LH59 created
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 🚁 Plane EO926 created
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 🚁 Plane CA426 created
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 [LIL] Starting take off for TK886 (runway is used)
-Tue Dec  7 14:52:22 2021
-[LIG] Starting take off for LH59 (runway is used)
-Tue Dec  7 14:52:22 2021
+Wed Dec  8 10:41:21 2021
 [CDG] Starting take off for AF492 (runway is used)
-Tue Dec  7 14:52:39 2021
-[CDG] AF492 is exiting the airport. (runway is used)
-Tue Dec  7 14:52:39 2021
-[CCR] AF492 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 14:52:40 2021
-[CDG] Starting take off for EC421 (runway is used)
-Tue Dec  7 14:52:44 2021
-[LIG] LH59 is exiting the airport. (runway is used)
-Tue Dec  7 14:52:44 2021
-[CCR] LH59 is going to Lille-Lesquin (LIL)
-Tue Dec  7 14:52:44 2021
-[LIG] Starting take off for EO926 (runway is used)
-Tue Dec  7 14:52:45 2021
-[LIL] TK886 is exiting the airport. (runway is used)
-Tue Dec  7 14:52:45 2021
-[CCR] TK886 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 14:52:46 2021
-[LIL] Starting take off for TK915 (runway is used)
-Tue Dec  7 14:52:56 2021
-[CDG] EC421 is exiting the airport. (runway is used)
-Tue Dec  7 14:52:56 2021
-[CCR] EC421 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 14:52:57 2021
-[CDG] Starting take off for AI27 (runway is used)
-Tue Dec  7 14:53:01 2021
-[LIG] Move AF492 to circular trajectory
-Tue Dec  7 14:53:05 2021
-[LIG] EO926 is exiting the airport. (runway is used)
-Tue Dec  7 14:53:05 2021
-[CCR] EO926 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 14:53:06 2021
-[LIG] Land plane AF492. (runway is used)
-Tue Dec  7 14:53:09 2021
-[LIL] TK915 is exiting the airport. (runway is used)
-Tue Dec  7 14:53:09 2021
-[CCR] TK915 is going to Paris-Charles-de-Gaulle (CDG)
-Tue Dec  7 14:53:10 2021
-[LIL] Starting take off for AC335 (runway is used)
-Tue Dec  7 14:53:13 2021
-[LIL] Move LH59 to circular trajectory
-Tue Dec  7 14:53:14 2021
-[CDG] AI27 is exiting the airport. (runway is used)
-Tue Dec  7 14:53:14 2021
-[CCR] AI27 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 14:53:14 2021
-[LIG] Move TK886 to circular trajectory
-Tue Dec  7 14:53:18 2021
-[LIG] Move EC421 to circular trajectory
-Tue Dec  7 14:53:27 2021
-[CDG] Move EO926 to circular trajectory
-Tue Dec  7 14:53:28 2021
-[LIG] AF492 is reaching the runway.
-Tue Dec  7 14:53:28 2021
-TK886 (0) -> 500.000000
-Tue Dec  7 14:53:28 2021
-EC421 (1) -> 850.000000
-Tue Dec  7 14:53:31 2021
-[CDG] Move TK915 to circular trajectory
-Tue Dec  7 14:53:32 2021
-[CDG] Land plane EO926. (runway is used)
-Tue Dec  7 14:53:34 2021
-[LIL] AC335 is exiting the airport. (runway is used)
-Tue Dec  7 14:53:34 2021
-[CCR] AC335 is going to Limoges-Bellegarde (LIG)
-Tue Dec  7 14:53:34 2021
-[LIL] Land plane LH59. (runway is used)
-Tue Dec  7 14:53:35 2021
-[LIG] Move AI27 to circular trajectory
-Tue Dec  7 14:53:40 2021
-[LIL] LH59 is reaching the runway.
-Tue Dec  7 14:53:54 2021
-[LIG] AF492 is landed and parked ! (runway is free)
-Tue Dec  7 14:53:55 2021
-[LIG] Land plane TK886. (runway is used)
-Tue Dec  7 14:53:55 2021
-[CDG] EO926 is reaching the runway.
-Tue Dec  7 14:53:55 2021
-TK915 (0) -> 500.000000
-Tue Dec  7 14:54:03 2021
-[LIG] Move AC335 to circular trajectory
-Tue Dec  7 14:54:04 2021
-[LIG] TK886 is reaching the runway.
-Tue Dec  7 14:54:04 2021
-EC421 (0) -> 500.000000
-Tue Dec  7 14:54:04 2021
-AI27 (1) -> 850.000000
-Tue Dec  7 14:54:04 2021
-AC335 (2) -> 1200.000000
-Tue Dec  7 14:54:07 2021
-[LIL] LH59 is landed and parked ! (runway is free)
-Tue Dec  7 14:54:07 2021
-[LIL] Starting take off for LH59 (runway is used)
-Tue Dec  7 14:54:17 2021
-The airport Paris-Charles-de-Gaulle stopped
-Tue Dec  7 14:54:17 2021
-The CCR stopped
-Tue Dec  7 14:54:17 2021
-The airport Limoges-Bellegarde stopped
-Tue Dec  7 14:54:17 2021
+Wed Dec  8 10:41:21 2021
+[LIG] Starting take off for LH59 (runway is used)
+Wed Dec  8 10:41:25 2021
 The airport Lille-Lesquin stopped
-Tue Dec  7 14:54:17 2021
+Wed Dec  8 10:41:25 2021
+The CCR stopped
+Wed Dec  8 10:41:25 2021
+The airport Paris-Charles-de-Gaulle stopped
+Wed Dec  8 10:41:25 2021
+The airport Limoges-Bellegarde stopped
+Wed Dec  8 10:41:25 2021
 World stopped

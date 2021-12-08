@@ -319,8 +319,7 @@ void Plane::start(const Trajectory& traj) {
 }
 
 void Plane::updateLocation() {
-    cout << *this << endl;
-    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed, true));
+    this->setLocation(this->trajectory.getNextLocation(this->location, this->speed));
     this->fuel -= this->consumption;
     this->destination = this->trajectory.getLastPoint();
 }
