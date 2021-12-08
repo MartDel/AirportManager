@@ -352,11 +352,6 @@ void Plane::world(vector<Plane *> &planes, bool &stop_prgm) {
                 current_plane->updateLocation();
                 Plane::cout_lock.unlock();
             }
-
-            // Debug plane data
-            // Plane::cout_lock.lock();
-            // cout << *current_plane << endl;
-            // Plane::cout_lock.unlock();
         }
 
         // Add 1s timeout

@@ -9,7 +9,7 @@ int main() {
 
     /* ------------------------------ Init log file ----------------------------- */
 
-    time_t now = time(nullptr);
+    time_t now = time(NULL);
     srand(0);
     char* dt = ctime(&now);
     ofstream file;

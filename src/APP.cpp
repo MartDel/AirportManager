@@ -4,8 +4,8 @@
 /*                                APP functions                               */
 /* -------------------------------------------------------------------------- */
 
-APP::APP(const json& data, const ReferenceFrame& _ref)
-: landing_plane(NULL), exiting_plane(NULL), ref_frame(_ref), background(NULL), airport_thread(NULL) {
+APP::APP(const json &data, const ReferenceFrame &_ref)
+: landing_plane(NULL), parking_plane(NULL), exiting_plane(NULL), ref_frame(_ref), background(NULL), airport_thread(NULL) {
     this->name = data["name"];
     this->trigramme = data["trigramme"];
 
