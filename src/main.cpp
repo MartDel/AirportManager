@@ -22,7 +22,7 @@ int main() {
     // Set up the window
     ContextSettings settings;
     settings.antialiasingLevel = 8.0;
-    RenderWindow app(VideoMode(WINDOW_WIDTH*2 + 50, WINDOW_HEIGHT*2 + 50, 32), "Airport simulation", Style::Default, settings);
+    RenderWindow app(VideoMode(WINDOW_WIDTH*2, WINDOW_HEIGHT*2, 32), "Airport simulation", Style::Default, settings);
     app.setFramerateLimit(30);
 
     // Load the font
@@ -122,6 +122,7 @@ int main() {
         app.draw(CCR_sprite);
         for (auto& airport : airports) {
             app.draw(airport->getGlobalPoint());
+            app.draw(airport->getNameLabel());
         }
         
         // Draw world->airports

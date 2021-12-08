@@ -13,8 +13,13 @@
 #define AIRPORTS_INTERVAL 250
 
 // SFML defines
-#define AIRPORTS_RADIUS 8.f
-#define AIRPORTS_COLOR_DEFAULT Color::Red
+#define AIRPORT_COLOR_DEFAULT Color::Red
+#define AIRPORT_COLOR_NOT_PRINTED Color(190, 190, 190)
+#define AIRPORT_RADIUS_DEFAULT 8.f
+#define AIRPORT_RADIUS_NOT_PRINTED 7.f
+#define AIRPORT_NAME_LABEL_X 15
+#define AIRPORT_NAME_LABEL_Y -15
+#define AIRPORT_NAME_LABEL_SIZE 10
 
 /**
  * @brief A APP manage airport perimeter and landing.
@@ -35,9 +40,10 @@ class APP {
         Plane *exiting_plane; // The plane which is reaching the perimeter limit
         thread* airport_thread;
         ReferenceFrame ref_frame;
-        Sprite* background; // The airport background image
+        Sprite *background; // The airport background image
+        Text name_label; // The airport name label to print on the CCR display
 
-        #ifdef DEBUG
+#ifdef DEBUG
         vector<Location> important_points;
         #endif
 
@@ -69,7 +75,8 @@ class APP {
         Plane *getLandingPlane() const { return this->landing_plane; }
         Plane *getParkingPlane() const { return this->parking_plane; }
         Plane* getExitingPlane() const { return this->exiting_plane; }
-        Sprite* getBackground() const { return this->background; }
+        Sprite *getBackground() const { return this->background; }
+        Text getNameLabel() const { return this->name_label; }
         ReferenceFrame getReferenceFrame() const { return this->ref_frame; }
         Location getGlobalLocation() { return this->global_location; }
         Location getPerimeterEntrance() { return this->perimeter_entrance; }

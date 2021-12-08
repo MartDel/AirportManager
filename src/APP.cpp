@@ -12,9 +12,21 @@ APP::APP(const json &data, const ReferenceFrame &_ref = ReferenceFrame::NOT_PRIN
     // Set global location
     this->global_location = Location(data["global_location"]["x"], data["global_location"]["y"], PLANE_FLIGHT_ALTITUDE);
     this->global_location.setRefFrame(ReferenceFrame::CCR);
-    this->global_point = CircleShape(AIRPORTS_RADIUS);
-    this->global_point.setFillColor(AIRPORTS_COLOR_DEFAULT);
+    this->global_point = CircleShape(this->ref_frame == ReferenceFrame::NOT_PRINTED ? AIRPORT_RADIUS_NOT_PRINTED : AIRPORT_RADIUS_DEFAULT);
+    this->global_point.setFillColor(this->ref_frame == ReferenceFrame::NOT_PRINTED ? AIRPORT_COLOR_NOT_PRINTED : AIRPORT_COLOR_DEFAULT);
     this->global_point.setPosition(this->global_location.toVector());
+
+    // Set name label
+    Text tmp_label;
+    tmp_label.setFont(Plane::default_font);
+    tmp_label.setCharacterSize(AIRPORT_NAME_LABEL_SIZE);
+    tmp_label.setFillColor(Color::Black);
+    tmp_label.setPosition(Vector2f(
+        this->global_point.getPosition().x + AIRPORT_NAME_LABEL_X,
+        this->global_point.getPosition().y + AIRPORT_NAME_LABEL_Y
+    ));
+    tmp_label.setString(this->name);
+    this->name_label = tmp_label;
 
     // Init waiting and coming planes
     vector<Plane *> tmp1, tmp2;
