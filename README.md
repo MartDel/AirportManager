@@ -1,4 +1,8 @@
-# Modélisation (très) simplifiée du contrôle de la circulation aérienne
+# AirportManager
+
+![snapshot](img/snapshot.png)
+
+## Modélisation (très) simplifiée du contrôle de la circulation aérienne
 
 L’objet de ce projet est de modéliser un contrôle de la circulation aérienne. Suivant, le périmètre retenu, cette modélisation porte sur un territoire à l’échelle d’un pays ou autour des aérodromes/aéroports.
 
